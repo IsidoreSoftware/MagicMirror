@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (test)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "args" : ["dotnet", "restore"],
+            "showOutput": "always",
+            "problemMatcher": "$msCompile",
+            "cwd": "${workingDirectory}",
+            "stopAtEntry": false,
+            "externalConsole": false
+        }
+    ]
+}
