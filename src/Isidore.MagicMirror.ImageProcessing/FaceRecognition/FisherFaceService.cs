@@ -37,9 +37,9 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
             return this.RecognizeAsync(image, users, savedTrainingFile).Result;
         }
 
-        public Task<RecognitionResult<Person>> RecognizeAsync(Mat image, IList<Person> users, string savedTrainingFile = null)
+        public async Task<RecognitionResult<Person>> RecognizeAsync(Mat image, IList<Person> users, string savedTrainingFile = null)
         {
-            return new Task<RecognitionResult<Person>>(() =>
+            return await Task.Factory.StartNew(() =>
             {
                 string usedFile;
                 if (!String.IsNullOrWhiteSpace(savedTrainingFile))
@@ -137,7 +137,8 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
             {
                 foreach (var photo in user.Value)
                 {
-                    var face = trainingFaces.AddLast(new Mat(GetFaceImage(photo).Resize(normalSize)));
+                    var faceImage = GetFaceImage(photo).Resize(normalSize);
+                    var face = trainingFaces.AddLast(faceImage);
                     labels.AddLast(user.Key.Id);
                 }
             }
@@ -146,7 +147,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
             {
                 using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer(threshold: threshold))
                 {
-                    await new Task(() => learnAction(ffr, trainingFaces.ToArray(), labels.ToArray()));
+                    await Task.Factory.StartNew(() => learnAction(ffr, trainingFaces.ToArray(), labels.ToArray()));
                     ffr.Save(savedTrainingFile);
                 }
             }

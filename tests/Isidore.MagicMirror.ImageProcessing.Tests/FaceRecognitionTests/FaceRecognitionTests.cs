@@ -21,10 +21,16 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*");
             var classifier = new HaarCascadeClassifier("FaceClassifierTests");
             var identityRecognizer = new FisherFaceService(classifier);
+            var users = faceDatabase.Keys;
+
             //When
             await identityRecognizer.Learn(faceDatabase);
 
             //Then
+            var find = new Mat("FaceRecognitionTests/TestPhotos/i293ua-fn.jpg", ImreadModes.GrayScale);
+            var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
+
+            Assert.Equal(293, result.RecognizedItem.Id);
         }
 
         public void Dispose()
@@ -58,7 +64,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 if (!dictionary.Keys.Any(x => x.Id == label.Id))
                     dictionary.Add(label, new List<Mat>());
 
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(new Mat(Path.Combine(path, file)));
+                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(new Mat(Path.Combine(path, file),ImreadModes.GrayScale));
             }
 
             return dictionary;
