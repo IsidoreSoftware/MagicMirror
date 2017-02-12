@@ -15,8 +15,14 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
     {
         IDictionary<Person, IEnumerable<Mat>> faceDatabase;
 
-        [Fact]
-        public async Task when_given_the_same_face_should_recognize_correctly()
+        [Theory]
+        [InlineData("i292ua-fn.jpg",292)]
+        [InlineData("i293ua-fn.jpg",293)]
+        [InlineData("i294ua-mg.jpg",294)]
+        [InlineData("i295ua-mg.jpg",295)]
+        [InlineData("i296ua-mg.jpg",296)]
+        [InlineData("i297ua-mn.jpg",297)]
+        public async Task when_given_the_same_face_should_recognize_correctly(string imageSrc, int label)
         {
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*");
             var classifier = new HaarCascadeClassifier("FaceClassifierTests");
@@ -27,10 +33,10 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             await identityRecognizer.Learn(faceDatabase);
 
             //Then
-            var find = new Mat("FaceRecognitionTests/TestPhotos/i293ua-fn.jpg", ImreadModes.GrayScale);
+            var find = new Mat($"FaceRecognitionTests/TestPhotos/{imageSrc}", ImreadModes.GrayScale);
             var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
 
-            Assert.Equal(293, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.Id);
         }
 
         public void Dispose()
