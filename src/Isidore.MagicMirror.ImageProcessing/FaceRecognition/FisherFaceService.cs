@@ -103,7 +103,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
             });
         }
 
-        public async Task Learn(IList<KeyValuePair<Person, IEnumerable<Mat>>> imagesWithLabels)
+        public async Task Learn(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels)
         {
             Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
             {
@@ -113,7 +113,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
             await this.LearnTemplateMethod(imagesWithLabels, this.trainingFile, action);
         }
 
-        public async Task LearnMore(IList<KeyValuePair<Person, IEnumerable<Mat>>> imagesWithLabels, string savedTrainingFile)
+        public async Task LearnMore(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels, string savedTrainingFile)
         {
             Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
             {
@@ -125,7 +125,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
         }
 
         private async Task LearnTemplateMethod(
-            IList<KeyValuePair<Person, IEnumerable<Mat>>> imagesWithLabels,
+            IDictionary<Person, IEnumerable<Mat>> imagesWithLabels,
             string savedTrainingFile,
             Action<LBPHFaceRecognizer, Mat[], int[]> learnAction)
         {
