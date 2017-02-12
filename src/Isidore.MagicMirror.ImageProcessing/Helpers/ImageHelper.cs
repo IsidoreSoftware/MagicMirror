@@ -1,4 +1,3 @@
-using System;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition;
 using OpenCvSharp;
 
