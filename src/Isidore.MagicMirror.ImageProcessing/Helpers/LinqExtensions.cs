@@ -11,9 +11,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Helpers
             var maxVal = int.MinValue;
             foreach (var el in collection)
             {
-                if (comparisonAction(el) > maxVal)
+                var value = comparisonAction(el);
+                if (value > maxVal)
                 {
                     max = el;
+                    maxVal = value;
                 }
             }
 

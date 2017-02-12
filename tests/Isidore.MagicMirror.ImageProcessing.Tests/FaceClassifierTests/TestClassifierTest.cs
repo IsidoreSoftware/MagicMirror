@@ -48,5 +48,18 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
             Assert.Equal(4, faces.Count());
         }
+
+        [Fact]
+        public void can_detect_the_biggest_face_among_many()
+        {
+            Mat image = new Mat("FaceClassifierTests/test_image2.jpg");
+
+            var face = classifier.RectangleDetectTheBiggestFace(image);
+
+            Assert.Equal(313, face.Top);
+            Assert.Equal(75, face.Left);
+            Assert.Equal(147, face.Width);
+            Assert.Equal(147, face.Height);
+        }
     }
 }
