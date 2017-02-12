@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
-using Isidore.MagicMirror.ImageProcessing.Helpers;
 using OpenCvSharp;
 using System.IO;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
+using System.Linq;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
@@ -39,6 +37,16 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
             Assert.Equal(278, face.Width);
             Assert.Equal(261, face.Top);
             Assert.Equal(611, face.Left);
+        }
+
+        [Fact]
+        public void haar_classifier_can_get_more_than_one_face()
+        {
+            Mat image = new Mat("FaceClassifierTests/test_image2.jpg");
+
+            var faces = classifier.DetectAllFaces(image);
+
+            Assert.Equal(4, faces.Count());
         }
     }
 }
