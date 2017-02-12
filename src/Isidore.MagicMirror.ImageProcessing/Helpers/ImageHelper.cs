@@ -8,12 +8,12 @@ namespace Isidore.MagicMirror.ImageProcessing.Helpers
     {
         public static Mat Crop(this Mat image, Area area)
         {
-            throw new NotImplementedException();
+            return image.SubMat(area.Top, area.Top + area.Height, area.Left, area.Left + area.Width);
         }
 
         public static Mat Scale(this Mat image, Size size)
         {
-            throw new NotImplementedException();            
+            return image.Resize(size, 0, 0, InterpolationFlags.Lanczos4);
         }
     }
 }
