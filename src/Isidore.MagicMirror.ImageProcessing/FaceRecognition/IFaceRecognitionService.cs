@@ -9,8 +9,8 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
         
         RecognitionResult<Person> Recognize(TImage image, IList<Person> users, string savedTrainingFile = null);
 
-        Task Learn(IList<KeyValuePair<Person, IEnumerable<TImage>>> imagesWithLabels);
+        Task Learn(IDictionary<Person, IEnumerable<TImage>> imagesWithLabels);
 
-        Task LearnMore(IList<KeyValuePair<Person, IEnumerable<TImage>>> imagesWithLabels, string savedTrainingFile);
+        Task LearnMore(IDictionary<Person, IEnumerable<TImage>> imagesWithLabels, string savedTrainingFile);
     }
 }
