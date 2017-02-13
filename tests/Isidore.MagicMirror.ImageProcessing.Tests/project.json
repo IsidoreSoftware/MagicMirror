@@ -7,8 +7,7 @@
     "System.Runtime.Serialization.Primitives": "4.3.0",
     "xunit": "2.1.0",
     "dotnet-test-xunit": "1.0.0-*",
-    "Isidore.MagicMirror.ImageProcessing": "1.0.0-*",
-    "Moq": "4.6.38-alpha"
+    "Isidore.MagicMirror.ImageProcessing": "1.0.0-*"
   },
   "testRunner": "xunit",
   "frameworks": {
