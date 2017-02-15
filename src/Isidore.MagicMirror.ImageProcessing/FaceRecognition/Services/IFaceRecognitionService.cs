@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 
-namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition
+namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
     public interface IFaceRecognitionService<TImage>
     {

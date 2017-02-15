@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenCvSharp;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using System.IO;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
