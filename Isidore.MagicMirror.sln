@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79E15313-B7F7-4AC1-B062-83D379FFEE00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{771E6CF1-4637-4F3B-80E2-F45489376917}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.ImageProcessing", "src\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.xproj", "{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.API", "src\Isidore.MagicMirror.API\Isidore.MagicMirror.API.xproj", "{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.ImageProcessing.Tests", "tests\Isidore.MagicMirror.ImageProcessing.Tests\Isidore.MagicMirror.ImageProcessing.Tests.xproj", "{7A5C5270-A603-42D2-9188-19CFF44A1814}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.API.Tests", "tests\Isidore.MagicMirror.API.Tests\Isidore.MagicMirror.API.Tests.xproj", "{F6783021-0F8C-437C-86F9-2BFD472C8E37}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Infrastructure", "src\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.xproj", "{87646170-CCE1-4C7A-BC01-C1F8EA102FC0}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Utils", "src\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.xproj", "{18ED4662-CAEB-4932-8450-137B3CE91768}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5C5270-A603-42D2-9188-19CFF44A1814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5C5270-A603-42D2-9188-19CFF44A1814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5C5270-A603-42D2-9188-19CFF44A1814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5C5270-A603-42D2-9188-19CFF44A1814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6783021-0F8C-437C-86F9-2BFD472C8E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6783021-0F8C-437C-86F9-2BFD472C8E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6783021-0F8C-437C-86F9-2BFD472C8E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6783021-0F8C-437C-86F9-2BFD472C8E37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18ED4662-CAEB-4932-8450-137B3CE91768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18ED4662-CAEB-4932-8450-137B3CE91768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18ED4662-CAEB-4932-8450-137B3CE91768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18ED4662-CAEB-4932-8450-137B3CE91768}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6CB2A8D8-3360-4084-A556-2B25CD8C3A6F} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+		{7FC0B137-DDAB-4909-9D4D-E610A4F1B9C5} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+		{7A5C5270-A603-42D2-9188-19CFF44A1814} = {771E6CF1-4637-4F3B-80E2-F45489376917}
+		{F6783021-0F8C-437C-86F9-2BFD472C8E37} = {771E6CF1-4637-4F3B-80E2-F45489376917}
+		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+		{18ED4662-CAEB-4932-8450-137B3CE91768} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+	EndGlobalSection
+EndGlobal
