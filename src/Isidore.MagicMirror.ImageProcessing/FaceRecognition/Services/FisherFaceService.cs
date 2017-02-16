@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using OpenCvSharp;
 using OpenCvSharp.Face;
 

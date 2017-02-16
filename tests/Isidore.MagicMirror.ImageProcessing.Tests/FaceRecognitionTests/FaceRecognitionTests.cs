@@ -5,9 +5,10 @@ using System.Linq;
 using OpenCvSharp;
 using Xunit;
 using System;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Threading.Tasks;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
@@ -75,29 +76,4 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         }
     }
 
-    internal static class PhotoLoaderHelper
-    {
-        public static IDictionary<Person, IEnumerable<Mat>> LoadPhotos(string path, string classRegex, string exclusion = null)
-        {
-            var dictionary = new Dictionary<Person, IEnumerable<Mat>>();
-            var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
-
-            foreach (var file in files)
-            {
-                var m = Regex.Match(file, classRegex);
-                Person label = new Person()
-                {
-                    Name = m.Groups[1].Value,
-                    Id = int.Parse(m.Groups[1].Value)
-                };
-
-                if (!dictionary.Keys.Any(x => x.Id == label.Id))
-                    dictionary.Add(label, new List<Mat>());
-
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(new Mat(Path.Combine(path, file), ImreadModes.GrayScale));
-            }
-
-            return dictionary;
-        }
-    }
 }
