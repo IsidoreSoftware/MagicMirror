@@ -14,7 +14,7 @@ namespace Isidore.MagicMirror.API.Controllers
 
         public FacesController() : base("/faces")
         {
-            var classifier = new HaarCascadeClassifier("..\\Isidore.MagicMirror.ImageProcessing\\FaceRecognition\\Classifiers");
+            var classifier = new HaarCascadeClassifier(".");
             _faceService = new FisherFaceByteProxy(classifier, "D:\\Kuba\\Desktop\\learn.yml");
             RegisterActions();
         }
@@ -46,7 +46,7 @@ namespace Isidore.MagicMirror.API.Controllers
             var imageBytes = await response.File.Value.ToByteArray();
 
 
-            return $"Learned {id}";
+            return $"Learned {id} with {imageBytes.Length} bytes";
         }
     }
 }

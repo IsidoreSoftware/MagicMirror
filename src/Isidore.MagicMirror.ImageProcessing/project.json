@@ -1,17 +1,18 @@
 {
-  "version": "1.0.0-*",
-  "buildOptions": {
-    "debugType": "portable"
-  },
-  "dependencies": {
-    "OpenCvSharp3-AnyCPU": "3.2.0.20170126"
-  },
-  "frameworks": {
-    "netstandard1.6": {
-      "dependencies": {
-        "NETStandard.Library": "1.6.1",
-        "CoreCompat.System.Drawing": "1.0.0-beta006"
-      }
+    "version": "1.0.0-*",
+    "buildOptions": {
+        "debugType": "portable"
+    },
+    "dependencies": {
+        "OpenCvSharp3-AnyCPU": "3.2.0.20170210-beta",
+        "System.Runtime.InteropServices.RuntimeInformation": "4.3.0"
+    },
+    "frameworks": {
+        "netstandard1.6": {
+            "dependencies": {
+                "NETStandard.Library": "1.6.1",
+                "CoreCompat.System.Drawing": "1.0.0-beta006"
+            }
+        }
     }
-  }
 }
