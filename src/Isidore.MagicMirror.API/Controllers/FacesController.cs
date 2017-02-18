@@ -17,7 +17,8 @@ namespace Isidore.MagicMirror.API.Controllers
         public FacesController() : base("/faces")
         {
             var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
-            var classifier = new HaarCascadeClassifier(fileProvider);
+            var classifier = new HaarCascadeClassifier(fileProvider,
+                "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
             _faceService = new FisherFaceByteProxy(classifier, "D:\\Kuba\\Desktop\\learn.yml");
             RegisterActions();
         }

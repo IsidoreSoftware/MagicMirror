@@ -21,7 +21,15 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
                 throw new FileNotFoundException("File with face definition can't be found");
             }
 
-            haarCascade = new CascadeClassifier(cascadeFileInfo.PhysicalPath);
+            string fullFileName = cascadeFileInfo.PhysicalPath;
+
+            if(string.IsNullOrWhiteSpace(fullFileName))
+            {
+                fullFileName = Path.GetTempFileName();
+                cascadeFileInfo.CreateReadStream().CopyTo(File.OpenWrite(fullFileName));
+            }
+
+            haarCascade = new CascadeClassifier(fullFileName);
         }
 
         public IEnumerable<Area> DetectAllFaces(Mat image)
