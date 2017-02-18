@@ -26,7 +26,7 @@ namespace Isidore.MagicMirror.API.Controllers
         public FacesController() : base("/faces")
         {
             var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
-            
+
             var classifier = new HaarCascadeClassifier(fileProvider,
                 "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
             _faceService = new FisherFaceByteProxy(classifier, LearnFilePath);
@@ -96,10 +96,10 @@ namespace Isidore.MagicMirror.API.Controllers
             }
             var imageBytes = await response.File.Value.ToByteArray();
             var users = _usersService.GetAllPersons();
-            var u = await _faceService.RecognizeAsync(imageBytes,users, LearnFilePath);
+            var u = await _faceService.RecognizeAsync(imageBytes, users, LearnFilePath);
 
             watch.Stop();
-            return $"It's {u.RecognizedItem.Name}. Recognized in {watch.ElapsedMilliseconds} ms";
+            return $"It's {u.RecognizedItem.Name} (d:{u.Distance:#.##}) Recognized in {watch.ElapsedMilliseconds} ms";
         }
     }
 }

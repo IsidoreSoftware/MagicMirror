@@ -101,7 +101,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
 
                 result.Area = faceRec;
-                result.Confidence = confidence;
+                result.Distance = confidence;
                 return result;
             });
         }

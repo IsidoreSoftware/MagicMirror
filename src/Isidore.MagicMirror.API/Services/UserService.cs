@@ -31,6 +31,11 @@ namespace Isidore.MagicMirror.API.Services
                 {
                     Id = 126,
                     Name = $"Monika Zalewska"
+                },
+                 new Person
+                {
+                    Id = 127,
+                    Name = $"Scarlett Johansson"
                 }};
         }
     }
