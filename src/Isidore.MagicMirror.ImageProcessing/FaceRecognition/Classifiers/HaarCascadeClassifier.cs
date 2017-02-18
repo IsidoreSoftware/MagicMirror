@@ -26,7 +26,10 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
             if(string.IsNullOrWhiteSpace(fullFileName))
             {
                 fullFileName = Path.GetTempFileName();
-                cascadeFileInfo.CreateReadStream().CopyTo(File.OpenWrite(fullFileName));
+                using (var outstream = File.OpenWrite(fullFileName))
+                {
+                    cascadeFileInfo.CreateReadStream().CopyTo(outstream);
+                }
             }
 
             haarCascade = new CascadeClassifier(fullFileName);
