@@ -1,8 +1,10 @@
 using Xunit;
 using OpenCvSharp;
-using System.IO;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Linq;
+using FakeItEasy;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
@@ -12,8 +14,9 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public TestClassifierTest()
         {
-            classifier = new HaarCascadeClassifier(
-                Path.Combine(Directory.GetCurrentDirectory(), "FaceClassifierTests"));
+            IFileProvider fileProvider = TestMocker
+                .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
+            classifier = new HaarCascadeClassifier(fileProvider);
         }
 
         [Fact]

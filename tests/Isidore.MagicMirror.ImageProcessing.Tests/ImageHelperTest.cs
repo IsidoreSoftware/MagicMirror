@@ -1,4 +1,4 @@
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using OpenCvSharp;
 using Xunit;

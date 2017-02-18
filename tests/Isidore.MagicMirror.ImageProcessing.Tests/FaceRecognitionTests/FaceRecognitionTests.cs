@@ -5,15 +5,24 @@ using System.Linq;
 using OpenCvSharp;
 using Xunit;
 using System;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Threading.Tasks;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
+using Microsoft.Extensions.FileProviders;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     public class FaceRecognitionTests : IDisposable
     {
         IDictionary<Person, IEnumerable<Mat>> faceDatabase;
+        IFileProvider fileProvider;
+
+        public FaceRecognitionTests()
+        {
+            fileProvider = TestMocker
+                   .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
+        }
 
         [Theory]
         [InlineData("i292ua-fn.jpg", 292)]
@@ -25,7 +34,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         public async Task when_given_the_same_face_should_recognize_correctly(string imageSrc, int label)
         {
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*");
-            var classifier = new HaarCascadeClassifier("FaceClassifierTests");
+            IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider);
             var identityRecognizer = new FisherFaceService(classifier);
             var users = faceDatabase.Keys;
 
@@ -49,7 +58,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         public async Task when_given_the_similar_face_should_recognize_correctly(string imageSrc, int label)
         {
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*","ua-");
-            var classifier = new HaarCascadeClassifier("FaceClassifierTests");
+            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider);
             var identityRecognizer = new FisherFaceService(classifier);
             var users = faceDatabase.Keys;
 
@@ -75,29 +84,4 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         }
     }
 
-    internal static class PhotoLoaderHelper
-    {
-        public static IDictionary<Person, IEnumerable<Mat>> LoadPhotos(string path, string classRegex, string exclusion = null)
-        {
-            var dictionary = new Dictionary<Person, IEnumerable<Mat>>();
-            var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
-
-            foreach (var file in files)
-            {
-                var m = Regex.Match(file, classRegex);
-                Person label = new Person()
-                {
-                    Name = m.Groups[1].Value,
-                    Id = int.Parse(m.Groups[1].Value)
-                };
-
-                if (!dictionary.Keys.Any(x => x.Id == label.Id))
-                    dictionary.Add(label, new List<Mat>());
-
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(new Mat(Path.Combine(path, file), ImreadModes.GrayScale));
-            }
-
-            return dictionary;
-        }
-    }
 }
