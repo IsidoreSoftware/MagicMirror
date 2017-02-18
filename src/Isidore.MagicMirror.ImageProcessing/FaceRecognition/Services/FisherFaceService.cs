@@ -68,6 +68,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                     facePic = image.Crop(faceRec);
                 }
                 int prediction;
+                double confidence;
 
                 var result = new RecognitionResult<Person>();
                 try
@@ -78,7 +79,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                         var size = new Size(minFaceSize, minFaceSize);
                         var resizedFace = facePic.Scale(size);
 
-                        prediction = ffr.Predict(resizedFace);
+                        ffr.Predict(resizedFace,out prediction,out confidence);
                     }
                 }
                 catch (Exception ex)
@@ -100,6 +101,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
 
                 result.Area = faceRec;
+                result.Confidence = confidence;
                 return result;
             });
         }
