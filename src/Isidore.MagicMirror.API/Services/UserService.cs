@@ -20,17 +20,17 @@ namespace Isidore.MagicMirror.API.Services
                 new Person
                 {
                     Id = 123,
-                    Name = $"Person no 123"
+                    Name = $"Kuba Matjanowski"
                 },
                 new Person
                 {
                     Id = 125,
-                    Name = $"Person no 125"
+                    Name = $"George Clooney"
                 },
                  new Person
                 {
                     Id = 126,
-                    Name = $"Person no 126"
+                    Name = $"Monika Zalewska"
                 }};
         }
     }

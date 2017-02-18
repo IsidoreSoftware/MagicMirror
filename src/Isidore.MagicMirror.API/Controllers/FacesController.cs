@@ -11,6 +11,7 @@ using Isidore.MagicMirror.API.Services;
 using System.Collections.Generic;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using System;
+using System.Diagnostics;
 
 namespace Isidore.MagicMirror.API.Controllers
 {
@@ -18,6 +19,7 @@ namespace Isidore.MagicMirror.API.Controllers
     {
         private IFaceRecognitionService<byte[]> _faceService;
         private UserService _usersService;
+        private Stopwatch watch = new Stopwatch();
 
         private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
 
@@ -64,7 +66,8 @@ namespace Isidore.MagicMirror.API.Controllers
 
         public async Task<dynamic> LearnImage(FileUploadRequest response, string id)
         {
-
+            watch.Reset();
+            watch.Start();
             if (!response.File.Name.EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
@@ -75,13 +78,16 @@ namespace Isidore.MagicMirror.API.Controllers
             var user = _usersService.GetPersonById(id);
             var usersToLearn = new Dictionary<Person, IEnumerable<byte[]>>();
             usersToLearn.Add(user, new List<byte[]> { imageBytes });
-            await _faceService.Learn(usersToLearn);
-            return $"Learned {id} with {imageBytes.Length} bytes";
+            await _faceService.LearnMore(usersToLearn, LearnFilePath);
+            watch.Stop();
+            return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
         }
 
         public async Task<dynamic> RecognizeUser(FileUploadRequest response)
         {
 
+            watch.Reset();
+            watch.Start();
             if (!response.File.Name.EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
@@ -92,7 +98,8 @@ namespace Isidore.MagicMirror.API.Controllers
             var users = _usersService.GetAllPersons();
             var u = await _faceService.RecognizeAsync(imageBytes,users, LearnFilePath);
 
-            return u;
+            watch.Stop();
+            return $"It's {u.RecognizedItem.Name}. Recognized in {watch.ElapsedMilliseconds} ms";
         }
     }
 }
