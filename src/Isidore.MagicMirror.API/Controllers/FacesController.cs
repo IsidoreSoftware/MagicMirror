@@ -5,6 +5,8 @@ using Nancy.ModelBinding;
 using Isidore.MagicMirror.Infrastructure.Http.FileUploads;
 using Isidore.MagicMirror.Utils.Helpers.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace Isidore.MagicMirror.API.Controllers
 {
@@ -14,7 +16,8 @@ namespace Isidore.MagicMirror.API.Controllers
 
         public FacesController() : base("/faces")
         {
-            var classifier = new HaarCascadeClassifier(".");
+            var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
+            var classifier = new HaarCascadeClassifier(fileProvider);
             _faceService = new FisherFaceByteProxy(classifier, "D:\\Kuba\\Desktop\\learn.yml");
             RegisterActions();
         }

@@ -1,9 +1,12 @@
 {
     "version": "1.0.0-*",
     "buildOptions": {
-        "debugType": "portable"
+        "debugType": "portable",
+        "embed": [ "FaceRecognition/Classifiers/*.xml" ]
+
     },
     "dependencies": {
+        "Microsoft.Extensions.FileProviders.Embedded": "1.1.0",
         "OpenCvSharp3-AnyCPU": "3.2.0.20170210-beta",
         "System.Runtime.InteropServices.RuntimeInformation": "4.3.0"
     },

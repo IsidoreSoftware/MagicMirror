@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.FileProviders;
 using OpenCvSharp;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
@@ -9,17 +10,18 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 {
     public class HaarCascadeClassifier : IFaceClassifier<Mat>
     {
-        private const string faceHaarCascade = "haarcascade_frontalface_default.xml";
+        private const string defaultFaceHaarCascade = "haarcascade_frontalface_default.xml";
         private readonly CascadeClassifier haarCascade;
 
-        public HaarCascadeClassifier(string cascadeInfosBasePath)
+        public HaarCascadeClassifier(IFileProvider fileProvider, string cascadeFileName = null)
         {
-            var cascadeInfoFile = Path.Combine(cascadeInfosBasePath, faceHaarCascade);
-            if(!File.Exists(cascadeInfoFile)){
+            var cascadeFileInfo = fileProvider.GetFileInfo(cascadeFileName ?? defaultFaceHaarCascade);
+            if (!cascadeFileInfo.Exists)
+            {
                 throw new FileNotFoundException("File with face definition can't be found");
             }
 
-            haarCascade = new CascadeClassifier(cascadeInfoFile);
+            haarCascade = new CascadeClassifier(cascadeFileInfo.PhysicalPath);
         }
 
         public IEnumerable<Area> DetectAllFaces(Mat image)
