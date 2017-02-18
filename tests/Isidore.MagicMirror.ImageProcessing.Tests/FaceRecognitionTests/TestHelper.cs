@@ -26,8 +26,8 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 
                 if (!dictionary.Keys.Any(x => x.Id == label.Id))
                     dictionary.Add(label, new List<Mat>());
-
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(new Mat(Path.Combine(path, file), ImreadModes.GrayScale));
+                var img = new Mat(Path.Combine(path, file), ImreadModes.GrayScale);
+                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(img);
             }
 
             return dictionary;

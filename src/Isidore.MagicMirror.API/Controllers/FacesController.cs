@@ -7,19 +7,26 @@ using Isidore.MagicMirror.Utils.Helpers.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using Isidore.MagicMirror.API.Services;
+using System.Collections.Generic;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
+using System;
 
 namespace Isidore.MagicMirror.API.Controllers
 {
     public class FacesController : NancyModule
     {
         private IFaceRecognitionService<byte[]> _faceService;
+        private UserService _usersService;
 
         public FacesController() : base("/faces")
         {
             var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
+            
             var classifier = new HaarCascadeClassifier(fileProvider,
                 "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
             _faceService = new FisherFaceByteProxy(classifier, "D:\\Kuba\\Desktop\\learn.yml");
+            _usersService = new UserService();
             RegisterActions();
         }
 
@@ -29,7 +36,14 @@ namespace Isidore.MagicMirror.API.Controllers
             base.Post("/learn/{id}", async (_, ctx) =>
             {
                 var response = this.Bind<FileUploadRequest>();
-                return await LearnImage(response, _["id"]);
+                try
+                {
+                    return await LearnImage(response, _["id"]);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             });
 
             Post("/recognize", _ =>
@@ -48,8 +62,10 @@ namespace Isidore.MagicMirror.API.Controllers
                 return r;
             }
             var imageBytes = await response.File.Value.ToByteArray();
-
-
+            var user = _usersService.GetPersonById(id);
+            var usersToLearn = new Dictionary<Person, IEnumerable<byte[]>>();
+            usersToLearn.Add(user, new List<byte[]> { imageBytes });
+            await _faceService.Learn(usersToLearn);
             return $"Learned {id} with {imageBytes.Length} bytes";
         }
     }

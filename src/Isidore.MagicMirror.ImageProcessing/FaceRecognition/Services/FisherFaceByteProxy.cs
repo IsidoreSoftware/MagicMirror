@@ -61,7 +61,9 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
         private static Mat GetMatFromBytes(byte[] image)
         {
-            return OpenCvSharp.Cv2.ImDecode(image, ImreadModes.GrayScale);
+            return Mat.FromImageData(image, ImreadModes.GrayScale);
+
+            //return OpenCvSharp.Cv2.ImDecode(image, ImreadModes.GrayScale);
         }
     }
 }
