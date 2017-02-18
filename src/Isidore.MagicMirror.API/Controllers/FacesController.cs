@@ -19,13 +19,15 @@ namespace Isidore.MagicMirror.API.Controllers
         private IFaceRecognitionService<byte[]> _faceService;
         private UserService _usersService;
 
+        private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
+
         public FacesController() : base("/faces")
         {
             var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
             
             var classifier = new HaarCascadeClassifier(fileProvider,
                 "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
-            _faceService = new FisherFaceByteProxy(classifier, "D:\\Kuba\\Desktop\\learn.yml");
+            _faceService = new FisherFaceByteProxy(classifier, LearnFilePath);
             _usersService = new UserService();
             RegisterActions();
         }
@@ -46,9 +48,17 @@ namespace Isidore.MagicMirror.API.Controllers
                 }
             });
 
-            Post("/recognize", _ =>
+            Post("/recognize", async _ =>
             {
-                return 500;
+                var response = this.Bind<FileUploadRequest>();
+                try
+                {
+                    return await RecognizeUser(response);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             });
         }
 
@@ -67,6 +77,22 @@ namespace Isidore.MagicMirror.API.Controllers
             usersToLearn.Add(user, new List<byte[]> { imageBytes });
             await _faceService.Learn(usersToLearn);
             return $"Learned {id} with {imageBytes.Length} bytes";
+        }
+
+        public async Task<dynamic> RecognizeUser(FileUploadRequest response)
+        {
+
+            if (!response.File.Name.EndsWith(".jpg"))
+            {
+                var r = (Response)"The file doesn't have not .jpg extension";
+                r.StatusCode = HttpStatusCode.BadRequest;
+                return r;
+            }
+            var imageBytes = await response.File.Value.ToByteArray();
+            var users = _usersService.GetAllPersons();
+            var u = await _faceService.RecognizeAsync(imageBytes,users, LearnFilePath);
+
+            return u;
         }
     }
 }

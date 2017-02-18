@@ -13,5 +13,25 @@ namespace Isidore.MagicMirror.API.Services
                 Name = $"Person no {id}"
             };
         }
+
+        public Person[] GetAllPersons()
+        {
+            return new Person[] {
+                new Person
+                {
+                    Id = 123,
+                    Name = $"Person no 123"
+                },
+                new Person
+                {
+                    Id = 125,
+                    Name = $"Person no 125"
+                },
+                 new Person
+                {
+                    Id = 126,
+                    Name = $"Person no 126"
+                }};
+        }
     }
 }
