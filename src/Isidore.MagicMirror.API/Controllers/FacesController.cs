@@ -99,7 +99,7 @@ namespace Isidore.MagicMirror.API.Controllers
             var u = await _faceService.RecognizeAsync(imageBytes, users, LearnFilePath);
 
             watch.Stop();
-            return $"It's {u.RecognizedItem.Name} (d:{u.Distance:#.##}) Recognized in {watch.ElapsedMilliseconds} ms";
+            return $"It's {u.RecognizedItem.Name} (d:{u.Distance:#.##}). Recognized in {watch.ElapsedMilliseconds} ms";
         }
     }
 }
