@@ -19,6 +19,12 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Infrast
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Utils", "src\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.xproj", "{18ED4662-CAEB-4932-8450-137B3CE91768}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90A77427-DA03-4081-8EA1-46E672F81F31}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
