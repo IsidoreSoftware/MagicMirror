@@ -21,6 +21,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Utils",
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Users", "src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.xproj", "{A6452CA2-C3A4-4A8E-9B62-87979CB26CB5}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Isidore.MagicMirror.Users.Tests", "tests\Isidore.MagicMirror.Users.Tests\Isidore.MagicMirror.Users.Tests.xproj", "{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A6452CA2-C3A4-4A8E-9B62-87979CB26CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6452CA2-C3A4-4A8E-9B62-87979CB26CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6452CA2-C3A4-4A8E-9B62-87979CB26CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{87646170-CCE1-4C7A-BC01-C1F8EA102FC0} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
 		{18ED4662-CAEB-4932-8450-137B3CE91768} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
 		{A6452CA2-C3A4-4A8E-9B62-87979CB26CB5} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+		{4924F6D5-4D23-45D7-A1CC-74C6D2A56F3C} = {771E6CF1-4637-4F3B-80E2-F45489376917}
 	EndGlobalSection
 EndGlobal
