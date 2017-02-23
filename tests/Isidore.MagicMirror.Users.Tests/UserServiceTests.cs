@@ -1,5 +1,5 @@
-﻿using Isidore.MagicMirror.Users.Services;
-using System.Threading.Tasks;
+﻿using Isidore.MagicMirror.Infrastructure.Services;
+using Isidore.MagicMirror.Users.Services;
 using Xunit;
 
 namespace Isidore.MagicMirror.Users.Tests
@@ -11,9 +11,15 @@ namespace Isidore.MagicMirror.Users.Tests
         }
 
         [Fact]
-        public async Task can_create_user_service()
+        public void can_create_user_service()
         {
             var userService = new UserService();
+        }
+
+        [Fact]
+        public void user_service_should_implement_base_data_service()
+        {
+            Assert.IsAssignableFrom(typeof(IDataService<>), new UserService());
         }
     }
 }

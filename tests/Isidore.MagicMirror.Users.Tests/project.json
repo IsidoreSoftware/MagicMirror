@@ -3,6 +3,7 @@
 
     "dependencies": {
         "FakeItEasy": "3.0.0",
+        "Isidore.MagicMirror.Infrastructure": "1.0.0-*",
         "Isidore.MagicMirror.Users": "1.0.0-*",
         "NETStandard.Library": "1.6.1",
         "xunit": "2.2.0"
