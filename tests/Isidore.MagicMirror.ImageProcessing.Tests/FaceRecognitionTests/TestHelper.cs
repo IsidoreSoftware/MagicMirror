@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {

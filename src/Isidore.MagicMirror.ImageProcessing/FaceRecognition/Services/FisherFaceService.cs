@@ -8,10 +8,11 @@ using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
 using OpenCvSharp.Face;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
-    public class FisherFaceService : IFaceRecognitionService<Mat>
+    public class FisherFaceService : IFaceRecognitionService<Mat,Person>
     {
         private const double threshold = 90;
         private const double ConfidenceScaleBase = 50;

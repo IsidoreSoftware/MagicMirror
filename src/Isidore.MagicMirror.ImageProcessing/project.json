@@ -6,6 +6,7 @@
 
     },
     "dependencies": {
+        "Isidore.MagicMirror.Users": "1.0.0-*",
         "Microsoft.Extensions.FileProviders.Embedded": "1.1.0",
         "OpenCvSharp3-AnyCPU": "3.2.0.20170210-beta",
         "System.Runtime.InteropServices.RuntimeInformation": "4.3.0"

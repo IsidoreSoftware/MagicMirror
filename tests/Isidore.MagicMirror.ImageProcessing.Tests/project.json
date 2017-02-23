@@ -8,7 +8,8 @@
         "xunit": "2.1.0",
         "dotnet-test-xunit": "1.0.0-*",
         "Isidore.MagicMirror.ImageProcessing": "1.0.0-*",
-        "FakeItEasy": "3.0.0-rc001-build000097"
+        "FakeItEasy": "3.0.0-rc001-build000097",
+        "Isidore.MagicMirror.Users": "1.0.0-*"
     },
   "testRunner": "xunit",
   "frameworks": {

@@ -1,4 +1,4 @@
-namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models
+namespace Isidore.MagicMirror.Users.Models
 {
     public class Person
     {

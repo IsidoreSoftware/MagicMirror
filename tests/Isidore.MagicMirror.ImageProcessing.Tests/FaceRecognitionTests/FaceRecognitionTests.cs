@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Linq;
 using OpenCvSharp;
 using Xunit;
@@ -8,8 +6,8 @@ using System;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using Microsoft.Extensions.FileProviders;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {

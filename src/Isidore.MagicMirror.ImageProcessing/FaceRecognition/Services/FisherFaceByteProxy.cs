@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
-    public class FisherFaceByteProxy : IFaceRecognitionService<byte[]>
+    public class FisherFaceByteProxy : IFaceRecognitionService<byte[],Person>
     {
-        private IFaceRecognitionService<Mat> _service;
+        private IFaceRecognitionService<Mat,Person> _service;
+
         public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName = null)
         {
             _service = new FisherFaceService(classifier,fileName);
