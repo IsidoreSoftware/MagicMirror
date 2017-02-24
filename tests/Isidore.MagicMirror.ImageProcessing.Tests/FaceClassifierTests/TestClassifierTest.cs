@@ -1,10 +1,8 @@
 using Xunit;
-using OpenCvSharp;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Linq;
-using FakeItEasy;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Microsoft.Extensions.FileProviders;
-using System.IO;
+using OpenCvSharp;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {

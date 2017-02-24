@@ -8,7 +8,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
     {
         public static IFileProvider MockFileProvider(string file)
         {
-            IFileProvider fileProvider = A.Fake<IFileProvider>();
+           IFileProvider fileProvider = A.Fake<IFileProvider>();
             IFileInfo fi = A.Fake<IFileInfo>();
             var realFile = new FileInfo(file).FullName;
             A.CallTo(() => fi.PhysicalPath)
