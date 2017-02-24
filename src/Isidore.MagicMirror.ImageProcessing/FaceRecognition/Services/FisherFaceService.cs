@@ -12,7 +12,7 @@ using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
-    public class FisherFaceService : IFaceRecognitionService<Mat,Person>
+    public class FisherFaceService : IFaceRecognitionService<Mat,User>
     {
         private const double threshold = 90;
         private const double ConfidenceScaleBase = 50;
@@ -34,12 +34,12 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         private readonly IFaceClassifier<Mat> classifier;
 
 
-        public RecognitionResult<Person> Recognize(Mat image, IList<Person> users, string savedTrainingFile = null)
+        public RecognitionResult<User> Recognize(Mat image, IList<User> users, string savedTrainingFile = null)
         {
             return this.RecognizeAsync(image, users, savedTrainingFile).Result;
         }
 
-        public async Task<RecognitionResult<Person>> RecognizeAsync(Mat image, IList<Person> users, string savedTrainingFile = null)
+        public async Task<RecognitionResult<User>> RecognizeAsync(Mat image, IList<User> users, string savedTrainingFile = null)
         {
             return await Task.Factory.StartNew(() =>
             {
@@ -71,7 +71,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 int prediction;
                 double confidence;
 
-                var result = new RecognitionResult<Person>();
+                var result = new RecognitionResult<User>();
                 try
                 {
                     using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer())
@@ -94,7 +94,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
                 else
                 {
-                    result.RecognizedItem = new Person
+                    result.RecognizedItem = new User
                     {
                         Id = prediction,
                         Name = $"Unknown {prediction}"
@@ -107,7 +107,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             });
         }
 
-        public async Task Learn(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels)
+        public async Task Learn(IDictionary<User, IEnumerable<Mat>> imagesWithLabels)
         {
             Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
             {
@@ -117,7 +117,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             await this.LearnTemplateMethod(imagesWithLabels, this.trainingFile, action);
         }
 
-        public async Task LearnMore(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels, string savedTrainingFile)
+        public async Task LearnMore(IDictionary<User, IEnumerable<Mat>> imagesWithLabels, string savedTrainingFile)
         {
             Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
             {
@@ -129,7 +129,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         }
 
         private async Task LearnTemplateMethod(
-            IDictionary<Person, IEnumerable<Mat>> imagesWithLabels,
+            IDictionary<User, IEnumerable<Mat>> imagesWithLabels,
             string savedTrainingFile,
             Action<LBPHFaceRecognizer, Mat[], int[]> learnAction)
         {

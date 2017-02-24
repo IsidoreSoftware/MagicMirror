@@ -13,13 +13,14 @@ using System.Diagnostics;
 using Isidore.MagicMirror.Users.Models;
 using System.Linq;
 using Isidore.MagicMirror.Infrastructure.Services;
+using Isidore.MagicMirror.Users.Services;
 
 namespace Isidore.MagicMirror.API.Controllers
 {
     public class FacesController : NancyModule
     {
-        private IFaceRecognitionService<byte[], Person> _faceService;
-        private IDataService<Person> _usersService;
+        private IFaceRecognitionService<byte[], User> _faceService;
+        private IDataService<User> _usersService;
         private Stopwatch watch = new Stopwatch();
 
         private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
@@ -31,7 +32,7 @@ namespace Isidore.MagicMirror.API.Controllers
             var classifier = new HaarCascadeClassifier(fileProvider,
                 "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
             _faceService = new FisherFaceByteProxy(classifier, LearnFilePath);
-            //_usersService = new UserService();
+            _usersService = new UserService();
             RegisterActions();
         }
 
@@ -63,7 +64,7 @@ namespace Isidore.MagicMirror.API.Controllers
             }
             var imageBytes = await response.File.Value.ToByteArray();
             var user = _usersService.GetById(id);
-            var usersToLearn = new Dictionary<Person, IEnumerable<byte[]>>();
+            var usersToLearn = new Dictionary<User, IEnumerable<byte[]>>();
             usersToLearn.Add(user, new List<byte[]> { imageBytes });
             await _faceService.LearnMore(usersToLearn, LearnFilePath);
             watch.Stop();

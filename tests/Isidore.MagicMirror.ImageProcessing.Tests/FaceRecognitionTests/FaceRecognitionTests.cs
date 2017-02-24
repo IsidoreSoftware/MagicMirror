@@ -13,7 +13,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     public class FaceRecognitionTests : IDisposable
     {
-        IDictionary<Person, IEnumerable<Mat>> faceDatabase;
+        IDictionary<User, IEnumerable<Mat>> faceDatabase;
         IFileProvider fileProvider;
 
         public FaceRecognitionTests()

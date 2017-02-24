@@ -10,15 +10,15 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     internal static class PhotoLoaderHelper
     {
-        public static IDictionary<Person, IEnumerable<Mat>> LoadPhotos(string path, string classRegex, string exclusion = null)
+        public static IDictionary<User, IEnumerable<Mat>> LoadPhotos(string path, string classRegex, string exclusion = null)
         {
-            var dictionary = new Dictionary<Person, IEnumerable<Mat>>();
+            var dictionary = new Dictionary<User, IEnumerable<Mat>>();
             var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
 
             foreach (var file in files)
             {
                 var m = Regex.Match(file, classRegex);
-                Person label = new Person()
+                User label = new User()
                 {
                     Name = m.Groups[1].Value,
                     Id = int.Parse(m.Groups[1].Value)
@@ -33,15 +33,15 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             return dictionary;
         }
 
-        public static IDictionary<Person, IEnumerable<byte[]>> LoadPhotosByte(string path, string classRegex, string exclusion = null)
+        public static IDictionary<User, IEnumerable<byte[]>> LoadPhotosByte(string path, string classRegex, string exclusion = null)
         {
-            var dictionary = new Dictionary<Person, IEnumerable<byte[]>>();
+            var dictionary = new Dictionary<User, IEnumerable<byte[]>>();
             var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
 
             foreach (var file in files)
             {
                 var m = Regex.Match(file, classRegex);
-                Person label = new Person()
+                User label = new User()
                 {
                     Name = m.Groups[1].Value,
                     Id = int.Parse(m.Groups[1].Value)

@@ -8,16 +8,16 @@ using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
-    public class FisherFaceByteProxy : IFaceRecognitionService<byte[],Person>
+    public class FisherFaceByteProxy : IFaceRecognitionService<byte[],User>
     {
-        private IFaceRecognitionService<Mat,Person> _service;
+        private IFaceRecognitionService<Mat,User> _service;
 
         public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName = null)
         {
             _service = new FisherFaceService(classifier,fileName);
         }
 
-        public async Task Learn(IDictionary<Person, IEnumerable<byte[]>> imagesWithLabels)
+        public async Task Learn(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
         {
             var converted = ConvertImagesWithLabels(imagesWithLabels);
             
@@ -25,29 +25,29 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             await this._service.Learn(converted);
         }
 
-        public async Task LearnMore(IDictionary<Person, IEnumerable<byte[]>> imagesWithLabels, string savedTrainingFile)
+        public async Task LearnMore(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels, string savedTrainingFile)
         {
             var converted = ConvertImagesWithLabels(imagesWithLabels);
             await this._service.LearnMore(converted,savedTrainingFile);
         }
 
-        public RecognitionResult<Person> Recognize(byte[] image, IList<Person> users, string savedTrainingFile = null)
+        public RecognitionResult<User> Recognize(byte[] image, IList<User> users, string savedTrainingFile = null)
         {
             Mat data = GetMatFromBytes(image);
 
             return _service.Recognize(data, users, savedTrainingFile);
         }
 
-        public async Task<RecognitionResult<Person>> RecognizeAsync(byte[] image, IList<Person> users, string savedTrainingFile = null)
+        public async Task<RecognitionResult<User>> RecognizeAsync(byte[] image, IList<User> users, string savedTrainingFile = null)
         {
             Mat data = GetMatFromBytes(image);
 
             return await _service.RecognizeAsync(data, users, savedTrainingFile);
         }
 
-        private static IDictionary<Person, IEnumerable<Mat>> ConvertImagesWithLabels(IDictionary<Person, IEnumerable<byte[]>> imagesWithLabels)
+        private static IDictionary<User, IEnumerable<Mat>> ConvertImagesWithLabels(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
         {
-            var converted =  new Dictionary<Person, IEnumerable<Mat>>(imagesWithLabels.Count);
+            var converted =  new Dictionary<User, IEnumerable<Mat>>(imagesWithLabels.Count);
             foreach (var person in imagesWithLabels)
             {
                 var images = new List<Mat>(person.Value.Count());

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.6</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Isidore.MagicMirror.API</AssemblyName>
@@ -29,6 +29,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.0" />
     <PackageReference Include="Nancy" Version="2.0.0-barneyrubble" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
