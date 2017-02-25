@@ -17,10 +17,12 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
     {
         IDictionary<User, IEnumerable<Mat>> faceDatabase;
         IFileProvider fileProvider;
+        string learningFile;
 
         public FaceRecognitionTests()
         {
             fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            learningFile = Path.GetTempFileName();
         }
 
         [Theory]
@@ -35,11 +37,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             var path =  PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
             faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*");
             IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
-            var identityRecognizer = new FisherFaceService(classifier);
+            var identityRecognizer = new FisherFaceService(classifier, learningFile);
             var users = faceDatabase.Keys;
 
             //When
-            await identityRecognizer.Learn(faceDatabase);
+            await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
@@ -60,11 +62,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
             faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*","ua-");
             IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
-            var identityRecognizer = new FisherFaceService(classifier);
+            var identityRecognizer = new FisherFaceService(classifier, learningFile);
             var users = faceDatabase.Keys;
 
             //When
-            await identityRecognizer.Learn(faceDatabase);
+            await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);

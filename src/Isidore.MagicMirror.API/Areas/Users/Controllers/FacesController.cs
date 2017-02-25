@@ -55,14 +55,13 @@ namespace Isidore.MagicMirror.API.Areas.Users.Controllers
             var user = _usersService.GetById(id);
             var usersToLearn = new Dictionary<User, IEnumerable<byte[]>>();
             usersToLearn.Add(user, new List<byte[]> { imageBytes });
-            await _faceService.LearnMore(usersToLearn,"");
+            await _faceService.LearnMore(usersToLearn);
             watch.Stop();
             return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
         }
 
         public async Task<dynamic> RecognizeUser(FileUploadRequest response)
         {
-
             watch.Reset();
             watch.Start();
             if (!response.File.Name.EndsWith(".jpg"))
@@ -73,7 +72,7 @@ namespace Isidore.MagicMirror.API.Areas.Users.Controllers
             }
             var imageBytes = await response.File.Value.ToByteArray();
             var users = _usersService.GetAll();
-            var u = await _faceService.RecognizeAsync(imageBytes, users.ToList(), "");
+            var u = await _faceService.RecognizeAsync(imageBytes, users.ToList());
 
             watch.Stop();
             return $"It's {u.RecognizedItem.Name} (d:{u.Distance:#.##}). Recognized in {watch.ElapsedMilliseconds} ms";

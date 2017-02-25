@@ -21,8 +21,8 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
             IFileProvider fileProvider = new EmbeddedFileProvider(testAssembly);
             classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
         }
-    
-        
+
+
         [Theory]
         [InlineData("i292ua-fn.jpg", 292)]
         [InlineData("i293ua-fn.jpg", 293)]
@@ -34,12 +34,13 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         {
             var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
 
-            var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*","ua-");
-            var testedService = new FisherFaceByteProxy(classifier);
-            await testedService.Learn(images);
+            var learningFile = Path.GetTempFileName();
+            var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*", "ua-");
+            var testedService = new FisherFaceByteProxy(classifier, learningFile);
+            await testedService.LearnMore(images);
             var users = images.Keys;
 
-            
+
             var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
             var result = await testedService.RecognizeAsync(find, users.ToList());
 

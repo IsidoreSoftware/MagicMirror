@@ -12,37 +12,29 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
     {
         private IFaceRecognitionService<Mat,User> _service;
 
-        public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName = null)
+        public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName)
         {
             _service = new FisherFaceService(classifier,fileName);
         }
 
-        public async Task Learn(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
+        public async Task LearnMore(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
         {
             var converted = ConvertImagesWithLabels(imagesWithLabels);
-            
-
-            await this._service.Learn(converted);
+            await this._service.LearnMore(converted);
         }
 
-        public async Task LearnMore(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels, string savedTrainingFile)
-        {
-            var converted = ConvertImagesWithLabels(imagesWithLabels);
-            await this._service.LearnMore(converted,savedTrainingFile);
-        }
-
-        public RecognitionResult<User> Recognize(byte[] image, IList<User> users, string savedTrainingFile = null)
+        public RecognitionResult<User> Recognize(byte[] image, IList<User> users)
         {
             Mat data = GetMatFromBytes(image);
 
-            return _service.Recognize(data, users, savedTrainingFile);
+            return _service.Recognize(data, users);
         }
 
-        public async Task<RecognitionResult<User>> RecognizeAsync(byte[] image, IList<User> users, string savedTrainingFile = null)
+        public async Task<RecognitionResult<User>> RecognizeAsync(byte[] image, IList<User> users)
         {
             Mat data = GetMatFromBytes(image);
 
-            return await _service.RecognizeAsync(data, users, savedTrainingFile);
+            return await _service.RecognizeAsync(data, users);
         }
 
         private static IDictionary<User, IEnumerable<Mat>> ConvertImagesWithLabels(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
@@ -64,8 +56,6 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         private static Mat GetMatFromBytes(byte[] image)
         {
             return Mat.FromImageData(image, ImreadModes.GrayScale);
-
-            //return OpenCvSharp.Cv2.ImDecode(image, ImreadModes.GrayScale);
         }
     }
 }
