@@ -23,5 +23,15 @@ namespace Isidore.MagicMirror.Users.Tests
         {
             Assert.IsAssignableFrom(typeof(IDataService<User>), new UserService());
         }
+
+        [Fact]
+        public void get_all_users_return_all()
+        {
+            var userService = new UserService();
+
+            var users = userService.GetAll();
+
+            Assert.Equal(5, users.Length);
+        }
     }
 }

@@ -2,10 +2,11 @@
 using Isidore.MagicMirror.Infrastructure.Paging;
 using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Models;
+using Isidore.MagicMirror.Users.Contract;
 
 namespace Isidore.MagicMirror.Users.Services
 {
-    public class UserService : IDataService<User>
+    public class UserService : IUserService
     {
         public User[] GetAll()
         {

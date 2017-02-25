@@ -1,38 +1,27 @@
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Nancy;
 using Nancy.ModelBinding;
 using Isidore.MagicMirror.Infrastructure.Http.FileUploads;
 using Isidore.MagicMirror.Utils.Helpers.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.FileProviders;
-using System.Reflection;
 using System.Collections.Generic;
-using System;
 using System.Diagnostics;
 using Isidore.MagicMirror.Users.Models;
 using System.Linq;
-using Isidore.MagicMirror.Infrastructure.Services;
-using Isidore.MagicMirror.Users.Services;
+using Isidore.MagicMirror.Users.Contract;
 
-namespace Isidore.MagicMirror.API.Controllers
+namespace Isidore.MagicMirror.API.Areas.Users.Controllers
 {
     public class FacesController : NancyModule
     {
         private IFaceRecognitionService<byte[], User> _faceService;
-        private IDataService<User> _usersService;
+        private IUserService _usersService;
         private Stopwatch watch = new Stopwatch();
 
-        private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
-
-        public FacesController() : base("/faces")
+        public FacesController(IUserService userService, IFaceRecognitionService<byte[],User> faceService) : base("/faces")
         {
-            var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
-
-            var classifier = new HaarCascadeClassifier(fileProvider,
-                "Assets.HaarClassifiers.haarcascade_frontalface_default.xml");
-            _faceService = new FisherFaceByteProxy(classifier, LearnFilePath);
-            _usersService = new UserService();
+            _faceService = faceService;
+            _usersService = userService;
             RegisterActions();
         }
 
@@ -66,7 +55,7 @@ namespace Isidore.MagicMirror.API.Controllers
             var user = _usersService.GetById(id);
             var usersToLearn = new Dictionary<User, IEnumerable<byte[]>>();
             usersToLearn.Add(user, new List<byte[]> { imageBytes });
-            await _faceService.LearnMore(usersToLearn, LearnFilePath);
+            await _faceService.LearnMore(usersToLearn,"");
             watch.Stop();
             return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
         }
@@ -84,7 +73,7 @@ namespace Isidore.MagicMirror.API.Controllers
             }
             var imageBytes = await response.File.Value.ToByteArray();
             var users = _usersService.GetAll();
-            var u = await _faceService.RecognizeAsync(imageBytes, users.ToList(), LearnFilePath);
+            var u = await _faceService.RecognizeAsync(imageBytes, users.ToList(), "");
 
             watch.Stop();
             return $"It's {u.RecognizedItem.Name} (d:{u.Distance:#.##}). Recognized in {watch.ElapsedMilliseconds} ms";
