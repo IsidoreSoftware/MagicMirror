@@ -34,7 +34,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 
             haarCascade = new CascadeClassifier(fullFileName);
         }
-
+ 
         public IEnumerable<Area> DetectAllFaces(Mat image)
         {
             var faces = haarCascade.DetectMultiScale(image);

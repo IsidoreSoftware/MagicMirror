@@ -17,7 +17,8 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public FaceRecognitionFromBytesTests()
         {
-            IFileProvider fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            var testAssembly = typeof(FaceRecognitionFromBytesTests).GetTypeInfo().Assembly;
+            IFileProvider fileProvider = new EmbeddedFileProvider(testAssembly);
             classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
         }
     
@@ -31,13 +32,15 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [InlineData("i297ua-mn.jpg", 297)]
         public async Task should_recognize_correctly_from_bytes(string imageSrc, int label)
         {
-            var images = PhotoLoaderHelper.LoadPhotosByte("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*","ua-");
+            var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
+
+            var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*","ua-");
             var testedService = new FisherFaceByteProxy(classifier);
             await testedService.Learn(images);
             var users = images.Keys;
 
             
-            var find = File.ReadAllBytes($"FaceRecognitionTests/TestPhotos/{imageSrc}");
+            var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
             var result = await testedService.RecognizeAsync(find, users.ToList());
 
             Assert.Equal(label, result.RecognizedItem.Id);

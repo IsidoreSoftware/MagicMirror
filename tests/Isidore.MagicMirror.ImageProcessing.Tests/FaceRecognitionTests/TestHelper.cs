@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using OpenCvSharp;
 using Isidore.MagicMirror.Users.Models;
+using System.Reflection;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
@@ -35,6 +36,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 
         public static IDictionary<User, IEnumerable<byte[]>> LoadPhotosByte(string path, string classRegex, string exclusion = null)
         {
+
             var dictionary = new Dictionary<User, IEnumerable<byte[]>>();
             var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
 
@@ -55,6 +57,15 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             }
 
             return dictionary;
+        }
+
+        public static string GetLocalPath(string relativePath)
+        {
+            var dllPath = typeof(PhotoLoaderHelper).GetTypeInfo().Assembly.CodeBase;
+            var toCut = "file:///".Length;
+            dllPath = dllPath.Substring(toCut, dllPath.Length - toCut);
+            string path = Path.Combine(Path.GetDirectoryName(dllPath), relativePath.Replace("/", "\\")).ToString();
+            return path;
         }
     }
 }
