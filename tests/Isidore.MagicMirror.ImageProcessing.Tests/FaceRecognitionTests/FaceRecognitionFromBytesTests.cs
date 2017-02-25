@@ -6,6 +6,8 @@ using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests;
 using OpenCvSharp;
 using Xunit;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
@@ -15,9 +17,8 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public FaceRecognitionFromBytesTests()
         {
-            var fileProvider = TestMocker
-                      .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
-            classifier = new HaarCascadeClassifier(fileProvider);
+            IFileProvider fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
         }
     
         

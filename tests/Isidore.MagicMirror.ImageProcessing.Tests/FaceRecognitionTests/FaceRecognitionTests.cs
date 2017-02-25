@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Microsoft.Extensions.FileProviders;
 using Isidore.MagicMirror.Users.Models;
+using System.Reflection;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
@@ -18,8 +19,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 
         public FaceRecognitionTests()
         {
-            fileProvider = TestMocker
-                   .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
+            fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
         }
 
         [Theory]
@@ -32,7 +32,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         public async Task when_given_the_same_face_should_recognize_correctly(string imageSrc, int label)
         {
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*");
-            IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider);
+            IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
             var identityRecognizer = new FisherFaceService(classifier);
             var users = faceDatabase.Keys;
 
@@ -56,7 +56,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         public async Task when_given_the_similar_face_should_recognize_correctly(string imageSrc, int label)
         {
             faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*","ua-");
-            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider);
+            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
             var identityRecognizer = new FisherFaceService(classifier);
             var users = faceDatabase.Keys;
 
