@@ -88,7 +88,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     throw ex;
                 }
-                var user = users.SingleOrDefault(x => x.Id == prediction);
+                var user = users.SingleOrDefault(x => x.UserNo == prediction);
                 if (user != null)
                 {
                     result.RecognizedItem = user;
@@ -97,7 +97,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     result.RecognizedItem = new User
                     {
-                        Id = prediction,
+                        UserNo = prediction,
                         Name = $"Unknown {prediction}"
                     };
                 }
@@ -142,7 +142,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     var faceImage = GetFaceImage(photo).Resize(normalSize);
                     var face = trainingFaces.AddLast(faceImage);
-                    labels.AddLast(user.Key.Id);
+                    labels.AddLast(user.Key.UserNo);
                 }
             }
 

@@ -22,13 +22,13 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 User label = new User()
                 {
                     Name = m.Groups[1].Value,
-                    Id = int.Parse(m.Groups[1].Value)
+                    UserNo = int.Parse(m.Groups[1].Value)
                 };
 
-                if (!dictionary.Keys.Any(x => x.Id == label.Id))
+                if (!dictionary.Keys.Any(x => x.UserNo == label.UserNo))
                     dictionary.Add(label, new List<Mat>());
                 var img = new Mat(Path.Combine(path, file), ImreadModes.GrayScale);
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(img);
+                (dictionary.First(x => x.Key.UserNo == label.UserNo).Value as List<Mat>).Add(img);
             }
 
             return dictionary;
@@ -46,14 +46,14 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 User label = new User()
                 {
                     Name = m.Groups[1].Value,
-                    Id = int.Parse(m.Groups[1].Value)
+                    UserNo = int.Parse(m.Groups[1].Value)
                 };
 
-                if (!dictionary.Keys.Any(x => x.Id == label.Id))
+                if (!dictionary.Keys.Any(x => x.UserNo == label.UserNo))
                     dictionary.Add(label, new List<byte[]>());
 
 
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<byte[]>).Add(File.ReadAllBytes(Path.Combine(path, file)));
+                (dictionary.First(x => x.Key.UserNo == label.UserNo).Value as List<byte[]>).Add(File.ReadAllBytes(Path.Combine(path, file)));
             }
 
             return dictionary;

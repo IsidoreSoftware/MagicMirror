@@ -1,4 +1,5 @@
 ﻿using Isidore.MagicMirror.Infrastructure.Paging;
+using System.Collections.Generic;
 
 namespace Isidore.MagicMirror.Infrastructure.Services
 {
@@ -6,9 +7,9 @@ namespace Isidore.MagicMirror.Infrastructure.Services
     {
         T GetById(string id);
 
-        T[] GetFiltered(IFilter<T> filter);
+        IEnumerable<T> GetFiltered(IFilter<T> filter);
 
-        T[] GetAll();
+        IEnumerable<T> GetAll();
 
         ResultPage<T> GetFiltered(IFilter<T> filter, PageReqest pageRequest);
 

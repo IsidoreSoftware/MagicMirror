@@ -47,7 +47,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
             var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
 
         [Theory]
@@ -72,7 +72,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
             var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
 
         public void Dispose()

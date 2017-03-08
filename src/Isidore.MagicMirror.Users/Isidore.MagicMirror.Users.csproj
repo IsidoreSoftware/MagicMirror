@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -9,6 +9,6 @@ namespace Isidore.MagicMirror.Infrastructure.Paging
         public int PageNumber { get; set; }
         public int PageSize => Items.Count();
         public int RequestedPageSize { get; set; }
-        public int TotalElementCount { get; set; }
+        public long TotalElementCount { get; set; }
     }
 }

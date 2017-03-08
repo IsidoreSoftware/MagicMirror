@@ -44,7 +44,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
             var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
             var result = await testedService.RecognizeAsync(find, users.ToList());
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
     }
 }
