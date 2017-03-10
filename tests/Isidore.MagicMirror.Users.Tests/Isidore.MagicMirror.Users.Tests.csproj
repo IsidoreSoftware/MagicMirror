@@ -14,6 +14,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
+		<ProjectReference Include="..\Isidore.MagicMirror.DAL.MongoDB.Tests\Isidore.MagicMirror.DAL.MongoDb.Tests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
