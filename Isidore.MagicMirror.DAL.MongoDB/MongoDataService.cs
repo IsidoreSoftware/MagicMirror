@@ -6,6 +6,7 @@ using Isidore.MagicMirror.Infrastructure.Services;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Concurrent;
+using MongoDB.Bson.Serialization;
 
 namespace Isidore.MagicMirror.DAL.MongoDB
 {
@@ -41,23 +42,8 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         {
             var filter = new BsonDocument();
 
-            var result = new ConcurrentBag<T>();
             var request = await _collection.FindAsync(filter);
-            var insertionTasks = new List<Task>();
-            while (await request.MoveNextAsync())
-            {
-                var batch = request.Current;
-                var insertion = Task.Factory.StartNew(() =>
-                {
-                    foreach (var item in batch)
-                    {
-                        result.Add(item);
-                    }
-                });
-                insertionTasks.Add(insertion);
-            }
-
-            await Task.WhenAll(insertionTasks);
+            var result = await ReadToEnd(request);
 
             return result.ToArray();
         }
@@ -117,7 +103,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public IEnumerable<T> GetFiltered(IFilter<T> filter)
         {
-            throw new NotImplementedException();
+            return GetFilteredAsync(filter).Result;
         }
 
         public ResultPage<T> GetFiltered(IFilter<T> filter, PageReqest pageRequest)
@@ -125,9 +111,13 @@ namespace Isidore.MagicMirror.DAL.MongoDB
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> GetFilteredAsync(IFilter<T> filter)
+        public async Task<IEnumerable<T>> GetFilteredAsync(IFilter<T> filter)
         {
-            throw new NotImplementedException();
+            var mongoFilter = BsonSerializer.Deserialize<BsonDocument>(filter.QueryString);
+
+            var request = (await _collection.FindAsync<T>(mongoFilter));
+
+            return await ReadToEnd(request);
         }
 
         public Task<ResultPage<T>> GetFilteredAsync(IFilter<T> filter, PageReqest pageRequest)
@@ -136,6 +126,27 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         }
 
         protected abstract string EntityIdPropertyName { get; }
+
+        private static async Task<ConcurrentBag<T>> ReadToEnd(IAsyncCursor<T> request)
+        {
+            var result = new ConcurrentBag<T>();
+            var insertionTasks = new List<Task>();
+            while (await request.MoveNextAsync())
+            {
+                var batch = request.Current;
+                var insertion = Task.Factory.StartNew(() =>
+                {
+                    foreach (var item in batch)
+                    {
+                        result.Add(item);
+                    }
+                });
+                insertionTasks.Add(insertion);
+            }
+
+            await Task.WhenAll(insertionTasks);
+            return result;
+        }
 
         private async Task<bool> CollectionExistsAsync(IMongoDatabase database, string collectionName)
         {

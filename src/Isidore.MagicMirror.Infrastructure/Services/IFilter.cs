@@ -2,7 +2,7 @@
 {
     public interface IFilter<T>
     {
-        string SqlQuery { get; set; }
+        string QueryString { get; set; }
 
         // TODO: visitor implementation the same as in IQueryable
     }

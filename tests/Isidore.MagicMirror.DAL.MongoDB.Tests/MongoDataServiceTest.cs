@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using System;
+using Isidore.MagicMirror.Infrastructure.Services;
 
 namespace Isidore.MagicMirror.DAL.MongoDb.Tests
 {
@@ -34,6 +34,7 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
         [Fact(Skip = "This test works only with MongoDB server enabled")]
         public async Task service_creates_collection()
         {
+            _client = new MongoClient();
             Assert.True(await CollectionExistsAsync(_client.GetDatabase(DbName), CollectionName));
 
             _client.GetDatabase(DbName).DropCollection(CollectionName);
@@ -56,10 +57,11 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
                     new Person()
                 };
 
-            var pr = new PageReqest();
-            pr.PageNumber = 1;
-            pr.PageSize = 1;
-
+            var pr = new PageReqest
+            {
+                PageNumber = 1,
+                PageSize = 1
+            };
             MockExpectedResultPage(expectedPageContent, pr.PageSize, 0, 5);
 
             var PersonsPage = _testService.GetAll(pr);
@@ -183,6 +185,28 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
             Assert.NotNull(user);
         }
 
+        [Fact]
+        public void return_correct_data_on_filter()
+        {
+            var expectedPageContent = new List<Person> {
+                    new Person(){Name="Testov"}
+                };
+            var cursor = MongoTestsHelpers.GetCursor(expectedPageContent);
+
+            A
+                .CallTo(() => _collectionMock.FindAsync(
+                    A<BsonDocumentFilterDefinition<Person>>
+                        .That.Matches(x => x.Document == new BsonDocument("Name", "Testov")),
+                    A<FindOptions<Person>>.Ignored,
+                    A<CancellationToken>.Ignored))
+                .Returns(cursor);
+
+            var filter = new PersonFilter() { QueryString = "{ \"Name\":\"Testov\" }"};
+            var users = _testService.GetFiltered(filter);
+
+            Assert.NotEmpty(users);
+        }
+
         private async Task<bool> CollectionExistsAsync(IMongoDatabase database, string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);
@@ -217,6 +241,11 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
             }
 
             protected override string EntityIdPropertyName => "Id";
+        }
+
+        private class PersonFilter : IFilter<Person>
+        {
+            public string QueryString { get; set; }
         }
 
         public class Person
