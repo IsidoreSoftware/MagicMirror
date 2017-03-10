@@ -1,16 +1,14 @@
-﻿using Isidore.MagicMirror.Infrastructure.Services;
+﻿using Isidore.MagicMirror.DAL.MongoDB;
 using Isidore.MagicMirror.Users.Models;
-using Newtonsoft.Json;
+using System;
 
 namespace Isidore.MagicMirror.Users.Contract
 {
-    public struct UserFilter : IFilter<User>
+    public class UserFilter : MongoDbFilter<User>
     {
-        public UserFilter(User patternUser)
-        {
-            QueryString = JsonConvert.SerializeObject(patternUser);
-        }
-
-        public string QueryString { get; private set; }
+        public int? UserNo { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public DateTime? RegistrationDate { get; set; }
     }
 }

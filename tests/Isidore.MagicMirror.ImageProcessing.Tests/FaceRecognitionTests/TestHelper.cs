@@ -21,7 +21,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 var m = Regex.Match(file, classRegex);
                 User label = new User()
                 {
-                    Name = m.Groups[1].Value,
+                    FirstName = m.Groups[1].Value,
                     UserNo = int.Parse(m.Groups[1].Value)
                 };
 
@@ -45,7 +45,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 var m = Regex.Match(file, classRegex);
                 User label = new User()
                 {
-                    Name = m.Groups[1].Value,
+                    FirstName = m.Groups[1].Value,
                     UserNo = int.Parse(m.Groups[1].Value)
                 };
 

@@ -98,7 +98,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                     result.RecognizedItem = new User
                     {
                         UserNo = prediction,
-                        Name = $"Unknown {prediction}"
+                      //  Name = $"Unknown {prediction}"
                     };
                 }
 
