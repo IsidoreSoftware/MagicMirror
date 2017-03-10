@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+    <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

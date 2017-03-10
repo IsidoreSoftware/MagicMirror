@@ -8,8 +8,14 @@
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="3.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.3" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.DAL.MongoDB\Isidore.MagicMirror.DAL.MongoDB.csproj" />
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
