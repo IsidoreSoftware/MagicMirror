@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Isidore.MagicMirror.Users.Models
+namespace Isidore.MagicMirror.Users.Contract
 {
-    public class User : BaseMongoObject
+    public struct UserDTO
     {
         public int UserNo { get; set; }
         public String FirstName { get; set; }

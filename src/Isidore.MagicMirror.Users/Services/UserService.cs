@@ -10,6 +10,6 @@ namespace Isidore.MagicMirror.Users.Services
         public UserService(IMongoDatabase database) : base(database, "users")
         { }
 
-        protected override string EntityIdPropertyName => "Id";
+        protected override string EntityIdPropertyName => "UserNo";
     }
 }
