@@ -8,6 +8,9 @@ using OpenCvSharp;
 using Xunit;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using Isidore.MagicMirror.Users.Contract;
+using FakeItEasy;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
@@ -36,13 +39,18 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
             var learningFile = Path.GetTempFileName();
             var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*", "ua-");
-            var testedService = new FisherFaceByteProxy(classifier, learningFile);
-            await testedService.LearnMore(images);
             var users = images.Keys;
 
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
+
+            var testedService = new FisherFaceByteProxy(classifier, learningFile, userServiceMock);
+
+            await testedService.LearnMore(images);
 
             var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
-            var result = await testedService.RecognizeAsync(find, users.ToList());
+            var result = await testedService.RecognizeAsync(find);
 
             Assert.Equal(label, result.RecognizedItem.UserNo);
         }

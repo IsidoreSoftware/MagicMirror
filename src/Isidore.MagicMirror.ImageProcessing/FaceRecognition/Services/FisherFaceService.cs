@@ -9,6 +9,8 @@ using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
 using OpenCvSharp.Face;
 using Isidore.MagicMirror.Users.Models;
+using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Exceptions;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
@@ -18,7 +20,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         private const double ConfidenceScaleBase = 50;
         private const int minFaceSize = 144;
 
-        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName)
+        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName, IUserService userService)
         {
 
             if (String.IsNullOrWhiteSpace(fileName))
@@ -39,18 +41,19 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
             trainingFile = fileName;
             classifier = faceClasifier;
+            _userService = userService;
         }
 
         private readonly string trainingFile;
         private readonly IFaceClassifier<Mat> classifier;
+        private readonly IUserService _userService;
 
-
-        public RecognitionResult<User> Recognize(Mat image, IList<User> users)
+        public RecognitionResult<User> Recognize(Mat image)
         {
-            return this.RecognizeAsync(image, users).Result;
+            return this.RecognizeAsync(image).Result;
         }
 
-        public async Task<RecognitionResult<User>> RecognizeAsync(Mat image, IList<User> users)
+        public async Task<RecognitionResult<User>> RecognizeAsync(Mat image)
         {
             return await Task.Factory.StartNew(() =>
             {
@@ -88,23 +91,19 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     throw ex;
                 }
-                var user = users.SingleOrDefault(x => x.UserNo == prediction);
+
+                var user = _userService.GetById(prediction.ToString());
                 if (user != null)
                 {
                     result.RecognizedItem = user;
+                    result.Area = faceRec;
+                    result.Distance = confidence;
+                    return result;
                 }
                 else
                 {
-                    result.RecognizedItem = new User
-                    {
-                        UserNo = prediction,
-                      //  Name = $"Unknown {prediction}"
-                    };
+                    throw new RecognizedNotExistingUserException(prediction);
                 }
-
-                result.Area = faceRec;
-                result.Distance = confidence;
-                return result;
             });
         }
 

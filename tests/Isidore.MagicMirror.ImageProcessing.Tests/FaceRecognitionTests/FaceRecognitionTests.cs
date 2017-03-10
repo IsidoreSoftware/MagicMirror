@@ -10,6 +10,8 @@ using Microsoft.Extensions.FileProviders;
 using Isidore.MagicMirror.Users.Models;
 using System.Reflection;
 using System.IO;
+using Isidore.MagicMirror.Users.Contract;
+using FakeItEasy;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
@@ -34,18 +36,22 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         [InlineData("i297ua-mn.jpg", 297)]
         public async Task when_given_the_same_face_should_recognize_correctly(string imageSrc, int label)
         {
-            var path =  PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
+            var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
             faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*");
-            IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
-            var identityRecognizer = new FisherFaceService(classifier, learningFile);
+            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
             var users = faceDatabase.Keys;
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
+
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
 
             //When
             await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
-            var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
+            var result = await identityRecognizer.RecognizeAsync(find);
 
             Assert.Equal(label, result.RecognizedItem.UserNo);
         }
@@ -60,17 +66,22 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         public async Task when_given_the_similar_face_should_recognize_correctly(string imageSrc, int label)
         {
             var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
-            faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*","ua-");
+            faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*", "ua-");
             IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
-            var identityRecognizer = new FisherFaceService(classifier, learningFile);
+
             var users = faceDatabase.Keys;
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
+
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
 
             //When
             await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
             var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
-            var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
+            var result = await identityRecognizer.RecognizeAsync(find);
 
             Assert.Equal(label, result.RecognizedItem.UserNo);
         }

@@ -71,8 +71,7 @@ namespace Isidore.MagicMirror.API.Areas.Users.Controllers
                 return r;
             }
             var imageBytes = await response.File.Value.ToByteArray();
-            var users = _usersService.GetAll();
-            var u = await _faceService.RecognizeAsync(imageBytes, users.ToList());
+            var u = await _faceService.RecognizeAsync(imageBytes);
 
             watch.Stop();
             return $"It's {u.RecognizedItem.ToString()} (d:{u.Distance:#.##}). Recognized in {watch.ElapsedMilliseconds} ms";

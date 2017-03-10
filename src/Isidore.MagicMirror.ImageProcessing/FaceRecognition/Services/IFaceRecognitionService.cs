@@ -6,9 +6,9 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
     public interface IFaceRecognitionService<TImage,TResult>
     {
-        Task<RecognitionResult<TResult>> RecognizeAsync(TImage image, IList<TResult> users);
+        Task<RecognitionResult<TResult>> RecognizeAsync(TImage image);
         
-        RecognitionResult<TResult> Recognize(TImage image, IList<TResult> users);
+        RecognitionResult<TResult> Recognize(TImage image);
 
         Task LearnMore(IDictionary<TResult, IEnumerable<TImage>> imagesWithLabels);
     }
