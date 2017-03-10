@@ -1,28 +1,31 @@
 using Xunit;
-using OpenCvSharp;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Linq;
-using FakeItEasy;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Microsoft.Extensions.FileProviders;
+using OpenCvSharp;
+using System.Reflection;
 using System.IO;
+using Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
     public class TestClassifierTest
     {
         HaarCascadeClassifier classifier;
+        string basePath;
 
         public TestClassifierTest()
         {
-            IFileProvider fileProvider = TestMocker
-                .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
-            classifier = new HaarCascadeClassifier(fileProvider);
+            IFileProvider fileProvider =new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
+
+            basePath = PhotoLoaderHelper.GetLocalPath($"FaceClassifierTests{Path.DirectorySeparatorChar}");
         }
 
         [Fact]
         public void haar_classifier_can_get_face()
         {
-            Mat image = new Mat("FaceClassifierTests/test_image.jpg");
+            Mat image = new Mat($"{basePath}test_image.jpg");
 
             var face = classifier.RectangleDetectTheBiggestFace(image);
 
@@ -32,7 +35,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [Fact]
         public void haar_classifier_can_get_correct_face()
         {
-            Mat image = new Mat("FaceClassifierTests/test_image.jpg");
+            Mat image = new Mat($"{basePath}test_image.jpg");
 
             var face = classifier.RectangleDetectTheBiggestFace(image);
 
@@ -45,7 +48,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [Fact]
         public void haar_classifier_can_get_more_than_one_face()
         {
-            Mat image = new Mat("FaceClassifierTests/test_image2.jpg");
+            Mat image = new Mat($"{basePath}test_image2.jpg");
 
             var faces = classifier.DetectAllFaces(image);
 
@@ -55,7 +58,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [Fact]
         public void can_detect_the_biggest_face_among_many()
         {
-            Mat image = new Mat("FaceClassifierTests/test_image2.jpg");
+            Mat image = new Mat($"{basePath}test_image2.jpg");
 
             var face = classifier.RectangleDetectTheBiggestFace(image);
 

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Linq;
 using OpenCvSharp;
 using Xunit;
@@ -8,20 +6,25 @@ using System;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using Microsoft.Extensions.FileProviders;
+using Isidore.MagicMirror.Users.Models;
+using System.Reflection;
+using System.IO;
+using Isidore.MagicMirror.Users.Contract;
+using FakeItEasy;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     public class FaceRecognitionTests : IDisposable
     {
-        IDictionary<Person, IEnumerable<Mat>> faceDatabase;
+        IDictionary<User, IEnumerable<Mat>> faceDatabase;
         IFileProvider fileProvider;
+        string learningFile;
 
         public FaceRecognitionTests()
         {
-            fileProvider = TestMocker
-                   .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
+            fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            learningFile = Path.GetTempFileName();
         }
 
         [Theory]
@@ -33,19 +36,24 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         [InlineData("i297ua-mn.jpg", 297)]
         public async Task when_given_the_same_face_should_recognize_correctly(string imageSrc, int label)
         {
-            faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*");
-            IFaceClassifier<Mat> classifier= new HaarCascadeClassifier(fileProvider);
-            var identityRecognizer = new FisherFaceService(classifier);
+            var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
+            faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*");
+            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
             var users = faceDatabase.Keys;
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
+
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
 
             //When
-            await identityRecognizer.Learn(faceDatabase);
+            await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
-            var find = new Mat($"FaceRecognitionTests/TestPhotos/{imageSrc}", ImreadModes.GrayScale);
-            var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
+            var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
+            var result = await identityRecognizer.RecognizeAsync(find);
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
 
         [Theory]
@@ -57,19 +65,25 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         [InlineData("i297ua-mn.jpg", 297)]
         public async Task when_given_the_similar_face_should_recognize_correctly(string imageSrc, int label)
         {
-            faceDatabase = PhotoLoaderHelper.LoadPhotos("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*","ua-");
-            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider);
-            var identityRecognizer = new FisherFaceService(classifier);
+            var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
+            faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*", "ua-");
+            IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
+
             var users = faceDatabase.Keys;
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
+
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
 
             //When
-            await identityRecognizer.Learn(faceDatabase);
+            await identityRecognizer.LearnMore(faceDatabase);
 
             //Then
-            var find = new Mat($"FaceRecognitionTests/TestPhotos/{imageSrc}", ImreadModes.GrayScale);
-            var result = await identityRecognizer.RecognizeAsync(find, users.ToList());
+            var find = new Mat($"{path}{Path.DirectorySeparatorChar}{imageSrc}", ImreadModes.GrayScale);
+            var result = await identityRecognizer.RecognizeAsync(find);
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
 
         public void Dispose()

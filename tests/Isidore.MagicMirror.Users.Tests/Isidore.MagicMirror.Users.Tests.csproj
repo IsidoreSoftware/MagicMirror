@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>Isidore.MagicMirror.Users.Tests</AssemblyName>
+		<PackageId>Isidore.MagicMirror.Users.Tests</PackageId>
+		<TargetFramework>netcoreapp1.1</TargetFramework>
+		<PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
+		<ProjectReference Include="..\Isidore.MagicMirror.DAL.MongoDB.Tests\Isidore.MagicMirror.DAL.MongoDb.Tests.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FakeItEasy" Version="3.1.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+		<PackageReference Include="xunit" Version="2.2.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+	</ItemGroup>
+
+</Project>

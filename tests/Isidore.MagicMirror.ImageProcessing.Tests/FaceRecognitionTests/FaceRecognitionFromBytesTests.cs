@@ -6,6 +6,11 @@ using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests;
 using OpenCvSharp;
 using Xunit;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
+using Isidore.MagicMirror.Users.Contract;
+using FakeItEasy;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
 {
@@ -15,12 +20,12 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public FaceRecognitionFromBytesTests()
         {
-            var fileProvider = TestMocker
-                      .MockFileProvider("FaceClassifierTests/haarcascade_frontalface_default.xml");
-            classifier = new HaarCascadeClassifier(fileProvider);
+            var testAssembly = typeof(FaceRecognitionFromBytesTests).GetTypeInfo().Assembly;
+            IFileProvider fileProvider = new EmbeddedFileProvider(testAssembly);
+            classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
         }
-    
-        
+
+
         [Theory]
         [InlineData("i292ua-fn.jpg", 292)]
         [InlineData("i293ua-fn.jpg", 293)]
@@ -30,16 +35,24 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [InlineData("i297ua-mn.jpg", 297)]
         public async Task should_recognize_correctly_from_bytes(string imageSrc, int label)
         {
-            var images = PhotoLoaderHelper.LoadPhotosByte("FaceRecognitionTests/TestPhotos", "i([0-9]{3}).*","ua-");
-            var testedService = new FisherFaceByteProxy(classifier);
-            await testedService.Learn(images);
+            var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
+
+            var learningFile = Path.GetTempFileName();
+            var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*", "ua-");
             var users = images.Keys;
 
-            
-            var find = File.ReadAllBytes($"FaceRecognitionTests/TestPhotos/{imageSrc}");
-            var result = await testedService.RecognizeAsync(find, users.ToList());
+            var userServiceMock = A.Fake<IUserService>();
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
+                .Returns(new User() { UserNo = label });
 
-            Assert.Equal(label, result.RecognizedItem.Id);
+            var testedService = new FisherFaceByteProxy(classifier, learningFile, userServiceMock);
+
+            await testedService.LearnMore(images);
+
+            var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
+            var result = await testedService.RecognizeAsync(find);
+
+            Assert.Equal(label, result.RecognizedItem.UserNo);
         }
     }
 }
