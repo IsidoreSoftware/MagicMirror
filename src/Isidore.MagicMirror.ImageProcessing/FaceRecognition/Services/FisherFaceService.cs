@@ -8,51 +8,56 @@ using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
 using OpenCvSharp.Face;
+using Isidore.MagicMirror.Users.Models;
+using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Exceptions;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
-    public class FisherFaceService : IFaceRecognitionService<Mat>
+    public class FisherFaceService : IFaceRecognitionService<Mat, User>
     {
         private const double threshold = 90;
         private const double ConfidenceScaleBase = 50;
         private const int minFaceSize = 144;
 
-        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName = null)
+        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName, IUserService userService)
         {
 
             if (String.IsNullOrWhiteSpace(fileName))
             {
-                fileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                throw new ArgumentException("Learning filename is not specified");
+            }
+            if (!File.Exists(fileName))
+            {
+                try
+                {
+                    File.Create(fileName);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Learning file doesn't exists and cannot be created: {ex.Message}", ex);
+                }
             }
 
             trainingFile = fileName;
             classifier = faceClasifier;
+            _userService = userService;
         }
 
         private readonly string trainingFile;
         private readonly IFaceClassifier<Mat> classifier;
+        private readonly IUserService _userService;
 
-
-        public RecognitionResult<Person> Recognize(Mat image, IList<Person> users, string savedTrainingFile = null)
+        public RecognitionResult<User> Recognize(Mat image)
         {
-            return this.RecognizeAsync(image, users, savedTrainingFile).Result;
+            return this.RecognizeAsync(image).Result;
         }
 
-        public async Task<RecognitionResult<Person>> RecognizeAsync(Mat image, IList<Person> users, string savedTrainingFile = null)
+        public async Task<RecognitionResult<User>> RecognizeAsync(Mat image)
         {
             return await Task.Factory.StartNew(() =>
             {
-                string usedFile;
-                if (!String.IsNullOrWhiteSpace(savedTrainingFile))
-                {
-                    usedFile = savedTrainingFile;
-                }
-                else
-                {
-                    usedFile = trainingFile;
-                }
-
-                if (!File.Exists(usedFile))
+                if (!File.Exists(trainingFile))
                 {
                     throw new FileNotFoundException();
                 }
@@ -68,71 +73,67 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                     facePic = image.Crop(faceRec);
                 }
                 int prediction;
+                double confidence;
 
-                var result = new RecognitionResult<Person>();
+                var result = new RecognitionResult<User>();
                 try
                 {
                     using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer())
                     {
-                        ffr.Load(usedFile);
+                        ffr.Load(trainingFile);
                         var size = new Size(minFaceSize, minFaceSize);
                         var resizedFace = facePic.Scale(size);
 
-                        prediction = ffr.Predict(resizedFace);
+                        ffr.Predict(resizedFace, out prediction, out confidence);
                     }
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
-                var user = users.SingleOrDefault(x => x.Id == prediction);
+
+                var user = _userService.GetById(prediction.ToString());
                 if (user != null)
                 {
                     result.RecognizedItem = user;
+                    result.Area = faceRec;
+                    result.Distance = confidence;
+                    return result;
                 }
                 else
                 {
-                    result.RecognizedItem = new Person
-                    {
-                        Id = prediction,
-                        Name = $"Unknown {prediction}"
-                    };
+                    throw new RecognizedNotExistingUserException(prediction);
                 }
-
-                result.Area = faceRec;
-                return result;
             });
         }
 
-        public async Task Learn(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels)
+        public async Task LearnMore(IDictionary<User, IEnumerable<Mat>> imagesWithLabels)
         {
             Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
             {
-                ffr.Train(images, labels);
+                var fi = new FileInfo(trainingFile);
+                if (fi.Length > 0)
+                {
+                    ffr.Load(trainingFile);
+                    ffr.Update(images, labels);
+                }
+                else
+                {
+                    ffr.Train(images, labels);
+                }
             };
 
-            await this.LearnTemplateMethod(imagesWithLabels, this.trainingFile, action);
-        }
-
-        public async Task LearnMore(IDictionary<Person, IEnumerable<Mat>> imagesWithLabels, string savedTrainingFile)
-        {
-            Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
-            {
-                ffr.Load(savedTrainingFile);
-                ffr.Update(images, labels);
-            };
-
-            await LearnTemplateMethod(imagesWithLabels, savedTrainingFile, action);
+            await LearnTemplateMethod(imagesWithLabels, trainingFile, action);
         }
 
         private async Task LearnTemplateMethod(
-            IDictionary<Person, IEnumerable<Mat>> imagesWithLabels,
+            IDictionary<User, IEnumerable<Mat>> imagesWithLabels,
             string savedTrainingFile,
             Action<LBPHFaceRecognizer, Mat[], int[]> learnAction)
         {
             var trainingFaces = new LinkedList<Mat>();
             var labels = new LinkedList<int>();
-            var normalSize = new OpenCvSharp.Size(minFaceSize, minFaceSize);
+            var normalSize = new Size(minFaceSize, minFaceSize);
 
             foreach (var user in imagesWithLabels)
             {
@@ -140,7 +141,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     var faceImage = GetFaceImage(photo).Resize(normalSize);
                     var face = trainingFaces.AddLast(faceImage);
-                    labels.AddLast(user.Key.Id);
+                    labels.AddLast(user.Key.UserNo);
                 }
             }
 

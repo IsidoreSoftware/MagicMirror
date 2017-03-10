@@ -1,6 +1,8 @@
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
+using Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests;
 using OpenCvSharp;
+using System.IO;
 using Xunit;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests
@@ -29,7 +31,9 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         [Fact]
         public void cropped_image_should_have_the_same_pixels()
         {
-            Mat image = new Mat("FaceClassifierTests/test_image.jpg");
+
+            string basePath = PhotoLoaderHelper.GetLocalPath($"FaceClassifierTests{Path.DirectorySeparatorChar}");
+            Mat image = new Mat($"{basePath}test_image.jpg");
 
             var cropArea = new Area
             {
