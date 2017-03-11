@@ -16,7 +16,7 @@ namespace Isidore.MagicMirror.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
-        private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
+        private const string LearnFilePath = "\\learn.yml";
         private const string MongoDbName = "magic-mirror";
 
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
@@ -55,10 +55,16 @@ namespace Isidore.MagicMirror.API
         private static IMongoDatabase SetUpMongoDb()
         {
             IMongoDatabase mongoDb;
+            var credential = MongoCredential.CreateCredential(MongoDbName, "admin", "");
             try
             {
-                mongoDb = new MongoClient().GetDatabase(MongoDbName);
-                mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait();
+                mongoDb = new MongoClient(new MongoClientSettings
+                {
+                    ConnectTimeout = TimeSpan.FromSeconds(5),
+                   // Credentials = new[] { credential }
+                }).GetDatabase(MongoDbName);
+                mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
+                 .Wait();
             }
             catch (Exception e)
             {
