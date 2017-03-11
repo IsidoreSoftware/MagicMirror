@@ -28,10 +28,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Isidore.MagicMirror.DAL.MongoDB", "src\Isidore.MagicMirror.DAL.MongoDB\Isidore.MagicMirror.DAL.MongoDB.csproj", "{10894136-333A-4833-B045-97EB2CC2848C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90A77427-DA03-4081-8EA1-46E672F81F31}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
