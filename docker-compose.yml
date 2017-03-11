@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  isidore.magicmirror.api:
+    image: isidore.magicmirror.api
+    build:
+      context: ./src/Isidore.MagicMirror.API
+      dockerfile: Dockerfile
