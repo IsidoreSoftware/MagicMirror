@@ -6,3 +6,21 @@ services:
     build:
       context: ./src/Isidore.MagicMirror.API
       dockerfile: Dockerfile
+    links:
+      - isidore.magicmirror.mongo
+  isidore.magicmirror.mongo:
+    image: mongo:3.0.4
+    environment:
+      - MONGODB_USERNAME=admin
+      - MONGODB_PASSWORD=
+    volumes_from:
+      - isidore.magicmirror.mongo.data
+    ports:
+      - "27017:27017"
+      - "28017:28017"
+    command: --smallfiles --rest --auth
+  isidore.magicmirror.mongo.data:
+    image: mongo:3.0.4
+    volumes:
+      - /mongodb
+    command: --break-mongo
