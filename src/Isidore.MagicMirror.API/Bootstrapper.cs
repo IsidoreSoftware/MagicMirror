@@ -61,8 +61,7 @@ namespace Isidore.MagicMirror.API
                 mongoDb = new MongoClient(new MongoClientSettings
                 {
                     Servers = new[] {new MongoServerAddress("mongo-db") },
-                    ConnectTimeout = TimeSpan.FromSeconds(5),
-                   // Credentials = new[] { credential }
+                    ConnectTimeout = TimeSpan.FromSeconds(5)
                 }).GetDatabase(MongoDbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
                  .Wait();

@@ -10,14 +10,7 @@ services:
       - isidore.magicmirror.mongo:mongo-db
   isidore.magicmirror.mongo:
     image: mongo:3.0.4
- #   volumes_from:
- #     - isidore.magicmirror.mongo.data
     ports:
       - "27017:27017"
       - "28017:28017"
-    command: --smallfiles --rest --noauth --storageEngine=mmapv1
-#  isidore.magicmirror.mongo.data:  
-#    image: mongo:3.0.4
-#    volumes:
-#      - c:\\mongodb:/data/db
-#    command: --break-mongo
+    command: --smallfiles --rest --noauth
