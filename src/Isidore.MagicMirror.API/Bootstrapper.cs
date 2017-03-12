@@ -60,6 +60,7 @@ namespace Isidore.MagicMirror.API
             {
                 mongoDb = new MongoClient(new MongoClientSettings
                 {
+                    Servers = new[] {new MongoServerAddress("mongo-db") },
                     ConnectTimeout = TimeSpan.FromSeconds(5),
                    // Credentials = new[] { credential }
                 }).GetDatabase(MongoDbName);
