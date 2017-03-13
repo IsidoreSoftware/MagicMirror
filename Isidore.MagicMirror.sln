@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Isidore.MagicMirror.DAL.Mon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Isidore.MagicMirror.DAL.MongoDB", "src\Isidore.MagicMirror.DAL.MongoDB\Isidore.MagicMirror.DAL.MongoDB.csproj", "{10894136-333A-4833-B045-97EB2CC2848C}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3E22CF0E-7063-4C9A-8F05-7A5955C7B55B}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "Isidore.MagicMirror.Docker", "src\Isidore.MagicMirror.Docker\Isidore.MagicMirror.Docker.dcproj", "{3E22CF0E-7063-4C9A-8F05-7A5955C7B55B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -186,5 +186,6 @@ Global
 		{8FED3912-080C-4023-ADDA-D899E6634EED} = {771E6CF1-4637-4F3B-80E2-F45489376917}
 		{06256632-F48A-41B0-BB3B-6831C64B57A5} = {771E6CF1-4637-4F3B-80E2-F45489376917}
 		{10894136-333A-4833-B045-97EB2CC2848C} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
+		{3E22CF0E-7063-4C9A-8F05-7A5955C7B55B} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
 	EndGlobalSection
 EndGlobal
