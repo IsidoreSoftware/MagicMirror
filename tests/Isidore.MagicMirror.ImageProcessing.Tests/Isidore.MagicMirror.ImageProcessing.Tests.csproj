@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.csproj" />
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

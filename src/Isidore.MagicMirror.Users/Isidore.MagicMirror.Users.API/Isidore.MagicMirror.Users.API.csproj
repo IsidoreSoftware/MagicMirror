@@ -21,9 +21,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.csproj" />
-    <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
     <ProjectReference Include="..\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
-    <ProjectReference Include="..\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.csproj" />
+    <ProjectReference Include="..\..\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
