@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  isidore.magicmirror.api:
-    image: isidore.magicmirror.api
+  isidore.magicmirror.users.api:
+    image: isidore.magicmirror.users.api
     build:
       context: ../Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API
       dockerfile: Dockerfile
@@ -14,3 +14,8 @@ services:
       - "27017:27017"
       - "28017:28017"
     command: --smallfiles --rest --noauth
+  isidore.magicmirror.widgets.api:
+    image: isidore.magicmirror.widgets.api
+    build:
+      context: ./../Isidore.MagicMirror.Widgets/Isidore.MagicMirror.Widgets.API
+      dockerfile: Dockerfile
