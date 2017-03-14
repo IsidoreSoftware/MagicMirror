@@ -1,5 +1,4 @@
-using Isidore.MagicMirror.API.Areas.Users.Controllers;
-using System;
+using Isidore.MagicMirror.Users.API.Controllers;
 using Xunit;
 
 namespace Isidore.MagicMirror.API.Tests

@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Isidore.MagicMirror.API.Exceptions;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
+using Isidore.MagicMirror.Users.API.Exceptions;
 using Isidore.MagicMirror.Users.Services;
 using Microsoft.Extensions.FileProviders;
 using MongoDB.Bson;
@@ -12,7 +12,7 @@ using Nancy.Bootstrappers.Autofac;
 using System;
 using System.Reflection;
 
-namespace Isidore.MagicMirror.API
+namespace Isidore.MagicMirror.Users.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {

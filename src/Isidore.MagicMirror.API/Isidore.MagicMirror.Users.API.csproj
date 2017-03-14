@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Isidore.MagicMirror.API</AssemblyName>
+    <AssemblyName>Isidore.MagicMirror.Users.API</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Isidore.MagicMirror.API</PackageId>
     <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.csproj" />
     <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+    <ProjectReference Include="..\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
     <ProjectReference Include="..\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.csproj" />
   </ItemGroup>
 
