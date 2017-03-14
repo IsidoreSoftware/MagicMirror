@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Isidore.MagicMirror.API.Exceptions
+namespace Isidore.MagicMirror.Users.API.Exceptions
 {
     public class DependentComponentException : Exception
     {
@@ -9,10 +9,7 @@ namespace Isidore.MagicMirror.API.Exceptions
         {
         }
     }
-}
 
-namespace Isidore.MagicMirror.API.Exceptions
-{
     public enum ComponentType
     {
         MongoDb = 1,

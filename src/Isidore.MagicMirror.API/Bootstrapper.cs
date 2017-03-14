@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Isidore.MagicMirror.API.Exceptions;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
+using Isidore.MagicMirror.Users.API.Exceptions;
 using Isidore.MagicMirror.Users.Services;
 using Microsoft.Extensions.FileProviders;
 using MongoDB.Bson;
@@ -12,11 +12,11 @@ using Nancy.Bootstrappers.Autofac;
 using System;
 using System.Reflection;
 
-namespace Isidore.MagicMirror.API
+namespace Isidore.MagicMirror.Users.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
-        private const string LearnFilePath = "D:\\Kuba\\Desktop\\learn.yml";
+        private const string LearnFilePath = "\\learn.yml";
         private const string MongoDbName = "magic-mirror";
 
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
@@ -55,10 +55,16 @@ namespace Isidore.MagicMirror.API
         private static IMongoDatabase SetUpMongoDb()
         {
             IMongoDatabase mongoDb;
+            var credential = MongoCredential.CreateCredential(MongoDbName, "admin", "");
             try
             {
-                mongoDb = new MongoClient().GetDatabase(MongoDbName);
-                mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait();
+                mongoDb = new MongoClient(new MongoClientSettings
+                {
+                    Servers = new[] {new MongoServerAddress("mongo-db") },
+                    ConnectTimeout = TimeSpan.FromSeconds(5)
+                }).GetDatabase(MongoDbName);
+                mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
+                 .Wait();
             }
             catch (Exception e)
             {

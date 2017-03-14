@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Isidore.MagicMirror.API\Isidore.MagicMirror.API.csproj" />
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.API\Isidore.MagicMirror.Users.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>
