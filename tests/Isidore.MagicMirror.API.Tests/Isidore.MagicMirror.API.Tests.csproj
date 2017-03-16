@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.API\Isidore.MagicMirror.Users.API.csproj" />
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
   </ItemGroup>
 
   <ItemGroup>

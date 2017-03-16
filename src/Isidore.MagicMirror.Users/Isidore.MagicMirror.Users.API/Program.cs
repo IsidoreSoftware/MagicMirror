@@ -12,7 +12,6 @@ namespace Isidore.MagicMirror.Users.API
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:80")
                 .Build();
 
             host.Run();

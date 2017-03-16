@@ -2,14 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <DebugType>portable</DebugType>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Isidore.MagicMirror.Users.API</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>Isidore.MagicMirror.API</PackageId>
-    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
-    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+	  <DockerComposeProjectPath>..\..\Isidore.MagicMirror.Docker\Isidore.MagicMirror.Docker.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
