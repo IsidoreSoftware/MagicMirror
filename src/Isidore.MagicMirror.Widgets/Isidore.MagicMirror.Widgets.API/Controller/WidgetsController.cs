@@ -8,9 +8,9 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
         public WidgetsController():base("/widgets")
         {
 
-                Get("/{id}",  (_, ctx)=>
+                Get("/{id}", async (_, ctx)=>
                 {
-                    return Task.FromResult(_["id"]);
+                    return await Task.FromResult(_["id"]);
                 });
         }
     }
