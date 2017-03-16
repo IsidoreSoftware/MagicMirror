@@ -14,5 +14,8 @@
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Bootstrappers.Autofac" Version="2.0.0-clinteastwood" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Isidore.MagicMirror.Widgets\Isidore.MagicMirror.Widgets.csproj" />
+  </ItemGroup>
 
 </Project>

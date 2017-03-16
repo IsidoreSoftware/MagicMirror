@@ -17,7 +17,6 @@ namespace Isidore.MagicMirror.Widgets.Tests
         [Fact]
         public void Test1()
         {
-            service.
         }
     }
 }

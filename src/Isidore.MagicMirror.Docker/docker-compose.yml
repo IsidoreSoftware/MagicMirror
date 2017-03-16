@@ -19,3 +19,5 @@ services:
     build:
       context: ./../Isidore.MagicMirror.Widgets/Isidore.MagicMirror.Widgets.API
       dockerfile: Dockerfile
+    links:
+      - isidore.magicmirror.mongo:mongo-db
