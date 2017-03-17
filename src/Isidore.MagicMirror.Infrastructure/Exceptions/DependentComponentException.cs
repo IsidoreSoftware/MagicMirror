@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Isidore.MagicMirror.Users.API.Exceptions
+namespace Isidore.MagicMirror.Infrastructure.Exceptions
 {
     public class DependentComponentException : Exception
     {

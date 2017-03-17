@@ -1,8 +1,7 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Isidore.MagicMirror.Users.API
+namespace Isidore.MagicMirror.Widgets.API
 {
     public class Program
     {

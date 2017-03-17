@@ -1,18 +1,15 @@
 ﻿using Autofac;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
-using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Isidore.MagicMirror.Infrastructure.Exceptions;
-using Isidore.MagicMirror.Users.Services;
-using Microsoft.Extensions.FileProviders;
+using Isidore.MagicMirror.Widgets.Contract;
+using Isidore.MagicMirror.Widgets.Services;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 using System;
-using System.Reflection;
 
-namespace Isidore.MagicMirror.Users.API
+namespace Isidore.MagicMirror.Widgets.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
@@ -30,15 +27,8 @@ namespace Isidore.MagicMirror.Users.API
             IMongoDatabase mongoDb = SetUpMongoDb();
 
             // Perform registration that should have an application lifetime
-            var fileProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
-            container.Update(builder => builder.RegisterInstance(mongoDb));
-            container.Update(builder => builder.RegisterType<UserService>().AsImplementedInterfaces());
-            container.Update(builder => builder.RegisterType<UserService>().AsImplementedInterfaces());
-            container.Update(builder => builder.RegisterInstance(fileProvider).As<IFileProvider>());
-            container.Update(builder => builder.RegisterType<HaarCascadeClassifier>().AsImplementedInterfaces()
-                .WithParameter(new NamedParameter("cascadeFileName", "Assets.HaarClassifiers.haarcascade_frontalface_default.xml")));
-            container.Update(builder => builder.RegisterType<FisherFaceByteProxy>().AsImplementedInterfaces()
-                .WithParameter(new NamedParameter("fileName", LearnFilePath)));
+            container.Update(builder => builder.RegisterInstance(mongoDb).As<IMongoDatabase>());
+            container.Update(builder => builder.RegisterType<WidgetService>().As<IWidgetService>());
         }
 
         protected override void ConfigureRequestContainer(ILifetimeScope container, NancyContext context)
@@ -60,7 +50,7 @@ namespace Isidore.MagicMirror.Users.API
             {
                 mongoDb = new MongoClient(new MongoClientSettings
                 {
-                    Servers = new[] {new MongoServerAddress("mongo-db") },
+                    Servers = new[] { new MongoServerAddress("mongo-db") },
                     ConnectTimeout = TimeSpan.FromSeconds(5)
                 }).GetDatabase(MongoDbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")

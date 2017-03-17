@@ -2,8 +2,8 @@ version: '2'
 
 services:
   ci-build:
-    image: microsoft/aspnetcore-build:1.0-1.1
+    image: microsoft/dotnet:1.1.1-runtime
     volumes:
       - .:/src
     working_dir: /src
-    command: /bin/bash -c "dotnet restore ./Isidore.MagicMirror.sln && dotnet publish ./Isidore.MagicMirror.sln -c Release -o ./obj/Docker/publish"
+    command: /bin/bash -c "dotnet restore ../../Isidore.MagicMirror.sln && dotnet publish ../../Isidore.MagicMirror.sln -c Release -o ./obj/Docker/publish"

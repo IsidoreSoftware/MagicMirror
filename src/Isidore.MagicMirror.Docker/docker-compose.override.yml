@@ -1,7 +1,12 @@
 version: '2'
 
 services:
-  isidore.magicmirror.api:
+  isidore.magicmirror.users.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+  isidore.magicmirror.widgets.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
