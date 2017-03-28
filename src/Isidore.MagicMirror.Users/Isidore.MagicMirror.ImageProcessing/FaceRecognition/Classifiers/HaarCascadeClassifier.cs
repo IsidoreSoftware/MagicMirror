@@ -32,7 +32,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
                 }
             }
 
-            haarCascade = new CascadeClassifier(fullFileName);
+           // haarCascade = new CascadeClassifier(fullFileName);
         }
  
         public IEnumerable<Area> DetectAllFaces(Mat image)

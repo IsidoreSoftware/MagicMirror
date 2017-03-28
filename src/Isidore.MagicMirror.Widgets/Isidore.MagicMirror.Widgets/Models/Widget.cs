@@ -5,8 +5,6 @@ namespace Isidore.MagicMirror.Widgets.Models
 {
     public class Widget : BaseMongoObject
     {
-        public long Id { get; set; }
-
         public string Name { get; set; }
 
         public string Template { get; set; }

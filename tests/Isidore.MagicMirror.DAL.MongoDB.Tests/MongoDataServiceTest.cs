@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Isidore.MagicMirror.Infrastructure.Services;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.DAL.MongoDb.Tests
 {
@@ -248,7 +249,7 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
             public string QueryString { get; set; }
         }
 
-        public class Person
+        public class Person : BaseMongoObject
         {
             public string Name { get; set; }
             public string Surname { get; set; }

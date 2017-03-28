@@ -40,6 +40,13 @@ namespace Isidore.MagicMirror.Widgets.API
         {
             // No registrations should be performed in here, however you may
             // resolve things that are needed during request startup.
+            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) =>
+            {
+                ctx.Response.WithHeader("Access-Control-Allow-Origin", "*")
+                                .WithHeader("Access-Control-Allow-Methods", "POST,GET")
+                                .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
+
+            });
         }
 
         private static IMongoDatabase SetUpMongoDb()

@@ -7,10 +7,11 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Concurrent;
 using MongoDB.Bson.Serialization;
+using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.DAL.MongoDB
 {
-    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T>
+    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T> where T: BaseMongoObject
     {
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<T> _collection;
@@ -97,7 +98,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var r = (await _collection.FindAsync<T>(new BsonDocument(EntityIdPropertyName, id)));
+            var r = (await _collection.FindAsync<T>(x=>x.Id == id));
             return await r.SingleOrDefaultAsync();
         }
 
@@ -123,6 +124,16 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         public Task<ResultPage<T>> GetFilteredAsync(IFilter<T> filter, PageReqest pageRequest)
         {
             throw new NotImplementedException();
+        }
+
+        public void Insert(T item)
+        {
+            InsertAsync(item).Wait();
+        }
+
+        public async Task InsertAsync(T item)
+        {
+            await _collection.InsertOneAsync(item);
         }
 
         protected abstract string EntityIdPropertyName { get; }
