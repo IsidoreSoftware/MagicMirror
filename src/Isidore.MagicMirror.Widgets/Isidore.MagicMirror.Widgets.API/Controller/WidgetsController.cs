@@ -31,7 +31,7 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
                         Id = "1",
                         Name = "Clock",
                         Template = "<div>Sum 2+5 =  {{2+5}}</div>",
-                        Style = "{\"color\":\"red\" }"
+                        Style = "div {color:#f00; }"
                     }};
                     return widgets;
 
