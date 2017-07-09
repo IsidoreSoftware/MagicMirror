@@ -5,6 +5,7 @@ using OpenCvSharp;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using System.IO;
+using System;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 {
@@ -31,8 +32,15 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
                     cascadeFileInfo.CreateReadStream().CopyTo(outstream);
                 }
             }
+            try
+            {
+                var m = new Mat();
+                //haarCascade = new CascadeClassifier(fullFileName);
+                haarCascade = new CascadeClassifier();
+            }catch(Exception e)
+            {
 
-           // haarCascade = new CascadeClassifier(fullFileName);
+            }
         }
  
         public IEnumerable<Area> DetectAllFaces(Mat image)
