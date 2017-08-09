@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isidore.MagicMirror.Widgets
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Isidore.MagicMirror.Widgets.Tests", "tests\Isidore.MagicMirror.Widgets.Tests\Isidore.MagicMirror.Widgets.Tests.csproj", "{C3048819-367C-4F55-8B03-872F55B4A369}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Isidore.MagicMirror.WebService", "src\Isidore.MagicMirror.WebService\Isidore.MagicMirror.WebService.csproj", "{DED331DB-FB04-4A49-9A07-75798511C54F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -304,6 +306,24 @@ Global
 		{C3048819-367C-4F55-8B03-872F55B4A369}.Release-JP|x64.Build.0 = Release|Any CPU
 		{C3048819-367C-4F55-8B03-872F55B4A369}.Release-JP|x86.ActiveCfg = Release|Any CPU
 		{C3048819-367C-4F55-8B03-872F55B4A369}.Release-JP|x86.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|x64.Build.0 = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Debug|x86.Build.0 = Debug|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|x64.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|x64.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|x86.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release|x86.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|Any CPU.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|Any CPU.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|x64.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|x64.Build.0 = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|x86.ActiveCfg = Release|Any CPU
+		{DED331DB-FB04-4A49-9A07-75798511C54F}.Release-JP|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,5 +345,6 @@ Global
 		{A58268C0-26CF-419D-BB3E-8994B490E448} = {EC94D71B-AA5E-41A9-834D-01CDFE0012E6}
 		{BABFF772-8F01-46ED-ACB5-655B7515F1AD} = {B60970D6-1B52-44E1-8612-5DE9AF0654FA}
 		{C3048819-367C-4F55-8B03-872F55B4A369} = {771E6CF1-4637-4F3B-80E2-F45489376917}
+		{DED331DB-FB04-4A49-9A07-75798511C54F} = {79E15313-B7F7-4AC1-B062-83D379FFEE00}
 	EndGlobalSection
 EndGlobal

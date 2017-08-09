@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DockerComposeProjectPath>..\..\Isidore.MagicMirror.Docker\Isidore.MagicMirror.Docker.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>71c135cf-56dc-44ef-bcc1-6817c2cf7ea0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.2" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Bootstrappers.Autofac" Version="2.0.0-clinteastwood" />
   </ItemGroup>

@@ -8,13 +8,20 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 using System;
+using Isidore.MagicMirror.DAL.MongoDB.Configuration;
+using Isidore.MagicMirror.Infrastructure.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace Isidore.MagicMirror.Widgets.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
-        private const string LearnFilePath = "\\learn.yml";
-        private const string MongoDbName = "magic-mirror";
+        private IConfiguration _appConfig;
+
+        public Bootstrapper(IConfiguration appConfig)
+        {
+            _appConfig = appConfig;
+        }
 
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
         {
@@ -49,23 +56,25 @@ namespace Isidore.MagicMirror.Widgets.API
             });
         }
 
-        private static IMongoDatabase SetUpMongoDb()
+        private IMongoDatabase SetUpMongoDb()
         {
             IMongoDatabase mongoDb;
-            var credential = MongoCredential.CreateCredential(MongoDbName, "admin", "");
+            var config = _appConfig.GetSettings<MongoDbConfig>();
+            var credential = MongoCredential.CreateCredential(config.DbName, config.Username, config.Password);
             try
             {
                 mongoDb = new MongoClient(new MongoClientSettings
                 {
-                    Servers = new[] { new MongoServerAddress("mongo-db") },
-                    ConnectTimeout = TimeSpan.FromSeconds(5)
-                }).GetDatabase(MongoDbName);
+                    Servers = new[] { new MongoServerAddress(config.ServerUrl) },
+                    ConnectTimeout = TimeSpan.FromSeconds(5),
+                    //Credentials = new[] { credential }
+                }).GetDatabase(config.DbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
-                 .Wait();
+                    .Wait();
             }
             catch (Exception e)
             {
-                throw new DependentComponentException(ComponentType.MongoDb, e, $"Database name: {MongoDbName}");
+                throw new DependentComponentException(ComponentType.MongoDb, e, $"Database name: {config.DbName}");
             }
 
             return mongoDb;

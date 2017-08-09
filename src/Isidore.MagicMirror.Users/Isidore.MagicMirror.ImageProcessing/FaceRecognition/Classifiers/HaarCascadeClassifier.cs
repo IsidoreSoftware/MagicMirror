@@ -24,7 +24,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 
             string fullFileName = cascadeFileInfo.PhysicalPath;
 
-            if(string.IsNullOrWhiteSpace(fullFileName))
+            if (string.IsNullOrWhiteSpace(fullFileName))
             {
                 fullFileName = Path.GetTempFileName();
                 using (var outstream = File.OpenWrite(fullFileName))
@@ -32,17 +32,10 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
                     cascadeFileInfo.CreateReadStream().CopyTo(outstream);
                 }
             }
-            try
-            {
-                var m = new Mat();
-                //haarCascade = new CascadeClassifier(fullFileName);
-                haarCascade = new CascadeClassifier();
-            }catch(Exception e)
-            {
 
-            }
+            haarCascade = new CascadeClassifier(fullFileName);
         }
- 
+
         public IEnumerable<Area> DetectAllFaces(Mat image)
         {
             var faces = haarCascade.DetectMultiScale(image);

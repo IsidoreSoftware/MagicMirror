@@ -1,21 +1,21 @@
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Nancy;
 using Nancy.ModelBinding;
-using Isidore.MagicMirror.Infrastructure.Http.FileUploads;
-using Isidore.MagicMirror.Utils.Helpers.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
+using Isidore.MagicMirror.WebService.Http.FileUploads;
+using Isidore.MagicMirror.Utils.Helpers.IO;
 
 namespace Isidore.MagicMirror.Users.API.Controllers
 {
     public class FacesController : NancyModule
     {
-        private IFaceRecognitionService<byte[],User> _faceService;
-        private IUserService _usersService;
-        private Stopwatch watch = new Stopwatch();
+        private readonly IFaceRecognitionService<byte[],User> _faceService;
+        private readonly IUserService _usersService;
+        private readonly Stopwatch watch = new Stopwatch();
 
         public FacesController(IUserService userService, IFaceRecognitionService<byte[], User> faceService) : base("/faces")
         {
@@ -26,7 +26,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
 
         private void RegisterActions()
         {
-            base.Post("/learn/{id}", async (_, ctx) =>
+            Post("/learn/{id}", async (_, ctx) =>
             {
                 var response = this.Bind<FileUploadRequest>();
                 return await LearnImage(response, _["id"]);

@@ -13,7 +13,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         {
             var type = this.GetType();
             var conditions = new Dictionary<string, object>();
-            foreach (var property in type.GetProperties())
+            foreach (var property in type.GetRuntimeProperties())
             {
                 if (property.Name != nameof(QueryString))
                 {

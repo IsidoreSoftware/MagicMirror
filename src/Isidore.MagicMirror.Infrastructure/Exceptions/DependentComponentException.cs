@@ -5,7 +5,7 @@ namespace Isidore.MagicMirror.Infrastructure.Exceptions
     public class DependentComponentException : Exception
     {
         public DependentComponentException(ComponentType type, Exception e, string additionalDetails = null)
-            : base($"There is problem with dependent component: {type.ToString()}. {additionalDetails}", e)
+            : base($"There is a problem with dependent component: {type.ToString()}. {additionalDetails}", e)
         {
         }
     }
