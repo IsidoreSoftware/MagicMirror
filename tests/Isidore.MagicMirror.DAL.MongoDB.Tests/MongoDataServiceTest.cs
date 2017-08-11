@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Isidore.MagicMirror.Infrastructure.Services;
-using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.DAL.MongoDb.Tests
 {

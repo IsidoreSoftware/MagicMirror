@@ -4,6 +4,7 @@ using Nancy.ModelBinding;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.WebService.Http.FileUploads;
@@ -13,11 +14,11 @@ namespace Isidore.MagicMirror.Users.API.Controllers
 {
     public class FacesController : NancyModule
     {
-        private readonly IFaceRecognitionService<byte[],User> _faceService;
+        private readonly IFaceRecognitionService<Stream, User> _faceService;
         private readonly IUserService _usersService;
         private readonly Stopwatch watch = new Stopwatch();
 
-        public FacesController(IUserService userService, IFaceRecognitionService<byte[], User> faceService) : base("/faces")
+        public FacesController(IUserService userService, IFaceRecognitionService<Stream, User> faceService) : base("/faces")
         {
             _faceService = faceService;
             _usersService = userService;
@@ -28,51 +29,86 @@ namespace Isidore.MagicMirror.Users.API.Controllers
         {
             Post("/learn/{id}", async (_, ctx) =>
             {
-                var response = this.Bind<FileUploadRequest>();
-                return await LearnImage(response, _["id"]);
+                var request = this.Bind<FileUploadRequest>();
+                if (!ValidateRequest(request))
+                {
+                    return Negotiate.WithStatusCode(400);
+                }
+
+                return await LearnImage(request, _["id"]);
             });
 
             Post("/recognize", async _ =>
             {
-                var response = this.Bind<FileUploadRequest>();
-                return await RecognizeUser(response);
+                var request = this.Bind<FileUploadRequest>();
+                if (!ValidateRequest(request))
+                {
+                    return Negotiate.WithStatusCode(400);
+                }
+
+                return await RecognizeUser(request);
             });
         }
 
+        private bool ValidateRequest(FileUploadRequest request)
+        {
+            return request.File != null;
+        }
+        
         public async Task<dynamic> LearnImage(FileUploadRequest response, string id)
         {
             watch.Reset();
             watch.Start();
-            if (!response.File.Name.EndsWith(".jpg"))
+            if (!response.File.Name.ToLowerInvariant().EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
                 r.StatusCode = HttpStatusCode.BadRequest;
                 return r;
             }
-            var imageBytes = await response.File.Value.ToByteArray();
+            var imageBytes = response.File.Value;
             var user = _usersService.GetById(id);
-            var usersToLearn = new Dictionary<User, IEnumerable<byte[]>>();
-            usersToLearn.Add(user, new List<byte[]> { imageBytes });
+            if (user == null)
+            {
+                return Negotiate.WithStatusCode(404);
+            }
+
+            var usersToLearn = new Dictionary<User, IEnumerable<Stream>>();
+            usersToLearn.Add(user, new List<Stream> { imageBytes });
             await _faceService.LearnMore(usersToLearn);
             watch.Stop();
             return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
         }
 
-        public async Task<dynamic> RecognizeUser(FileUploadRequest response)
+        public async Task<dynamic> RecognizeUser(FileUploadRequest request)
         {
             watch.Reset();
             watch.Start();
-            if (!response.File.Name.EndsWith(".jpg"))
+            if (!request.File.Name.ToLowerInvariant().EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
                 r.StatusCode = HttpStatusCode.BadRequest;
                 return r;
             }
-            var imageBytes = await response.File.Value.ToByteArray();
-            var u = await _faceService.RecognizeAsync(imageBytes);
+            var u = await _faceService.RecognizeAsync(request.File.Value);
 
             watch.Stop();
-            return $"It's {u.RecognizedItem.ToString()} (d:{u.Distance:#.##}). Recognized in {watch.ElapsedMilliseconds} ms";
+            if (u == null)
+            {
+                return await Negotiate.WithStatusCode(204).WithModel(new
+                {
+                    error="No face found"
+                });
+            }
+            else if (u.RecognizedItem == null)
+            {
+                return await Negotiate.WithStatusCode(404).WithModel(new
+                {
+                    error = "The face can't be assigned",
+                    area = u.Area
+                });
+            }
+
+            return u;
         }
     }
 }

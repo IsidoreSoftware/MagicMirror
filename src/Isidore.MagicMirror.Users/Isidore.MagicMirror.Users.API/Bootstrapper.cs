@@ -15,16 +15,21 @@ using System.Reflection;
 using Isidore.MagicMirror.DAL.MongoDB.Configuration;
 using Isidore.MagicMirror.Users.API.Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.ProjectOxford.Face;
+using NLog;
 
 namespace Isidore.MagicMirror.Users.API
 {
     public class Bootstrapper : AutofacNancyBootstrapper
     {
         private readonly IConfiguration _appConfig;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public Bootstrapper(IConfiguration appConfig)
+        public Bootstrapper(IConfiguration appConfig, ILoggerFactory loggerFactory)
         {
             _appConfig = appConfig;
+            _loggerFactory = loggerFactory;
         }
 
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
@@ -40,10 +45,17 @@ namespace Isidore.MagicMirror.Users.API
             //SetLocalFaceService(container);
             container.Update(builder =>
             {
-                builder.RegisterType<AzureFaceRecognitionService>().AsImplementedInterfaces();
+                var faceServiceConfig = _appConfig.GetSettings<FaceServiceConfig>();
+                var faceRecognitionService =
+                    new FaceServiceClient(faceServiceConfig.AccessKey, faceServiceConfig.ServiceUrl);
+                builder.RegisterInstance(faceRecognitionService).As<IFaceServiceClient>();
+                builder.RegisterInstance(_loggerFactory).As<ILoggerFactory>();
+                builder.RegisterType<AzureFaceRecognitionService>()
+                    .AsImplementedInterfaces();
                 builder.RegisterInstance(SetUpMongoDb());
                 builder.RegisterType<UserService>().AsImplementedInterfaces();
                 builder.RegisterInstance(this._appConfig.Get<FaceServiceConfig>());
+                builder.RegisterType<UserGroupService>().AsImplementedInterfaces().WithParameter("groupId", "598cdc940a1e512da48f5a40");
             });
         }
 

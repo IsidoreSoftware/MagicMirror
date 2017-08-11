@@ -7,25 +7,24 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Concurrent;
 using MongoDB.Bson.Serialization;
-using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.DAL.MongoDB
 {
     public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T> where T: BaseMongoObject
     {
-        private readonly IMongoDatabase _database;
-        private readonly IMongoCollection<T> _collection;
-        private readonly FilterDefinitionBuilder<T> _filterBuilder;
+        protected readonly IMongoDatabase _database;
+        protected readonly IMongoCollection<T> _collection;
+        protected readonly FilterDefinitionBuilder<T> _filterBuilder;
 
-        public MongoDataService(IMongoDatabase database, string collectionName)
+        protected MongoDataService(IMongoDatabase database, string collectionName)
         {
-            this._database = database;
-            if (!this.CollectionExistsAsync(database, collectionName).Result)
+            _database = database;
+            if (!CollectionExistsAsync(database, collectionName).Result)
             {
                 database.CreateCollection(collectionName);
             }
 
-            this._collection = database.GetCollection<T>(collectionName);
+            _collection = database.GetCollection<T>(collectionName);
             _filterBuilder = new FilterDefinitionBuilder<T>();
         }
 
@@ -98,7 +97,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var r = (await _collection.FindAsync<T>(x=>x.Id == id));
+            var r = await _collection.FindAsync<T>(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
             return await r.SingleOrDefaultAsync();
         }
 
@@ -131,9 +130,19 @@ namespace Isidore.MagicMirror.DAL.MongoDB
             InsertAsync(item).Wait();
         }
 
+        public void Update(string id, T item)
+        {
+            UpdateAsync(id,item).Wait();
+        }
+
         public async Task InsertAsync(T item)
         {
             await _collection.InsertOneAsync(item);
+        }
+
+        public async Task UpdateAsync(string id, T item)
+        {
+            await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), item);
         }
 
         protected abstract string EntityIdPropertyName { get; }

@@ -1,5 +1,5 @@
-﻿using Isidore.MagicMirror.Users.Models;
-using System;
+﻿using System;
+using Isidore.MagicMirror.DAL.MongoDB;
 
 namespace Isidore.MagicMirror.Widgets.Models
 {

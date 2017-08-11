@@ -16,5 +16,7 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         ResultPage<T> GetAll(PageReqest pageRequest);
 
         void Insert(T item);
+
+        void Update(string id, T item);
     }
 }

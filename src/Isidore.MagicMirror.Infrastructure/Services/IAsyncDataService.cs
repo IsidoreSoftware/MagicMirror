@@ -17,5 +17,7 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         Task<ResultPage<T>> GetAllAsync(PageReqest pageRequest);
 
         Task InsertAsync(T item);
+
+        Task UpdateAsync(string id, T item);
     }
 }

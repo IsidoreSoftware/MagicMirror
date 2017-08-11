@@ -2,6 +2,7 @@
 using Isidore.MagicMirror.Widgets.Models;
 using Nancy;
 using System;
+using MongoDB.Bson;
 
 namespace Isidore.MagicMirror.Widgets.API.Controller
 {

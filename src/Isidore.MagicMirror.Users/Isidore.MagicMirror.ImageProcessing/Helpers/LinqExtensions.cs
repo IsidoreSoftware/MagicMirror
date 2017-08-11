@@ -21,5 +21,22 @@ namespace Isidore.MagicMirror.ImageProcessing.Helpers
 
             return max;
         }
+
+        public static T MaxBy<T>(this IEnumerable<T> collection, Func<T, double> comparisonAction)
+        {
+            T max = default(T);
+            var maxVal = double.MinValue;
+            foreach (var el in collection)
+            {
+                var value = comparisonAction(el);
+                if (value > maxVal)
+                {
+                    max = el;
+                    maxVal = value;
+                }
+            }
+
+            return max;
+        }
     }
 }

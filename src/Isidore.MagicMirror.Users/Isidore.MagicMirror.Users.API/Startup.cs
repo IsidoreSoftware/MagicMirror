@@ -1,10 +1,14 @@
 ﻿using System;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy.Owin;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace Isidore.MagicMirror.Users.API
 {
@@ -14,6 +18,7 @@ namespace Isidore.MagicMirror.Users.API
 
         public Startup(IHostingEnvironment env)
         {
+            env.ConfigureNLog("nlog.config");
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -31,16 +36,8 @@ namespace Isidore.MagicMirror.Users.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
-            try
-            {
-                app.UseOwin(pipe => pipe.UseNancy(x=>x.Bootstrapper = new Bootstrapper(Configuration)));
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e.Message);
-                return;
-            }
+            SetupLogger(app, loggerFactory);
+            UseNancy(app, loggerFactory);
 
             if (env.IsDevelopment())
             {
@@ -51,6 +48,33 @@ namespace Isidore.MagicMirror.Users.API
             {
                 await context.Response.WriteAsync("Hello World!");
             });
+        }
+
+        private static void SetupLogger(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole().AddNLog();
+            //add NLog.Web
+            app.AddNLogWeb();
+        }
+
+        private void UseNancy(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            try
+            {
+                app.UseOwin(pipe => pipe.UseNancy(x => x.Bootstrapper = new Bootstrapper(Configuration, loggerFactory)));
+            }
+            catch (Exception e)
+            {
+                Exception firstException = e;
+                while (firstException.InnerException != null)
+                {
+                    firstException = firstException.InnerException;
+                }
+
+                Console.Error.WriteLine(firstException.Message);
+
+                throw;
+            }
         }
     }
 }

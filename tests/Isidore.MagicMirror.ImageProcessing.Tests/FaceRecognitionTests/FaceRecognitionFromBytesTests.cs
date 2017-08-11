@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,13 +28,13 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
 
         [Theory]
-        [InlineData("i292ua-fn.jpg", 292)]
-        [InlineData("i293ua-fn.jpg", 293)]
-        [InlineData("i294ua-mg.jpg", 294)]
-        [InlineData("i295ua-mg.jpg", 295)]
-        [InlineData("i296ua-mg.jpg", 296)]
-        [InlineData("i297ua-mn.jpg", 297)]
-        public async Task should_recognize_correctly_from_bytes(string imageSrc, int label)
+        [InlineData("i292ua-fn.jpg", "292")]
+        [InlineData("i293ua-fn.jpg", "293")]
+        [InlineData("i294ua-mg.jpg", "294")]
+        [InlineData("i295ua-mg.jpg", "295")]
+        [InlineData("i296ua-mg.jpg", "296")]
+        [InlineData("i297ua-mn.jpg", "297")]
+        public async Task should_recognize_correctly_from_bytes(string imageSrc, string label)
         {
             var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
 
@@ -42,8 +43,8 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
             var users = images.Keys;
 
             var userServiceMock = A.Fake<IUserService>();
-            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
-                .Returns(new User() { UserNo = label });
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label)))
+                .Returns(new User() { Id = label });
 
             var testedService = new FisherFaceByteProxy(classifier, learningFile, userServiceMock);
 
@@ -52,7 +53,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
             var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
             var result = await testedService.RecognizeAsync(find);
 
-            Assert.Equal(label, result.RecognizedItem.UserNo);
+            Assert.Equal(label, result.RecognizedItem.Id);
         }
     }
 }

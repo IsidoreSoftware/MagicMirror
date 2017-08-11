@@ -1,7 +1,4 @@
-FROM microsoft/dotnet:1.1-runtime
-
-MAINTAINER Jakub Matjanowski "kuba@matjanowski.pl"
-
+FROM microsoft/aspnetcore:1.1
 ARG source
 WORKDIR /app
 EXPOSE 80

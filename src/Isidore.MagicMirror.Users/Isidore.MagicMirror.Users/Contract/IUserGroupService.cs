@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.Users.Contract
 {
-    public interface IUserService : IDataService<User>
+    public interface IUserGroupService : IDataService<UserGroup>
     {
-        Task<User> GetByGuid(Guid guid);
+        Task<UserGroup> GetCurrentUserGroup();
     }
 }
