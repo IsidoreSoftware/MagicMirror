@@ -116,7 +116,7 @@ namespace Isidore.MagicMirror.Infrastructure.Tests
 
             var result = validator.Validate(4);
 
-            Assert.Equal("This value should be more than 5 but was 4", result.Message);
+            Assert.Equal("This value should be more than 5 but was 4\r\n", result.Message);
         }
 
         [Fact]

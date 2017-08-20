@@ -26,7 +26,7 @@ namespace Isidore.MagicMirror.Infrastructure.Validation
                 stringBuilder.AppendLine(oneResult.Message);
             }
             var message = stringBuilder.ToString();
-            result.Message = String.IsNullOrEmpty(message) ? null : message;
+            result.Message = String.IsNullOrWhiteSpace(message) ? null : message;
             result.Result = validated;
             result.Entity = entity;
 
