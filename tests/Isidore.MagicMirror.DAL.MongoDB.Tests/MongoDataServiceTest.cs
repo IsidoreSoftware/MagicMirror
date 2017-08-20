@@ -175,7 +175,7 @@ namespace Isidore.MagicMirror.DAL.MongoDb.Tests
             A
                 .CallTo(() => _collectionMock.FindAsync(
                     A<BsonDocumentFilterDefinition<Person>>
-                        .That.Matches(x => x.Document == new BsonDocument("Id", "09654321")),
+                        .That.Matches(x => x.Document == new BsonDocument("_id", new BsonObjectId("09654321"))),
                     A<FindOptions<Person>>.Ignored,
                     A<CancellationToken>.Ignored))
                 .Returns(cursor);

@@ -102,7 +102,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
                 else
                 {
-                    throw new RecognizedNotExistingUserException(prediction);
+                    throw new RecognizedNotExistingUserException(prediction.ToString());
                 }
             });
         }

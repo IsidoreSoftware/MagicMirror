@@ -1,3 +1,4 @@
+using System;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Nancy;
 using Nancy.ModelBinding;
@@ -66,10 +67,18 @@ namespace Isidore.MagicMirror.Users.API.Controllers
                 return r;
             }
             var imageBytes = response.File.Value;
-            var user = _usersService.GetById(id);
-            if (user == null)
+            User user;
+            try
             {
-                return Negotiate.WithStatusCode(404);
+                user = _usersService.GetById(id);
+                if (user == null)
+                {
+                    return Negotiate.WithStatusCode(404);
+                }
+            }
+            catch (Exception e)
+            {
+                return Negotiate.WithStatusCode(500);
             }
 
             var usersToLearn = new Dictionary<User, IEnumerable<Stream>>();

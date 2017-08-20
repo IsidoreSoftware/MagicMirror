@@ -16,4 +16,10 @@
     <ProjectReference Include="..\..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.ProjectOxford.Face">
+      <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.projectoxford.face.dotnetstandard\1.0.0\lib\netstandard1.4\Microsoft.ProjectOxford.Face.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

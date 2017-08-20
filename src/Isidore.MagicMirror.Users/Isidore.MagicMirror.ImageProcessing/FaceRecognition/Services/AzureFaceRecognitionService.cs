@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Exceptions;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.Users.Contract;
@@ -10,8 +11,6 @@ using Isidore.MagicMirror.Users.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
-using MongoDB.Driver.Core.Operations;
-using NLog;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
@@ -35,7 +34,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
             try
             {
-                _localFaceGroup = _faceServiceClient.GetPersonGroupAsync(currentUserGroup.Id.ToString()).Result;
+                _localFaceGroup = _faceServiceClient.GetPersonGroupAsync(currentUserGroup.Id).Result;
             }
             catch (Exception e)
             {
@@ -82,8 +81,16 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             }
 
             var probableResult = GetMostLikelyPerson(identificationResult);
+            var userGuid = probableResult.PersonId.ToString("N");
+            var filter = new UserFilter
+            {
+                UserGuid = userGuid
+            };
 
-            var user = await _userService.GetByGuid(probableResult.PersonId);
+            var user = (await _userService.GetFilteredAsync(filter)).SingleOrDefault();
+
+            if (user==null)
+                throw new RecognizedNotExistingUserException(userGuid);
 
             return new RecognitionResult<User>
             {
@@ -121,15 +128,16 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 foreach (var user in imagesWithLabels)
                 foreach (var stream in user.Value)
                 {
-                    if (!user.Key.UserGuid.HasValue)
+                    if (String.IsNullOrEmpty(user.Key.UserGuid))
                     {
                        var result = await _faceServiceClient.CreatePersonAsync(_localFaceGroup.PersonGroupId,
                             $"{user.Key.FirstName} {user.Key.LastName}");
-                        user.Key.UserGuid = result.PersonId;
+                        user.Key.UserGuid = result.PersonId.ToString("N");
                         _userService.Update(user.Key.Id, user.Key);
                     }
+
                     await _faceServiceClient.AddPersonFaceAsync(_localFaceGroup.PersonGroupId,
-                        user.Key.UserGuid.Value, stream);
+                        new Guid(user.Key.UserGuid), stream);
                     await _faceServiceClient.TrainPersonGroupAsync(_localFaceGroup.PersonGroupId);
                 }
 

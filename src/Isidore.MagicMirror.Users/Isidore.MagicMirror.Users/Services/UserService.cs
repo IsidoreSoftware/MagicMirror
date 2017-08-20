@@ -13,13 +13,6 @@ namespace Isidore.MagicMirror.Users.Services
         {
         }
 
-
-
-        protected override string EntityIdPropertyName => "UserNo";
-        public async Task<User> GetByGuid(Guid guid)
-        {
-            var r = await _collection.FindAsync<User>(Builders<User>.Filter.Eq(nameof(User.UserGuid), guid));
-            return await r.SingleOrDefaultAsync();
-        }
+        protected override string EntityIdPropertyName => "UserGuid";
     }
 }
