@@ -4,7 +4,6 @@ using Isidore.MagicMirror.DAL.MongoDB;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Microsoft.ProjectOxford.Face;
-using Microsoft.ProjectOxford.Face.Contract;
 using MongoDB.Driver;
 
 namespace Isidore.MagicMirror.Users.Services
@@ -12,7 +11,6 @@ namespace Isidore.MagicMirror.Users.Services
     public class UserGroupService : MongoDataService<UserGroup>, IUserGroupService
     {
         private readonly IFaceServiceClient _faceServiceClient;
-        private Person[] _persons;
         private UserGroup _currentUserGroup;
         private static readonly object SyncRoot = new object();
 

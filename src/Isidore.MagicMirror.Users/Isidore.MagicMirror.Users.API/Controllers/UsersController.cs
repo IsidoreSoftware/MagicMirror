@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.Infrastructure.Validation;
@@ -7,19 +6,18 @@ using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Nancy;
 using Nancy.ModelBinding;
-using Newtonsoft.Json;
 
 namespace Isidore.MagicMirror.Users.API.Controllers
 {
     public class UsersController : NancyModule
     {
         private readonly IUserService _userService;
-        private readonly IValidator validator;
+        private readonly IValidator _validator;
 
         public UsersController(IUserService userService, ValidatorsFactory validatorsFactory) : base("/users")
         {
             _userService = userService;
-            validator = validatorsFactory.GetValidator<User>();
+            _validator = validatorsFactory.GetValidator<User>();
             RegisterActions();
         }
 
@@ -32,7 +30,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
 
         private async Task<Response> ListUsers()
         {
-            var result = await _userService.GetAllAsync();
+            var result = (await _userService.GetAllAsync()).ToList();
             if(result == null || !result.Any())
             {
                 return Response.AsJson(result).WithStatusCode(204);
@@ -56,7 +54,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
 
         private async Task<Response> AddUser(User user)
         {
-            var result = this.validator.Validate(user);
+            var result = this._validator.Validate(user);
 
             if (!result.Result)
             {

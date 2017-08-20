@@ -97,7 +97,8 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var r = await _collection.FindAsync<T>(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+            var filter = Builders<T>.Filter.Eq("_id", new ObjectId(id));
+            var r = await _collection.FindAsync<T>(filter);
             return await r.SingleOrDefaultAsync();
         }
 

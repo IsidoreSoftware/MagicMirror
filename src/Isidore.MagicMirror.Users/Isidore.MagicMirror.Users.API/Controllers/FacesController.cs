@@ -9,7 +9,7 @@ using System.IO;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.WebService.Http.FileUploads;
-using Isidore.MagicMirror.Utils.Helpers.IO;
+using NLog;
 
 namespace Isidore.MagicMirror.Users.API.Controllers
 {
@@ -18,6 +18,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
         private readonly IFaceRecognitionService<Stream, User> _faceService;
         private readonly IUserService _usersService;
         private readonly Stopwatch watch = new Stopwatch();
+       private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public FacesController(IUserService userService, IFaceRecognitionService<Stream, User> faceService) : base("/faces")
         {
@@ -78,6 +79,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             }
             catch (Exception e)
             {
+                Logger.Error(e,"Error on getting user from storage.");
                 return Negotiate.WithStatusCode(500);
             }
 
