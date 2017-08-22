@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Exceptions;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.WebService.Http.FileUploads;
@@ -85,7 +86,14 @@ namespace Isidore.MagicMirror.Users.API.Controllers
 
             var usersToLearn = new Dictionary<User, IEnumerable<Stream>>();
             usersToLearn.Add(user, new List<Stream> { imageBytes });
-            await _faceService.LearnMore(usersToLearn);
+            try
+            {
+                await _faceService.LearnMore(usersToLearn);
+            }
+            catch (FaceNotFoundException e)
+            {
+                return Response.AsJson(e.Message).WithStatusCode(HttpStatusCode.BadRequest);
+            }
             watch.Stop();
             return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
         }

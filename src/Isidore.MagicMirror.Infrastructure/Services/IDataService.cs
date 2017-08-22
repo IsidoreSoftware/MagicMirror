@@ -18,5 +18,7 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         void Insert(T item);
 
         void Update(string id, T item);
+
+        void Delete(string id);
     }
 }

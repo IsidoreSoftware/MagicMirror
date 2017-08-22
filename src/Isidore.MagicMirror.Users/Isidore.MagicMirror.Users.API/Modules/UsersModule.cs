@@ -39,10 +39,10 @@ namespace Isidore.MagicMirror.Users.API.Modules
             builder.RegisterType<AzureFaceRecognitionService>()
                 .AsImplementedInterfaces();
             builder.RegisterInstance(SetUpMongoDb());
-            builder.RegisterType<UserService>().AsImplementedInterfaces();
+            builder.RegisterType<AzureUserService>().AsImplementedInterfaces();
             builder.RegisterInstance(this._appConfig.Get<FaceServiceConfig>());
             builder.RegisterInstance(GetValidatorFactory()).SingleInstance();
-            builder.RegisterType<UserGroupService>().AsImplementedInterfaces();
+            builder.RegisterType<AzureUserGroupService>().AsImplementedInterfaces();
         }
 
         private ValidatorsFactory GetValidatorFactory()

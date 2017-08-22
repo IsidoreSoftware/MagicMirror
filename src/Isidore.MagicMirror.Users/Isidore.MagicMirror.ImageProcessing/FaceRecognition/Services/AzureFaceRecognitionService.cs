@@ -64,20 +64,17 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 identificationResult = await _faceServiceClient.IdentifyAsync(
                     _localFaceGroup.PersonGroupId,
                     new[] { biggestFace.FaceId });
+
+                if (identificationResult[0]?.Candidates?.Length == 0)
+                {
+                    _logger.LogInformation("The face can't be assigned to any of known persons.");
+                    return NoUserFound(biggestFace);
+                }
             }
             catch (FaceAPIException e)
             {
                 _logger.LogError($"Can't identify a user. Reason: {e.Message}", e);
-                return new RecognitionResult<User>
-                {
-                    Area = new Area
-                    {
-                        Height = biggestFace.FaceRectangle.Height,
-                        Width = biggestFace.FaceRectangle.Width,
-                        Top = biggestFace.FaceRectangle.Top,
-                        Left = biggestFace.FaceRectangle.Left,
-                    }
-                };
+                return NoUserFound(biggestFace);
             }
 
             var probableResult = GetMostLikelyPerson(identificationResult);
@@ -92,6 +89,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             if (user==null)
                 throw new RecognizedNotExistingUserException(userGuid);
 
+            _logger.LogTrace($"User (Guid:{user.UserGuid}) recognized. Confidence = {probableResult.Confidence}");
             return new RecognitionResult<User>
             {
                 Area = new Area
@@ -103,6 +101,20 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 },
                 Distance = probableResult.Confidence,
                 RecognizedItem = user
+            };
+        }
+
+        private static RecognitionResult<User> NoUserFound(Face biggestFace)
+        {
+            return new RecognitionResult<User>
+            {
+                Area = new Area
+                {
+                    Height = biggestFace.FaceRectangle.Height,
+                    Width = biggestFace.FaceRectangle.Width,
+                    Top = biggestFace.FaceRectangle.Top,
+                    Left = biggestFace.FaceRectangle.Left,
+                }
             };
         }
 
@@ -128,19 +140,16 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 foreach (var user in imagesWithLabels)
                 foreach (var stream in user.Value)
                 {
-                    if (String.IsNullOrEmpty(user.Key.UserGuid))
-                    {
-                       var result = await _faceServiceClient.CreatePersonAsync(_localFaceGroup.PersonGroupId,
-                            $"{user.Key.FirstName} {user.Key.LastName}");
-                        user.Key.UserGuid = result.PersonId.ToString("N");
-                        _userService.Update(user.Key.Id, user.Key);
-                    }
-
                     await _faceServiceClient.AddPersonFaceAsync(_localFaceGroup.PersonGroupId,
                         new Guid(user.Key.UserGuid), stream);
                     await _faceServiceClient.TrainPersonGroupAsync(_localFaceGroup.PersonGroupId);
                 }
 
+            }
+            catch (FaceAPIException e)
+            {
+                _logger.LogWarning($"Error when learning face. Code:{e.ErrorCode}; Message:{e.ErrorMessage}; Status: {e.HttpStatus}",e);
+                throw new FaceNotFoundException();
             }
             catch (Exception e)
             {

@@ -19,5 +19,7 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         Task InsertAsync(T item);
 
         Task UpdateAsync(string id, T item);
+
+        Task DeleteAsync(string id);
     }
 }

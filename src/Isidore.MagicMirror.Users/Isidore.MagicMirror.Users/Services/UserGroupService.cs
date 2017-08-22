@@ -10,13 +10,11 @@ namespace Isidore.MagicMirror.Users.Services
 {
     public class UserGroupService : MongoDataService<UserGroup>, IUserGroupService
     {
-        private readonly IFaceServiceClient _faceServiceClient;
         private UserGroup _currentUserGroup;
         private static readonly object SyncRoot = new object();
 
-        public UserGroupService(IMongoDatabase mongoDatabase, IFaceServiceClient faceServiceClient) : base(mongoDatabase,"userGroups")
+        public UserGroupService(IMongoDatabase mongoDatabase) : base(mongoDatabase,"userGroups")
         {
-            _faceServiceClient = faceServiceClient;
         }
 
         protected override string EntityIdPropertyName => "Id";
@@ -25,22 +23,11 @@ namespace Isidore.MagicMirror.Users.Services
         {
             if (_currentUserGroup == null)
             {
-                var group = (await _faceServiceClient.ListPersonGroupsAsync("", 1)).FirstOrDefault();
+                var group  = (await GetAllAsync()).FirstOrDefault();
                 lock (SyncRoot)
                 {
                     if (_currentUserGroup == null)
-                        _currentUserGroup = GetById(group.PersonGroupId);
-                }
-
-                //TODO: remove
-                if (_currentUserGroup == null)
-                {
-                    _currentUserGroup = new UserGroup
-                    {
-                        Id = group.PersonGroupId,
-                        GroupName = group.Name
-                    };
-                    await InsertAsync(_currentUserGroup);
+                        _currentUserGroup = group;
                 }
             }
 
