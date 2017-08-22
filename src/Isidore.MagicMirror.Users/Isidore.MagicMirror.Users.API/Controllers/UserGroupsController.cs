@@ -29,12 +29,10 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             var result = (await _groupService.GetAllAsync()).ToList();
             if (result == null || !result.Any())
             {
-                return Response.AsJson(result).WithStatusCode(204);
+                return HttpStatusCode.NoContent;
             }
-            else
-            {
-                return Response.AsJson(result);
-            }
+
+            return Response.AsJson(result);
         }
 
         private async Task<Response> DeleteGroup(string groupId)

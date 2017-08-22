@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.Infrastructure.Validation;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
+using Isidore.MagicMirror.WebService.Exceptions;
 using Nancy;
 using Nancy.ModelBinding;
+using NLog;
 
 namespace Isidore.MagicMirror.Users.API.Controllers
 {
@@ -13,6 +15,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IValidator _validator;
+        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public UsersController(IUserService userService, ValidatorsFactory validatorsFactory) : base("/users")
         {
@@ -25,7 +28,8 @@ namespace Isidore.MagicMirror.Users.API.Controllers
         {
             Get("", async (_, ctx) => await ListUsers());
             Get("/{id}", async (_, ctx) => await GetUser(_["id"]));
-            Post("", async (_, ctx) => await AddUser(this.Bind<User>()));
+            Post("", async (_, ctx) => await AddUser(this.Bind<User>())); 
+            Delete("/{id}", async (_, ctx) => await RemoveUser(_["id"]));
         }
 
         private async Task<Response> ListUsers()
@@ -33,12 +37,9 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             var result = (await _userService.GetAllAsync()).ToList();
             if(result == null || !result.Any())
             {
-                return Response.AsJson(result).WithStatusCode(204);
+                return HttpStatusCode.NoContent;
             }
-            else
-            {
-                return Response.AsJson(result);
-            }
+            return Response.AsJson(result);
         }
 
         private async Task<Response> GetUser(string id)
@@ -73,6 +74,21 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             {
                 return Response.AsJson(e, HttpStatusCode.InternalServerError);
             }
+        }
+
+        private async Task<Response> RemoveUser(string id)
+        {
+            try
+            {
+                await _userService.DeleteAsync(id);
+            }
+            catch (ElementNotFoundException e)
+            {
+                Logger.Warn(e);
+                return new NotFoundResponse();
+            }
+
+            return Nancy.Response.NoBody;
         }
     }
 }
