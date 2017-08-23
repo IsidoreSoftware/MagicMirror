@@ -154,7 +154,7 @@ namespace Isidore.MagicMirror.Users.Services
             // TODO: return id in all inserts
             var result = await _faceServiceClient.CreatePersonAsync(_userGroupId,
                    $"{item.FirstName} {item.LastName} ({item.Id})");
-            item.UserGuid = result.PersonId.ToString("N");
+            item.UserGuid = result.PersonId.ToString();
         }
 
         public async Task UpdateAsync(string id, User item)
