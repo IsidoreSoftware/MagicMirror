@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.Infrastructure.Validation;
 using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.Users.Exceptions;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.WebService.Exceptions;
 using Nancy;
@@ -22,6 +23,17 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             _userService = userService;
             _validator = validatorsFactory.GetValidator<User>();
             RegisterActions();
+            OnError.AddItemToEndOfPipeline((x,e)=>CatchKnownErrors(e));
+        }
+
+        private dynamic CatchKnownErrors(Exception exception)
+        {
+            if (exception is NoDefaultUserGroupDefined)
+            {
+                return Response.AsJson(new { error="No default group defined for this system." }).WithStatusCode(400);
+            }
+
+            return exception;
         }
 
         private void RegisterActions()
@@ -69,7 +81,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             try
             {
                 await _userService.InsertAsync(user);
-                return Response.AsText(user.UserGuid).WithStatusCode(HttpStatusCode.Created);
+                return Response.AsText(user.Id).WithStatusCode(HttpStatusCode.Created);
             }
             catch (Exception e)
             {

@@ -40,7 +40,7 @@ namespace Isidore.MagicMirror.Users.API.Modules
                 .AsImplementedInterfaces();
             builder.RegisterInstance(SetUpMongoDb());
             builder.RegisterType<UserService>();
-            builder.RegisterType<AzureUserService>();
+            builder.RegisterType<AzureUserService>().SingleInstance();
             builder.RegisterType<CompositeUserService>().AsImplementedInterfaces();
             builder.RegisterType<UserGroupService>();
             builder.RegisterType<AzureUserGroupService>();

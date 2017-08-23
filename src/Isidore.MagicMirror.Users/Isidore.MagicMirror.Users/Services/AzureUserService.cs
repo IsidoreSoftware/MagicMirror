@@ -17,6 +17,7 @@ namespace Isidore.MagicMirror.Users.Services
     public class AzureUserService : IUserService
     {
         private readonly IFaceServiceClient _faceServiceClient;
+        private Dictionary<string, string> _usersIdsMap = new Dictionary<string, string>();
         private readonly string _userGroupId;
         private static readonly Regex UserNameRegex = new Regex(
             @"(?<fname>([a-zA-Z])*( ?))?(?<lname>([a-zA-Z])*( ?))?(?<id>\(([a-z0-9]*)\)*)*");
@@ -34,6 +35,8 @@ namespace Isidore.MagicMirror.Users.Services
                 _userGroupId = null;
                 Logger.Error(e,"Can't get current user group.");
             }
+
+            BuildAzureAndDbIdMap().Wait();
         }
 
         public User GetById(string id)
@@ -83,7 +86,7 @@ namespace Isidore.MagicMirror.Users.Services
                 throw new NoDefaultUserGroupDefined();
             }
 
-            var person = await _faceServiceClient.GetPersonAsync(_userGroupId, new Guid(id));
+            var person = await _faceServiceClient.GetPersonAsync(_userGroupId, new Guid(_usersIdsMap[id]));
             return new User
             {
                 UserGuid = person.PersonId.ToString("N"),
@@ -153,8 +156,10 @@ namespace Isidore.MagicMirror.Users.Services
 
             // TODO: return id in all inserts
             var result = await _faceServiceClient.CreatePersonAsync(_userGroupId,
-                   $"{item.FirstName} {item.LastName} ({item.Id})");
+                   $"{item.FirstName} {item.LastName} ({item.Id})",item.Id);
             item.UserGuid = result.PersonId.ToString();
+
+            _usersIdsMap.Add(item.Id, item.UserGuid);
         }
 
         public async Task UpdateAsync(string id, User item)
@@ -165,8 +170,8 @@ namespace Isidore.MagicMirror.Users.Services
             }
 
             // TODO: return number of updated records
-            await _faceServiceClient.UpdatePersonAsync(_userGroupId, new Guid(id),
-                $"{item.FirstName} {item.LastName} ({item.Id})");
+            await _faceServiceClient.UpdatePersonAsync(_userGroupId, new Guid(_usersIdsMap[id]),
+                $"{item.FirstName} {item.LastName} ({item.Id})",item.Id);
         }
 
         public async Task DeleteAsync(string id)
@@ -177,7 +182,22 @@ namespace Isidore.MagicMirror.Users.Services
             }
 
             // TODO: return number of deleted records
-            await _faceServiceClient.DeletePersonAsync(_userGroupId, new Guid(id));
+            await _faceServiceClient.DeletePersonAsync(_userGroupId, new Guid(_usersIdsMap[id]));
+
+            if (_userGroupId.Contains(id))
+            {
+                _usersIdsMap.Remove(id);
+            }
+        }
+
+        private async Task BuildAzureAndDbIdMap()
+        {
+            var persons = await _faceServiceClient.GetPersonsAsync(_userGroupId);
+            foreach (var person in persons)
+            {
+                _usersIdsMap.Add(person.UserData,person.PersonId.ToString());
+                //await _faceServiceClient.DeletePersonAsync(_userGroupId, person.PersonId);
+            }
         }
     }
 }
