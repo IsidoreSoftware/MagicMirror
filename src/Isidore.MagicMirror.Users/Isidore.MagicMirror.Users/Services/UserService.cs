@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Isidore.MagicMirror.Users.Models;
+﻿using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.DAL.MongoDB;
 using MongoDB.Driver;
 using Isidore.MagicMirror.Users.Contract;

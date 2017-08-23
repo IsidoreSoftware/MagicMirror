@@ -17,8 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.extensions.logging.abstractions\1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ProjectOxford.Face">
       <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.projectoxford.face.dotnetstandard\1.0.0\lib\netstandard1.4\Microsoft.ProjectOxford.Face.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>C:\Users\Kuba\.nuget\packages\nlog\5.0.0-beta07\lib\netstandard1.5\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
 

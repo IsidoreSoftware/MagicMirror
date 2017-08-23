@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.Infrastructure.Paging;
 using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.Users.Exceptions;
 using Isidore.MagicMirror.Users.Models;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
+using NLog;
 
 namespace Isidore.MagicMirror.Users.Services
 {
@@ -18,11 +20,20 @@ namespace Isidore.MagicMirror.Users.Services
         private readonly string _userGroupId;
         private static readonly Regex UserNameRegex = new Regex(
             @"(?<fname>([a-zA-Z])*( ?))?(?<lname>([a-zA-Z])*( ?))?(?<id>\(([a-z0-9]*)\)*)*");
+        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public AzureUserService(IFaceServiceClient faceServiceClient, IUserGroupService userGroupService)
         {
             _faceServiceClient = faceServiceClient;
-            _userGroupId = userGroupService.GetCurrentUserGroup().Result.Id;
+            try
+            {
+                _userGroupId = userGroupService.GetCurrentUserGroup().Result.Id;
+            }
+            catch (Exception e)
+            {
+                _userGroupId = null;
+                Logger.Error(e,"Can't get current user group.");
+            }
         }
 
         public User GetById(string id)
@@ -67,6 +78,11 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task<User> GetByIdAsync(string id)
         {
+            if (_userGroupId == null)
+            {
+                throw new NoDefaultUserGroupDefined();
+            }
+
             var person = await _faceServiceClient.GetPersonAsync(_userGroupId, new Guid(id));
             return new User
             {
@@ -82,8 +98,13 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
+            if (_userGroupId == null)
+            {
+                throw new NoDefaultUserGroupDefined();
+            }
+
             return (await _faceServiceClient.GetPersonsAsync(_userGroupId))
-                .Select(person => ConvertPersonToUser(person));
+                .Select(ConvertPersonToUser);
         }
 
         private static User ConvertPersonToUser(Person person)
@@ -125,6 +146,11 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task InsertAsync(User item)
         {
+            if (_userGroupId == null)
+            {
+                throw new NoDefaultUserGroupDefined();
+            }
+
             // TODO: return id in all inserts
             var result = await _faceServiceClient.CreatePersonAsync(_userGroupId,
                    $"{item.FirstName} {item.LastName} ({item.Id})");
@@ -133,6 +159,11 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task UpdateAsync(string id, User item)
         {
+            if (_userGroupId == null)
+            {
+                throw new NoDefaultUserGroupDefined();
+            }
+
             // TODO: return number of updated records
             await _faceServiceClient.UpdatePersonAsync(_userGroupId, new Guid(id),
                 $"{item.FirstName} {item.LastName} ({item.Id})");
@@ -140,6 +171,11 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task DeleteAsync(string id)
         {
+            if (_userGroupId == null)
+            {
+                throw new NoDefaultUserGroupDefined();
+            }
+
             // TODO: return number of deleted records
             await _faceServiceClient.DeletePersonAsync(_userGroupId, new Guid(id));
         }

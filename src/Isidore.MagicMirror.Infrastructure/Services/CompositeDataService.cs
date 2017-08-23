@@ -99,23 +99,26 @@ namespace Isidore.MagicMirror.Infrastructure.Services
 
         public async Task InsertAsync(T item)
         {
-            var firstService = Services.FirstOrDefault();
-
-            await firstService.InsertAsync(item);
+            foreach (var service in Services)
+            {
+                await service.InsertAsync(item);
+            }
         }
 
         public async Task UpdateAsync(string id, T item)
         {
-            var firstService = Services.FirstOrDefault();
-
-            await firstService.UpdateAsync(id, item);
+            foreach (var service in Services)
+            {
+                await service.UpdateAsync(id, item);
+            }
         }
 
         public async Task DeleteAsync(string id)
         {
-            var firstService = Services.FirstOrDefault();
-
-            await firstService.DeleteAsync(id);
+            foreach (var service in Services)
+            {
+                await service.DeleteAsync(id);
+            }
         }
     }
 }

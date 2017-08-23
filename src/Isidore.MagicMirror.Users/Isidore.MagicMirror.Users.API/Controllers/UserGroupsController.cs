@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.WebService.Exceptions;
 using Nancy;
+using Nancy.ModelBinding;
 using NLog;
 
 namespace Isidore.MagicMirror.Users.API.Controllers
@@ -22,6 +25,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
         {
             Get("", async (_, ctx) => await ListGroups());
             Delete("{id}", async (_, ctx) => await DeleteGroup(_["id"]));
+            Post("", async (_, ctx) => await AddUserGroup(this.Bind<UserGroup>()));
         }
 
         private async Task<Response> ListGroups()
@@ -33,6 +37,21 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             }
 
             return Response.AsJson(result);
+        }
+
+        private async Task<Response> AddUserGroup(UserGroup userGroup)
+        {
+            try
+            {
+                await _groupService.InsertAsync(userGroup);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(e);
+                return new NotFoundResponse();
+            }
+
+            return Nancy.Response.NoBody;
         }
 
         private async Task<Response> DeleteGroup(string groupId)

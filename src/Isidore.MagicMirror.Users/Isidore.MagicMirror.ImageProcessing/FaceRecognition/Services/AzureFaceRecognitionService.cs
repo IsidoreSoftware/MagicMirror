@@ -30,7 +30,13 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             _faceServiceClient = faceServiceClient;
             _logger = new Logger<AzureFaceRecognitionService>(loggerFactory);
             _userService = userService;
+
             var currentUserGroup = userGroupService.GetCurrentUserGroup().Result;
+            if (currentUserGroup == null)
+            {
+                _logger.LogError("Can't get the default user group on database.");
+                return;
+            }
 
             try
             {
@@ -38,9 +44,8 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             }
             catch (Exception e)
             {
-                _faceServiceClient.CreatePersonGroupAsync(currentUserGroup.Id.ToString(), currentUserGroup.GroupName);
-                _logger.LogError($"Can't get the local face group. {e.Message}", e);
-                throw;
+                _logger.LogWarning($"Can't get the default user group on Azure. Creating a new one. Message: {e.Message}");
+                _faceServiceClient.CreatePersonGroupAsync(currentUserGroup.Id, currentUserGroup.GroupName);
             }
         }
 

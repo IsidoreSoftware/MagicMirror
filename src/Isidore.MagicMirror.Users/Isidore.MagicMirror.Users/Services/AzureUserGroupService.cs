@@ -7,6 +7,7 @@ using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Microsoft.ProjectOxford.Face;
+using Microsoft.ProjectOxford.Face.Contract;
 
 namespace Isidore.MagicMirror.Users.Services
 {
@@ -86,19 +87,19 @@ namespace Isidore.MagicMirror.Users.Services
             });
         }
 
-        public async Task<ResultPage<UserGroup>> GetFilteredAsync(IFilter<UserGroup> filter, PageReqest pageRequest)
+        public Task<ResultPage<UserGroup>> GetFilteredAsync(IFilter<UserGroup> filter, PageReqest pageRequest)
         {
             throw new NotSupportedException();
         }
 
-        public async Task<ResultPage<UserGroup>> GetAllAsync(PageReqest pageRequest)
+        public Task<ResultPage<UserGroup>> GetAllAsync(PageReqest pageRequest)
         {
             throw new NotSupportedException();
         }
 
         public async Task InsertAsync(UserGroup item)
         {
-            await _faceServiceClient.CreatePersonGroupAsync(item.Id, item.GroupName);
+           await _faceServiceClient.CreatePersonGroupAsync(item.Id, item.GroupName);
         }
 
         public async Task UpdateAsync(string id, UserGroup item)
@@ -115,10 +116,15 @@ namespace Isidore.MagicMirror.Users.Services
         {
             var group = (await _faceServiceClient.ListPersonGroupsAsync(top:1)).FirstOrDefault();
 
+            if (group == null)
+            {
+                return null;
+            }
+
             return new UserGroup
             {
-                Id = group.PersonGroupId,
-                GroupName = group.Name
+                Id = group?.PersonGroupId,
+                GroupName = group?.Name
             };
         }
     }
