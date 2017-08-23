@@ -39,6 +39,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             {
                 return HttpStatusCode.NoContent;
             }
+
             return Response.AsJson(result);
         }
 

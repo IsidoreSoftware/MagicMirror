@@ -140,8 +140,10 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 foreach (var user in imagesWithLabels)
                 foreach (var stream in user.Value)
                 {
-                    await _faceServiceClient.AddPersonFaceAsync(_localFaceGroup.PersonGroupId,
-                        new Guid(user.Key.UserGuid), stream);
+                    await _faceServiceClient.AddPersonFaceAsync(
+                        _localFaceGroup.PersonGroupId,
+                        new Guid(user.Key.UserGuid),
+                        stream);
                     await _faceServiceClient.TrainPersonGroupAsync(_localFaceGroup.PersonGroupId);
                 }
 

@@ -18,8 +18,8 @@ namespace Isidore.MagicMirror.Users.API.Controllers
     {
         private readonly IFaceRecognitionService<Stream, User> _faceService;
         private readonly IUserService _usersService;
-        private readonly Stopwatch watch = new Stopwatch();
-       private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly Stopwatch _watch = new Stopwatch();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public FacesController(IUserService userService, IFaceRecognitionService<Stream, User> faceService) : base("/faces")
         {
@@ -57,11 +57,11 @@ namespace Isidore.MagicMirror.Users.API.Controllers
         {
             return request.File != null;
         }
-        
+
         public async Task<dynamic> LearnImage(FileUploadRequest response, string id)
         {
-            watch.Reset();
-            watch.Start();
+            _watch.Reset();
+            _watch.Start();
             if (!response.File.Name.ToLowerInvariant().EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
@@ -80,7 +80,7 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             }
             catch (Exception e)
             {
-                Logger.Error(e,"Error on getting user from storage.");
+                Logger.Error(e, "Error on getting user from storage.");
                 return Negotiate.WithStatusCode(500);
             }
 
@@ -94,14 +94,14 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             {
                 return Response.AsJson(e.Message).WithStatusCode(HttpStatusCode.BadRequest);
             }
-            watch.Stop();
-            return $"Learned {id} with {imageBytes.Length} bytes in {watch.ElapsedMilliseconds} ms";
+            _watch.Stop();
+            return $"Learned {id} with {imageBytes.Length} bytes in {_watch.ElapsedMilliseconds} ms";
         }
 
         public async Task<dynamic> RecognizeUser(FileUploadRequest request)
         {
-            watch.Reset();
-            watch.Start();
+            _watch.Reset();
+            _watch.Start();
             if (!request.File.Name.ToLowerInvariant().EndsWith(".jpg"))
             {
                 var r = (Response)"The file doesn't have not .jpg extension";
@@ -110,12 +110,12 @@ namespace Isidore.MagicMirror.Users.API.Controllers
             }
             var u = await _faceService.RecognizeAsync(request.File.Value);
 
-            watch.Stop();
+            _watch.Stop();
             if (u == null)
             {
                 return await Negotiate.WithStatusCode(204).WithModel(new
                 {
-                    error="No face found"
+                    error = "No face found"
                 });
             }
             else if (u.RecognizedItem == null)

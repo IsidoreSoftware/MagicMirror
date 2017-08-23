@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Isidore.MagicMirror.DAL.MongoDB;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
-using Microsoft.ProjectOxford.Face;
 using MongoDB.Driver;
 
 namespace Isidore.MagicMirror.Users.Services

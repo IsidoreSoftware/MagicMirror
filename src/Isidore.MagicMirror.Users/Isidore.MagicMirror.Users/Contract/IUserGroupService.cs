@@ -4,7 +4,7 @@ using Isidore.MagicMirror.Users.Models;
 
 namespace Isidore.MagicMirror.Users.Contract
 {
-    public interface IUserGroupService : IDataService<UserGroup>, IAsyncDataService<UserGroup>
+    public interface IUserGroupService : ISyncAndAsyncDataService<UserGroup>
     {
         Task<UserGroup> GetCurrentUserGroup();
     }
