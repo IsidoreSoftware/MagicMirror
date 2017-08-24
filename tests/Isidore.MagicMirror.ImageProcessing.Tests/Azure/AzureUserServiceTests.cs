@@ -49,7 +49,9 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
         {
             // Arrange
             var azureUserService = new AzureUserService(_faceServiceClient, _userGroupService);
-            var user = new User();
+            var user = new User{
+                Id="abcd-e2324"
+            };
 
             // Act
             await azureUserService.InsertAsync(user);
@@ -78,6 +80,20 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
                     () => _faceServiceClient.GetPersonAsync(
                         A<string>.Ignored,A<Guid>.That.Matches(x=>x.Equals(Guid.Parse(user.UserGuid)))))
                 .MustHaveHappened(Repeated.Exactly.Once);
+        }
+
+        
+        [Fact]
+        public async Task user_must_have_id_specified_when_inserting_to_services()
+        {
+            // Arrange
+            var azureUserService = new AzureUserService(_faceServiceClient, _userGroupService);
+            var user = new User{
+                Id = null
+            };
+
+            // Act
+            await Assert.ThrowsAsync<ArgumentException>(() => azureUserService.InsertAsync(user));            
         }
     }
 }

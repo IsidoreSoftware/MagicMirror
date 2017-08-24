@@ -149,6 +149,10 @@ namespace Isidore.MagicMirror.Users.Services
 
         public async Task InsertAsync(User item)
         {
+            if(item.Id == null){
+                throw new ArgumentException("User must have Id already known to create it on Azure.");
+            }
+
             if (_userGroupId == null)
             {
                 throw new NoDefaultUserGroupDefined();
