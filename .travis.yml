@@ -10,10 +10,6 @@ branches:
     - build-server
 before_script:
   - chmod -R a+x scripts
-os:  
-  - linux
-install:  
-  - export PATH="$DOTNET_INSTALL_DIR:$PATH"  
 script:  
   - dotnet restore
   - dotnet build
