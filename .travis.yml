@@ -16,5 +16,5 @@ install:
   - export PATH="$DOTNET_INSTALL_DIR:$PATH"  
 script:  
   - dotnet restore
-  - dotnet build ./**/project.json
+  - dotnet build
   - ./scripts/test.sh
