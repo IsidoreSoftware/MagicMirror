@@ -10,7 +10,7 @@ branches:
     - build-server
 before_script:
   - chmod -R a+x scripts
-script:  
-  - dotnet restore
+script:
+  - ./scripts/restore.sh
   - dotnet build
   - ./scripts/test.sh
