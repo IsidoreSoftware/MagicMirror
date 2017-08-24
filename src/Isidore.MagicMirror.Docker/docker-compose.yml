@@ -7,7 +7,7 @@ services:
       context: ./../Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API
       dockerfile: Dockerfile
     links:
-      - isidore.magicmirror.mongo:mongo-db
+      - isidore.magicmirror.mongo:mongo
   isidore.magicmirror.mongo:
     image: mongo:3.0.4
     ports:
@@ -20,4 +20,4 @@ services:
       context: ./../Isidore.MagicMirror.Widgets/Isidore.MagicMirror.Widgets.API
       dockerfile: Dockerfile
     links:
-      - isidore.magicmirror.mongo:mongo-db
+      - isidore.magicmirror.mongo:mongo

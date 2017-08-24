@@ -15,5 +15,11 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         Task<ResultPage<T>> GetFilteredAsync(IFilter<T> filter, PageReqest pageRequest);
 
         Task<ResultPage<T>> GetAllAsync(PageReqest pageRequest);
+
+        Task InsertAsync(T item);
+
+        Task UpdateAsync(string id, T item);
+
+        Task DeleteAsync(string id);
     }
 }

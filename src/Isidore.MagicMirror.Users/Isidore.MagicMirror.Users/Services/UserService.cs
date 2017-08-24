@@ -8,8 +8,9 @@ namespace Isidore.MagicMirror.Users.Services
     public class UserService : MongoDataService<User>, IUserService
     {
         public UserService(IMongoDatabase database) : base(database, "users")
-        { }
+        {
+        }
 
-        protected override string EntityIdPropertyName => "UserNo";
+        protected override string EntityIdPropertyName => "UserGuid";
     }
 }

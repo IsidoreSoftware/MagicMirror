@@ -1,13 +1,20 @@
 version: '2'
+ 
+#mounting usersecrets
+#until this is resolved https://github.com/Microsoft/DockerTools/issues/24
 
 services:
   isidore.magicmirror.users.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - "7010:80"
+    volumes:
+      - C:\Users\Kuba\AppData\Roaming\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro
   isidore.magicmirror.widgets.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - "7011:80"
+    volumes:
+      - C:\Users\Kuba\AppData\Roaming\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro

@@ -1,12 +1,10 @@
-﻿using Isidore.MagicMirror.Users.Models;
-using System;
+﻿using System;
+using Isidore.MagicMirror.DAL.MongoDB;
 
 namespace Isidore.MagicMirror.Widgets.Models
 {
     public class Widget : BaseMongoObject
     {
-        public long Id { get; set; }
-
         public string Name { get; set; }
 
         public string Template { get; set; }

@@ -102,24 +102,24 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
                 else
                 {
-                    throw new RecognizedNotExistingUserException(prediction);
+                    throw new RecognizedNotExistingUserException(prediction.ToString());
                 }
             });
         }
 
         public async Task LearnMore(IDictionary<User, IEnumerable<Mat>> imagesWithLabels)
         {
-            Action<LBPHFaceRecognizer, Mat[], int[]> action = (ffr, images, labels) =>
+            Action<LBPHFaceRecognizer, Mat[], string[]> action = (ffr, images, labels) =>
             {
                 var fi = new FileInfo(trainingFile);
                 if (fi.Length > 0)
                 {
                     ffr.Load(trainingFile);
-                    ffr.Update(images, labels);
+                    ffr.Update(images, labels.Select(int.Parse));
                 }
                 else
                 {
-                    ffr.Train(images, labels);
+                    ffr.Train(images, labels.Select(int.Parse));
                 }
             };
 
@@ -129,10 +129,10 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         private async Task LearnTemplateMethod(
             IDictionary<User, IEnumerable<Mat>> imagesWithLabels,
             string savedTrainingFile,
-            Action<LBPHFaceRecognizer, Mat[], int[]> learnAction)
+            Action<LBPHFaceRecognizer, Mat[], string[]> learnAction)
         {
             var trainingFaces = new LinkedList<Mat>();
-            var labels = new LinkedList<int>();
+            var labels = new LinkedList<string>();
             var normalSize = new Size(minFaceSize, minFaceSize);
 
             foreach (var user in imagesWithLabels)
@@ -141,7 +141,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 {
                     var faceImage = GetFaceImage(photo).Resize(normalSize);
                     var face = trainingFaces.AddLast(faceImage);
-                    labels.AddLast(user.Key.UserNo);
+                    labels.AddLast(user.Key.Id);
                 }
             }
 

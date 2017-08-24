@@ -5,6 +5,7 @@ using OpenCvSharp;
 using Isidore.MagicMirror.ImageProcessing.Helpers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using System.IO;
+using System;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 {
@@ -23,7 +24,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 
             string fullFileName = cascadeFileInfo.PhysicalPath;
 
-            if(string.IsNullOrWhiteSpace(fullFileName))
+            if (string.IsNullOrWhiteSpace(fullFileName))
             {
                 fullFileName = Path.GetTempFileName();
                 using (var outstream = File.OpenWrite(fullFileName))
@@ -34,7 +35,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers
 
             haarCascade = new CascadeClassifier(fullFileName);
         }
- 
+
         public IEnumerable<Area> DetectAllFaces(Mat image)
         {
             var faces = haarCascade.DetectMultiScale(image);

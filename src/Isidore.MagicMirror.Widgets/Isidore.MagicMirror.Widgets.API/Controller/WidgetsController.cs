@@ -1,5 +1,8 @@
 ﻿using Isidore.MagicMirror.Widgets.Contract;
+using Isidore.MagicMirror.Widgets.Models;
 using Nancy;
+using System;
+using MongoDB.Bson;
 
 namespace Isidore.MagicMirror.Widgets.API.Controller
 {
@@ -10,6 +13,7 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
         public WidgetsController(IWidgetService widgetService) : base("/widgets")
         {
             this._widgetService = widgetService;
+
             SetUpRoutes();
         }
 
@@ -17,8 +21,27 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
         {
             Get("/{id}", async (_, ctx) =>
             {
-                if (_["id"] != null)
-                    return await _widgetService.GetByIdAsync(_["id"]);
+                var id = (string)_.id;
+
+                if (id != null)
+                {
+                    var widgets = new[]{new Widget()
+                    {
+                        AuthorId = 1,
+                        CreationDate = DateTime.Now,
+                        Id = "1",
+                        Name = "Clock",
+                        Template = "<div>Sum 2+5 =  {{2+5}}</div>",
+                        Style = "div {color:#f00; }"
+                    }};
+                    return widgets;
+
+                    var widget = await _widgetService.GetByIdAsync(id);
+                    if (widget == null)
+                        return HttpStatusCode.NotFound;
+
+                    return widget;
+                }
                 else
                     return HttpStatusCode.BadRequest;
             });

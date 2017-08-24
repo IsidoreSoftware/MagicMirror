@@ -1,5 +1,4 @@
-﻿using System;
-using Isidore.MagicMirror.DAL.MongoDB;
+﻿using Isidore.MagicMirror.DAL.MongoDB;
 using Isidore.MagicMirror.Widgets.Models;
 using MongoDB.Driver;
 using Isidore.MagicMirror.Widgets.Contract;
@@ -12,6 +11,6 @@ namespace Isidore.MagicMirror.Widgets.Services
         {
         }
 
-        protected override string EntityIdPropertyName => nameof(Widget.Id);
+        protected override string EntityIdPropertyName => "_id";
     }
 }

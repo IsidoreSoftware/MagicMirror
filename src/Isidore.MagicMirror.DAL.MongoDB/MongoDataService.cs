@@ -6,26 +6,27 @@ using Isidore.MagicMirror.Infrastructure.Services;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Concurrent;
+using Isidore.MagicMirror.WebService.Exceptions;
 using MongoDB.Bson.Serialization;
 
 namespace Isidore.MagicMirror.DAL.MongoDB
 {
-    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T>
+    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T> where T: BaseMongoObject
     {
-        private readonly IMongoDatabase _database;
-        private readonly IMongoCollection<T> _collection;
-        private readonly FilterDefinitionBuilder<T> _filterBuilder;
+        protected readonly IMongoDatabase Database;
+        protected readonly IMongoCollection<T> Collection;
+        protected readonly FilterDefinitionBuilder<T> FilterBuilder;
 
-        public MongoDataService(IMongoDatabase database, string collectionName)
+        protected MongoDataService(IMongoDatabase database, string collectionName)
         {
-            this._database = database;
-            if (!this.CollectionExistsAsync(database, collectionName).Result)
+            Database = database;
+            if (!CollectionExistsAsync(database, collectionName).Result)
             {
                 database.CreateCollection(collectionName);
             }
 
-            this._collection = database.GetCollection<T>(collectionName);
-            _filterBuilder = new FilterDefinitionBuilder<T>();
+            Collection = database.GetCollection<T>(collectionName);
+            FilterBuilder = new FilterDefinitionBuilder<T>();
         }
 
         public IEnumerable<T> GetAll()
@@ -42,7 +43,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         {
             var filter = new BsonDocument();
 
-            var request = await _collection.FindAsync(filter);
+            var request = await Collection.FindAsync(filter);
             var result = await ReadToEnd(request);
 
             return result.ToArray();
@@ -51,7 +52,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         public async Task<ResultPage<T>> GetAllAsync(PageReqest pageRequest)
         {
             var filter = new BsonDocument();
-            var count = _collection.Count(filter);
+            var count = Collection.Count(filter);
             var lastPage = PageCalculator.GetLastPage(count, pageRequest.PageSize);
 
             var options = new FindOptions<T>()
@@ -61,7 +62,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
             };
 
             var result = new ConcurrentBag<T>();
-            var request = await _collection.FindAsync(filter, options: options);
+            var request = await Collection.FindAsync(filter, options: options);
             var insertionTasks = new List<Task>();
 
             while (await request.MoveNextAsync())
@@ -97,7 +98,8 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var r = (await _collection.FindAsync<T>(new BsonDocument(EntityIdPropertyName, id)));
+            var filter = Builders<T>.Filter.Eq("_id", new ObjectId(id));
+            var r = await Collection.FindAsync<T>(filter);
             return await r.SingleOrDefaultAsync();
         }
 
@@ -115,7 +117,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         {
             var mongoFilter = BsonSerializer.Deserialize<BsonDocument>(filter.QueryString);
 
-            var request = (await _collection.FindAsync<T>(mongoFilter));
+            var request = (await Collection.FindAsync<T>(mongoFilter));
 
             return await ReadToEnd(request);
         }
@@ -123,6 +125,44 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         public Task<ResultPage<T>> GetFilteredAsync(IFilter<T> filter, PageReqest pageRequest)
         {
             throw new NotImplementedException();
+        }
+
+        public void Insert(T item)
+        {
+            InsertAsync(item).Wait();
+        }
+
+        public void Update(string id, T item)
+        {
+            UpdateAsync(id,item).Wait();
+        }
+
+        public void Delete(string id)
+        {
+            DeleteAsync(id).Wait();
+        }
+
+        public async Task InsertAsync(T item)
+        {
+            await Collection.InsertOneAsync(item);
+        }
+
+        public async Task UpdateAsync(string id, T item)
+        {
+            await Collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)), item);
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var result = await Collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+            if (result.DeletedCount == 0)
+            {
+                throw new ElementNotFoundException(id);
+            }
+            else if (result.DeletedCount > 1)
+            {
+                throw new Exception($"Removed more than 1 object for the same ID: {id}");
+            }
         }
 
         protected abstract string EntityIdPropertyName { get; }

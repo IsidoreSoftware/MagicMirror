@@ -16,12 +16,12 @@
       }
     },
     "Isidore.MagicMirror.Users.API": {
-        "commandName": "Project",
-        "launchBrowser": true,
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development"
-        },
-        "applicationUrl": "http://localhost:54382"
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:54382"
     }
   }
 }

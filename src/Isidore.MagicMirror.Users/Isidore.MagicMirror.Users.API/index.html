@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>writting a fun cli apps with ncurses | c/c++ programming by examples</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://cc.byexamples.com/wp-content/themes/twentyeleven/style.css" />
+<link rel="pingback" href="http://cc.byexamples.com/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://cc.byexamples.com/wp-content/themes/twentyeleven/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<link rel="alternate" type="application/rss+xml" title="c/c++ programming by examples &raquo; Feed" href="http://cc.byexamples.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="c/c++ programming by examples &raquo; Comments Feed" href="http://cc.byexamples.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="c/c++ programming by examples &raquo; writting a fun cli apps with ncurses Comments Feed" href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/cc.byexamples.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.8"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='https://api.w.org/' href='http://cc.byexamples.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://cc.byexamples.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://cc.byexamples.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='create a timer' href='http://cc.byexamples.com/2007/03/14/create-a-timer/' />
+<link rel='next' title='Non-blocking user input in loop without ncurses.' href='http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/' />
+<meta name="generator" content="WordPress 4.5.8" />
+<link rel="canonical" href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/" />
+<link rel='shortlink' href='http://cc.byexamples.com/?p=22' />
+<link rel="alternate" type="application/json+oembed" href="http://cc.byexamples.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fcc.byexamples.com%2F2007%2F03%2F30%2Fwritting-a-fun-cli-apps-with-ncurses%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://cc.byexamples.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fcc.byexamples.com%2F2007%2F03%2F30%2Fwritting-a-fun-cli-apps-with-ncurses%2F&#038;format=xml" />
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<meta id="syntaxhighlighteranchor" name="syntaxhighlighter-version" content="3.1.3" />
+</head>
+
+<body class="single single-post postid-22 single-format-standard single-author singular two-column right-sidebar">
+<div id="page" class="hfeed">
+	<header id="branding" role="banner">
+			<hgroup>
+				<h1 id="site-title"><span><a href="http://cc.byexamples.com/" title="c/c++ programming by examples" rel="home">c/c++ programming by examples</a></span></h1>
+				<h2 id="site-description">we share the c/c++ coding by examples</h2>
+			</hgroup>
+
+						<a href="http://cc.byexamples.com/">
+									<img src="http://cc.byexamples.com/wp-content/themes/twentyeleven/images/headers/hanoi.jpg" width="1000" height="288" alt="" />
+							</a>
+			
+								<form method="get" id="searchform" action="http://cc.byexamples.com/">
+		<label for="s" class="assistive-text">Search</label>
+		<input type="text" class="field" name="s" id="s" placeholder="Search" />
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search" />
+	</form>
+			
+			<nav id="access" role="navigation">
+				<h3 class="assistive-text">Main menu</h3>
+								<div class="skip-link"><a class="assistive-text" href="#content" title="Skip to primary content">Skip to primary content</a></div>
+				<div class="skip-link"><a class="assistive-text" href="#secondary" title="Skip to secondary content">Skip to secondary content</a></div>
+								<div class="menu"><ul><li ><a href="http://cc.byexamples.com/">Home</a></li></ul></div>
+			</nav><!-- #access -->
+	</header><!-- #branding -->
+
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					<nav id="nav-single">
+						<h3 class="assistive-text">Post navigation</h3>
+						<span class="nav-previous"><a href="http://cc.byexamples.com/2007/03/14/create-a-timer/" rel="prev"><span class="meta-nav">&larr;</span> Previous</a></span>
+						<span class="nav-next"><a href="http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/" rel="next">Next <span class="meta-nav">&rarr;</span></a></span>
+					</nav><!-- #nav-single -->
+
+					
+<article id="post-22" class="post-22 post type-post status-publish format-standard hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">writting a fun cli apps with ncurses</h1>
+
+				<div class="entry-meta">
+			<span class="sep">Posted on </span><a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/" title="1:43 am" rel="bookmark"><time class="entry-date" datetime="2007-03-30T01:43:38+00:00" pubdate>March 30, 2007</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="http://cc.byexamples.com/author/admin/" title="View all posts by mysurface" rel="author">mysurface</a></span></span>		</div><!-- .entry-meta -->
+			</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>Do you feel like writing a nice CLI Application? Where you can manipulate your text in any position and any combination of colors. There are plenty of CLI apps are nicely build with positioning and colors, such as vim, kismet, irssi, screen etc. You can do it in c/c++ with the help of ncurses library.</p>
+<p>Do it with ncurses is not difficult, check out the <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">ncurses programming HowTo</a>. This tutorial was well written, it covers from beginners (hello world example) to advance level (uses widget libraries). It includes also some fun game examples just to illustrate the capabilities of ncurses. I have wrote one after taking two days reading the ebook.</p>
+<p><img src="http://files.myopera.com/mysurface/albums/22882/thumbs/matrix-0.2.png_thumb.jpg" alt="matrix 0.2" /></p>
+<p><strong>Matrix 0.2</strong><br />
+A simple matrix animation using ncurses library, license under GNU GPL.</p>
+<pre><code>
+Usage: matrix [option]...
+matrix --version
+matrix --help
+
+-c [1-7] Color value from 1 to 7, default is 2
+-t [string] Text heading for each flow string
+-s [1-9] The flow speed, 1 fastest, 9 slowest
+-l [1-50] Default have 25 flow strings, you can add more
+-b Use black as background
+-v Print Version
+-h Print Usage
+
+Internal Usage:
+q | enter Quit the program
+[1-7] Changing color
+</code></pre>
+<p><a id="p23" rel="attachment" href="http://cc.byexamples.com/20070330/writting-a-fun-cli-apps-with-ncurses/matrix-02-bin/" title="matrix 0.2 bin">matrix 0.2 bin</a><br />
+<a id="p24" rel="attachment" href="http://cc.byexamples.com/20070330/writting-a-fun-cli-apps-with-ncurses/matrix-02-source-code/" title="matrix 0.2 source code">matrix 0.2 source code</a></p>
+<p>To compile the source code, you must have ncurses library installed.</p>
+<pre><code>g++ -o matrix{,.cc} -lncurses</code></pre>
+<p>For more <a href="http://linux.byexamples.com/archives/202/compile-c-and-c-source-code/">g++ examples</a>, check out <a href="http://linux.byexamples.com">linux.byexamples.com</a>.<br />
+To print string in colors without ncurses, <a href="http://cc.byexamples.com/20070120/print-color-string-without-ncurses/">here</a>.<br />
+To print string at any position without ncurses, <a href="http://cc.byexamples.com/20070121/print-text-at-any-position-without-ncurses/">here</a>.</p>
+			</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+		This entry was posted in Uncategorized by <a href="http://cc.byexamples.com/author/admin/">mysurface</a>. Bookmark the <a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/" title="Permalink to writting a fun cli apps with ncurses" rel="bookmark">permalink</a>.		
+			</footer><!-- .entry-meta -->
+</article><!-- #post-22 -->
+
+						<div id="comments">
+	
+	
+			<h2 id="comments-title">
+			6 thoughts on &ldquo;<span>writting a fun cli apps with ncurses</span>&rdquo;		</h2>
+
+		
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1" id="li-comment-22">
+		<article id="comment-22" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://2.gravatar.com/avatar/5b96880d15de7317a6184e82468d6aab?s=68&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/5b96880d15de7317a6184e82468d6aab?s=136&amp;d=mm&amp;r=g 2x' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://blog.mypapit.net' rel='external nofollow' class='url'>mypapit</a></span> on <a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/#comment-22"><time pubdate datetime="2007-03-30T17:26:48+00:00">March 30, 2007 at 5:26 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>yet another ncurses matrix app.  I know where to find a local ncurses programmer now 🙂</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='http://cc.byexamples.com/20070408/non-blocking-user-input-in-loop-without-ncurses/' rel='external nofollow' class='url'>Non-blocking user input in loop without ncurses.</a></p>
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='http://www.cookieblingy.com/?p=249' rel='external nofollow' class='url'>How to list shared library dependencies used by an application</a></p>
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1880">
+		<article id="comment-1880" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://2.gravatar.com/avatar/bc9c82f510fd7686c42ae1a92dcf4389?s=68&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/bc9c82f510fd7686c42ae1a92dcf4389?s=136&amp;d=mm&amp;r=g 2x' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">havoc</span> on <a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/#comment-1880"><time pubdate datetime="2009-04-07T10:54:45+00:00">April 7, 2009 at 10:54 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Seems the download urls are linked to empty pages, can you check them?</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-2096">
+		<article id="comment-2096" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/f3431eb2d5de69f1576102c3a06d500e?s=68&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/f3431eb2d5de69f1576102c3a06d500e?s=136&amp;d=mm&amp;r=g 2x' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">Anonymous</span> on <a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/#comment-2096"><time pubdate datetime="2012-07-31T18:59:32+00:00">July 31, 2012 at 6:59 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>» Seems the download urls are linked to empty pages, can you check them?</p>
+<p>Those are the links:</p>
+<p><a href="http://files.myopera.com/mysurface/blog/matrix_0.2.tar.gz" rel="nofollow">http://files.myopera.com/mysurface/blog/matrix_0.2.tar.gz</a><br />
+<a href="http://files.myopera.com/mysurface/blog/matrix_0.2_source.tar.gz" rel="nofollow">http://files.myopera.com/mysurface/blog/matrix_0.2_source.tar.gz</a></p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-2102">
+		<article id="comment-2102" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://2.gravatar.com/avatar/8b89a9d7061e061fa751f9f15ca2e3a8?s=39&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/8b89a9d7061e061fa751f9f15ca2e3a8?s=78&amp;d=mm&amp;r=g 2x' class='avatar avatar-39 photo' height='39' width='39' /><span class="fn">mysurface</span> on <a href="http://cc.byexamples.com/2007/03/30/writting-a-fun-cli-apps-with-ncurses/#comment-2102"><time pubdate datetime="2012-09-19T03:37:05+00:00">September 19, 2012 at 3:37 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>I able to access and download it</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+		</ol>
+
+		
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2007/03/30/writting-a-fun-cli-apps-with-ncurses/#respond" style="display:none;">Cancel reply</a></small></h3>				<form action="http://cc.byexamples.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='22' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6c404010c0" /></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+	</div><!-- #main -->
+
+	<footer id="colophon" role="contentinfo">
+
+			
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform" rel="generator">Proudly powered by WordPress</a>
+			</div>
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='http://cc.byexamples.com/wp-includes/js/wp-embed.min.js?ver=4.5.8'></script>
+
+</body>
+</html>

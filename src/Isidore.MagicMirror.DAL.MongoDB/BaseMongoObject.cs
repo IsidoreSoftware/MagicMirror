@@ -1,9 +1,12 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace Isidore.MagicMirror.Users.Models
+namespace Isidore.MagicMirror.DAL.MongoDB
 {
     public class BaseMongoObject
     {
-        public ObjectId _id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
     }
 }
