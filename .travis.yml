@@ -12,5 +12,5 @@ before_script:
   - chmod -R a+x scripts
 script:
   - ./scripts/restore.sh
-  - dotnet build
+  - ./scripts/build.sh
   - ./scripts/test.sh
