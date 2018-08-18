@@ -16,7 +16,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public TestClassifierTest()
         {
-            IFileProvider fileProvider =new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            var fileProvider =new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
             classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
 
             basePath = PhotoLoaderHelper.GetLocalPath($"FaceClassifierTests{Path.DirectorySeparatorChar}");

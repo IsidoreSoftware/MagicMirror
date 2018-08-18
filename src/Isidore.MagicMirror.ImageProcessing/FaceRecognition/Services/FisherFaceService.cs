@@ -78,9 +78,9 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 var result = new RecognitionResult<User>();
                 try
                 {
-                    using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer())
+                    using (var ffr = LBPHFaceRecognizer.Create())
                     {
-                        ffr.Load(trainingFile);
+                        ffr.Read(trainingFile);
                         var size = new Size(minFaceSize, minFaceSize);
                         var resizedFace = facePic.Scale(size);
 
@@ -114,7 +114,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 var fi = new FileInfo(trainingFile);
                 if (fi.Length > 0)
                 {
-                    ffr.Load(trainingFile);
+                    ffr.Read(trainingFile);
                     ffr.Update(images, labels);
                 }
                 else
@@ -147,7 +147,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
             try
             {
-                using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer(threshold: threshold))
+                using (var ffr = LBPHFaceRecognizer.Create(threshold: threshold))
                 {
                     await Task.Factory.StartNew(() => learnAction(ffr, trainingFaces.ToArray(), labels.ToArray()));
                     ffr.Save(savedTrainingFile);

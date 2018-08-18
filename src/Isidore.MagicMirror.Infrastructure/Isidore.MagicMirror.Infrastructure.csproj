@@ -15,4 +15,8 @@
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

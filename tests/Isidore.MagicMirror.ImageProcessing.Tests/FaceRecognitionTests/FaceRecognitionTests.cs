@@ -1,17 +1,17 @@
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.FileProviders;
 using OpenCvSharp;
 using Xunit;
 using System;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using System.Threading.Tasks;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
-using Microsoft.Extensions.FileProviders;
 using Isidore.MagicMirror.Users.Models;
 using System.Reflection;
 using System.IO;
 using Isidore.MagicMirror.Users.Contract;
 using FakeItEasy;
+using Nancy.Responses;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
