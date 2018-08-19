@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Web;
 
 namespace Isidore.MagicMirror.Users.API
 {
@@ -11,6 +12,7 @@ namespace Isidore.MagicMirror.Users.API
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
+                .UseNLog()
                 .Build();
 
             host.Run();

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <DockerComposeProjectPath>..\..\Isidore.MagicMirror.Docker\Isidore.MagicMirror.Docker.dcproj</DockerComposeProjectPath>
     <UserSecretsId>71c135cf-56dc-44ef-bcc1-6817c2cf7ea0</UserSecretsId>
   </PropertyGroup>

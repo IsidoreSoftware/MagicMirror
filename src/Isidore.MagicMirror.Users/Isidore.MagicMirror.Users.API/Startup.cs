@@ -50,9 +50,9 @@ namespace Isidore.MagicMirror.Users.API
 
         private static void SetupLogger(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole().AddNLog();
-            //add NLog.Web
-            app.AddNLogWeb();
+            loggerFactory
+                .AddConsole()
+                .AddNLog();
         }
 
         private void UseNancy(IApplicationBuilder app, ILoggerFactory loggerFactory)

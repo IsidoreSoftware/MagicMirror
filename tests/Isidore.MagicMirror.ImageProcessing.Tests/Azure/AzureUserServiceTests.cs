@@ -60,8 +60,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
 
             // Assert
 
-            A.CallTo(
-                    () => _faceServiceClient.CreatePersonAsync(A<string>.That.IsEqualTo(DefaulGroupId),
+            A.CallTo(() => _faceServiceClient.CreatePersonInPersonGroupAsync(A<string>.That.IsEqualTo(DefaulGroupId),
                         A<string>.Ignored, A<string>.Ignored))
                 .MustHaveHappened(Repeated.Exactly.Once);
         }
