@@ -3,6 +3,8 @@ sudo: required
 dotnet: 2.1
 mono: none
 dist: trusty
+before_script:
+  - chmod -R a+x scripts
 script:  
   - dotnet restore
   - dotnet build Isidore.MagicMirror.sln
