@@ -4,7 +4,7 @@ services:
   isidore.magicmirror.api:
     image: isidore.magicmirror.api
     build:
-      context: ../Isidore.MagicMirror.Users.API
+      context: ../Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API
       dockerfile: Dockerfile
     links:
       - isidore.magicmirror.mongo:mongo-db

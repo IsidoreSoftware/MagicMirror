@@ -11,6 +11,7 @@ using OpenCvSharp.Face;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
@@ -20,7 +21,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
         private const double ConfidenceScaleBase = 50;
         private const int minFaceSize = 144;
 
-        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName, IUserService userService)
+        public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName, IUserService userService, ILogger<FisherFaceService> logger)
         {
 
             if (String.IsNullOrWhiteSpace(fileName))
@@ -42,15 +43,17 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             trainingFile = fileName;
             classifier = faceClasifier;
             _userService = userService;
+            _logger = logger;
         }
 
         private readonly string trainingFile;
         private readonly IFaceClassifier<Mat> classifier;
         private readonly IUserService _userService;
+        private readonly ILogger<FisherFaceService> _logger;
 
         public RecognitionResult<User> Recognize(Mat image)
         {
-            return this.RecognizeAsync(image).Result;
+            return RecognizeAsync(image).Result;
         }
 
         public async Task<RecognitionResult<User>> RecognizeAsync(Mat image)
@@ -63,24 +66,21 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
 
                 var faceRec = classifier.RectangleDetectTheBiggestFace(image);
-                Mat facePic = null;
                 if (faceRec == null)
                 {
                     return null;
                 }
-                else
-                {
-                    facePic = image.Crop(faceRec);
-                }
+
+                var facePic = image.Crop(faceRec);
                 int prediction;
                 double confidence;
 
                 var result = new RecognitionResult<User>();
                 try
                 {
-                    using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer())
+                    using (var ffr = LBPHFaceRecognizer.Create())
                     {
-                        ffr.Load(trainingFile);
+                        ffr.Read(trainingFile);
                         var size = new Size(minFaceSize, minFaceSize);
                         var resizedFace = facePic.Scale(size);
 
@@ -89,7 +89,8 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    _logger.LogError(ex, "Failed recognizing face.");
+                    throw;
                 }
 
                 var user = _userService.GetById(prediction.ToString());
@@ -114,7 +115,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 var fi = new FileInfo(trainingFile);
                 if (fi.Length > 0)
                 {
-                    ffr.Load(trainingFile);
+                    ffr.Read(trainingFile);
                     ffr.Update(images, labels.Select(int.Parse));
                 }
                 else
@@ -140,22 +141,26 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
                 foreach (var photo in user.Value)
                 {
                     var faceImage = GetFaceImage(photo).Resize(normalSize);
-                    var face = trainingFaces.AddLast(faceImage);
+                    trainingFaces.AddLast(faceImage);
                     labels.AddLast(user.Key.Id);
                 }
             }
 
             try
             {
-                using (var ffr = FaceRecognizer.CreateLBPHFaceRecognizer(threshold: threshold))
+                await Task.Factory.StartNew(() =>
                 {
-                    await Task.Factory.StartNew(() => learnAction(ffr, trainingFaces.ToArray(), labels.ToArray()));
-                    ffr.Save(savedTrainingFile);
-                }
+                    using (var ffr = LBPHFaceRecognizer.Create(threshold: threshold))
+                    {
+                        learnAction(ffr, trainingFaces.ToArray(), labels.ToArray());
+                        ffr.Save(savedTrainingFile);
+                    }
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.LogError(ex, "Error on learining new face");
+                throw;
             }
         }
 

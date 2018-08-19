@@ -25,10 +25,11 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             IFaceServiceClient faceServiceClient,
             IUserService userService,
             ILoggerFactory loggerFactory,
-            IUserGroupService userGroupService)
+            IUserGroupService userGroupService,
+            ILogger<AzureFaceRecognitionService> logger)
         {
             _faceServiceClient = faceServiceClient;
-            _logger = new Logger<AzureFaceRecognitionService>(loggerFactory);
+            _logger = logger;
             _userService = userService;
 
             var currentUserGroup = userGroupService.GetCurrentUserGroup().Result;
@@ -58,7 +59,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             }
             catch (FaceAPIException e)
             {
-                _logger.LogError($"Can't identify a user. Reason: {e.Message}", e);
+                _logger.LogError(e, $"Can't identify a user. Reason: {e.Message}");
                 return null;
             }
 

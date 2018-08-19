@@ -6,6 +6,7 @@ using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Models;
 using OpenCvSharp;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.Users.Contract;
+using Microsoft.Extensions.Logging;
 
 namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
@@ -13,15 +14,16 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
     {
         private IFaceRecognitionService<Mat,User> _service;
 
-        public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName, IUserService userService)
+        public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName, IUserService userService, ILoggerFactory loggerFactory)
         {
-            _service = new FisherFaceService(classifier,fileName, userService);
+            _service = new FisherFaceService(classifier, fileName, userService,
+                loggerFactory.CreateLogger<FisherFaceService>());
         }
 
         public async Task LearnMore(IDictionary<User, IEnumerable<byte[]>> imagesWithLabels)
         {
             var converted = ConvertImagesWithLabels(imagesWithLabels);
-            await this._service.LearnMore(converted);
+            await _service.LearnMore(converted);
         }
 
         public RecognitionResult<User> Recognize(byte[] image)

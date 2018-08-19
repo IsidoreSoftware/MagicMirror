@@ -4,8 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<AssemblyName>Isidore.MagicMirror.Users.Tests</AssemblyName>
 		<PackageId>Isidore.MagicMirror.Users.Tests</PackageId>
-		<TargetFramework>netcoreapp1.1</TargetFramework>
-		<PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+		<TargetFramework>netcoreapp2.1</TargetFramework>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

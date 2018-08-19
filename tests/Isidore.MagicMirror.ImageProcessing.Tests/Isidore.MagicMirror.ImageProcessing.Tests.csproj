@@ -20,24 +20,18 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <PackageReference Include="FakeItEasy" Version="4.8.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="OpenCvSharp3-AnyCPU" Version="3.4.1.20180319" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
-=======
-    <PackageReference Include="FakeItEasy" Version="3.1.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="OpenCvSharp3-AnyCPU" Version="3.2.0.20170419" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
->>>>>>> dev
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.ImageProcessing\Isidore.MagicMirror.ImageProcessing.csproj" />
+    <ProjectReference Include="..\..\src\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
   </ItemGroup>
 
   <ItemGroup>

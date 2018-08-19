@@ -80,28 +80,5 @@ namespace Isidore.MagicMirror.Users.API.Properties {
                 return ResourceManager.GetString("haarcascade_frontalcatface_extended", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
-        ///&lt;!--
-        ///    Stump-based 24x24 discrete(?) adaboost frontal face detector.
-        ///    Created by Rainer Lienhart.
-        ///
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        ///  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-        ///
-        ///  By downloading, copying, installing or using the software you agree to this license.
-        ///  If you do not agree to this license, do not download, install,
-        ///  copy or use the software.
-        ///
-        ///
-        ///                        Intel L [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string haarcascade_frontalface_default {
-            get {
-                return ResourceManager.GetString("haarcascade_frontalface_default", resourceCulture);
-            }
-        }
     }
 }

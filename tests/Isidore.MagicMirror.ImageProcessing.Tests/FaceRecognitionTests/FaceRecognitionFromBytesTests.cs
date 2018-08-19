@@ -1,23 +1,21 @@
-using System;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using FakeItEasy;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
-using Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests;
+using Isidore.MagicMirror.Users.Contract;
+using Isidore.MagicMirror.Users.Models;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenCvSharp;
 using Xunit;
-using Microsoft.Extensions.FileProviders;
-using System.Reflection;
-using Isidore.MagicMirror.Users.Contract;
-using FakeItEasy;
-using Isidore.MagicMirror.Users.Models;
 
-namespace Isidore.MagicMirror.ImageProcessing.Tests
+namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     public class FaceRecognitionFromBytesTests
     {
-        IFaceClassifier<Mat> classifier;
+        readonly IFaceClassifier<Mat> classifier;
 
         public FaceRecognitionFromBytesTests()
         {
@@ -40,13 +38,12 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
             var learningFile = Path.GetTempFileName();
             var images = PhotoLoaderHelper.LoadPhotosByte(path, "i([0-9]{3}).*", "ua-");
-            var users = images.Keys;
 
             var userServiceMock = A.Fake<IUserService>();
             A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label)))
-                .Returns(new User() { Id = label });
+                .Returns(new User { Id = label });
 
-            var testedService = new FisherFaceByteProxy(classifier, learningFile, userServiceMock);
+            var testedService = new FisherFaceByteProxy(classifier, learningFile, userServiceMock, new NullLoggerFactory());
 
             await testedService.LearnMore(images);
 

@@ -1,31 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Isidore.MagicMirror.Users</AssemblyName>
     <PackageId>Isidore.MagicMirror.Users</PackageId>
-	  <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Isidore.MagicMirror.DAL.MongoDB\Isidore.MagicMirror.DAL.MongoDB.csproj" />
-    <ProjectReference Include="..\..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.ProjectOxford.Face" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
-      <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.extensions.logging.abstractions\1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ProjectOxford.Face">
-      <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.projectoxford.face.dotnetstandard\1.0.0\lib\netstandard1.4\Microsoft.ProjectOxford.Face.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>C:\Users\Kuba\.nuget\packages\nlog\5.0.0-beta07\lib\netstandard1.5\NLog.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\Isidore.MagicMirror.DAL.MongoDB\Isidore.MagicMirror.DAL.MongoDB.csproj" />
+    <ProjectReference Include="..\..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

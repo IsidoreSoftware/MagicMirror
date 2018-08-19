@@ -12,21 +12,20 @@ namespace Isidore.MagicMirror.ImageProcessing.ImageConversion
         public FilePathToBitmapConverter(string resultFolderPath)
         {
             this.resultFolderPath = resultFolderPath;
-
         }
 
         public async Task<Bitmap> ConvertAsync(string inputImage)
         {
             if (String.IsNullOrEmpty(inputImage))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(inputImage));
             }
             if (!File.Exists(inputImage))
             {
                 throw new FileNotFoundException("This file doesn't exist");
             }
 
-            Task<Bitmap> getImage = new Task<Bitmap>(()=>new Bitmap(inputImage));
+            Task<Bitmap> getImage = new Task<Bitmap>(()=>new Bitmap(File.Open(inputImage, FileMode.Open)));
             return await getImage;
         }
 
@@ -36,7 +35,7 @@ namespace Isidore.MagicMirror.ImageProcessing.ImageConversion
             var fullFilePath  = Path.Combine(resultFolderPath,fileName);
             using(var stream = File.OpenWrite(fullFilePath))
             {
-                await Task.Run(()=> inputImage.Save(stream,ImageFormat.Jpeg));
+                await Task.Run(()=> inputImage.Save(stream, ImageFormat.Jpeg));
             }
 
             return fullFilePath;
@@ -46,7 +45,7 @@ namespace Isidore.MagicMirror.ImageProcessing.ImageConversion
         {
             try
             {
-                output = this.ConvertAsync(inputImage).Result;
+                output = ConvertAsync(inputImage).Result;
                 return true;
             }
             catch (Exception)

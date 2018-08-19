@@ -8,23 +8,25 @@ using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Exceptions;
 using Isidore.MagicMirror.Users.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
-using NLog;
 
 namespace Isidore.MagicMirror.Users.Services
 {
     public class AzureUserService : IUserService
     {
         private readonly IFaceServiceClient _faceServiceClient;
-        private Dictionary<string, string> _usersIdsMap = new Dictionary<string, string>();
+        private readonly ILogger<AzureUserService> _logger;
+        private readonly Dictionary<string, string> _usersIdsMap = new Dictionary<string, string>();
         private readonly string _userGroupId;
+
         private static readonly Regex UserNameRegex = new Regex(
             @"(?<fname>([a-zA-Z])*( ?))?(?<lname>([a-zA-Z])*( ?))?(?<id>\(([a-z0-9]*)\)*)*");
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AzureUserService(IFaceServiceClient faceServiceClient, IUserGroupService userGroupService)
+        public AzureUserService(IFaceServiceClient faceServiceClient, IUserGroupService userGroupService, ILogger<AzureUserService> logger)
         {
+            _logger = logger;
             _faceServiceClient = faceServiceClient;
             try
             {
@@ -33,7 +35,7 @@ namespace Isidore.MagicMirror.Users.Services
             catch (Exception e)
             {
                 _userGroupId = null;
-                Logger.Error(e,"Can't get current user group.");
+                _logger.LogError(e,"Can't get current user group.");
             }
 
             BuildAzureAndDbIdMap().Wait();

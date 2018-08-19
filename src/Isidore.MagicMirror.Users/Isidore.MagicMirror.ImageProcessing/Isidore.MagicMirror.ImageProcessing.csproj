@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Isidore.MagicMirror.ImageProcessing</AssemblyName>
     <PackageId>Isidore.MagicMirror.ImageProcessing</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,26 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+    <PackageReference Include="Microsoft.ProjectOxford.Face" Version="1.4.0" />
     <PackageReference Include="Microsoft.ProjectOxford.Face.DotNetStandard" Version="1.0.0" />
-    <PackageReference Include="OpenCvSharp3-AnyCPU" Version="3.2.0.20170419" />
+    <PackageReference Include="OpenCvSharp3-AnyCPU" Version="3.4.1.20180319" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
-      <HintPath>C:\Users\Kuba\.nuget\packages\microsoft.extensions.logging.abstractions\1.1.2\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>C:\Users\Kuba\.nuget\packages\nlog\5.0.0-beta07\lib\netstandard1.5\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Parallel">
-      <HintPath>C:\Users\Kuba\.nuget\packages\system.threading.tasks.parallel\4.3.0\ref\netstandard1.1\System.Threading.Tasks.Parallel.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

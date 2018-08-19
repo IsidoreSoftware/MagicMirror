@@ -7,7 +7,6 @@ using Isidore.MagicMirror.Infrastructure.Services;
 using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Microsoft.ProjectOxford.Face;
-using Microsoft.ProjectOxford.Face.Contract;
 
 namespace Isidore.MagicMirror.Users.Services
 {

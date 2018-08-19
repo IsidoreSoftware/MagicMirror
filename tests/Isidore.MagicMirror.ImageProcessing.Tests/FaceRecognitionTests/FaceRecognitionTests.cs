@@ -11,20 +11,22 @@ using System.Reflection;
 using System.IO;
 using Isidore.MagicMirror.Users.Contract;
 using FakeItEasy;
-using Nancy.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 {
     public class FaceRecognitionTests : IDisposable
     {
         IDictionary<User, IEnumerable<Mat>> faceDatabase;
-        IFileProvider fileProvider;
-        string learningFile;
+        readonly IFileProvider fileProvider;
+        readonly string learningFile;
+        private readonly ILogger<FisherFaceService> loggerMock;
 
         public FaceRecognitionTests()
         {
             fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
             learningFile = Path.GetTempFileName();
+            loggerMock = A.Fake<ILogger<FisherFaceService>>();
         }
 
         [Theory]
@@ -39,12 +41,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             var path = PhotoLoaderHelper.GetLocalPath($"FaceRecognitionTests{Path.DirectorySeparatorChar}TestPhotos");
             faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*");
             IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
-            var users = faceDatabase.Keys;
             var userServiceMock = A.Fake<IUserService>();
             A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label)))
-                .Returns(new User() { Id = label });
+                .Returns(new User { Id = label });
 
-            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock,loggerMock);
 
             //When
             await identityRecognizer.LearnMore(faceDatabase);
@@ -69,12 +70,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
             faceDatabase = PhotoLoaderHelper.LoadPhotos(path, "i([0-9]{3}).*", "ua-");
             IFaceClassifier<Mat> classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
 
-            var users = faceDatabase.Keys;
             var userServiceMock = A.Fake<IUserService>();
-            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label.ToString())))
-                .Returns(new User() { Id = label });
+            A.CallTo(() => userServiceMock.GetById(A<string>.That.IsEqualTo(label)))
+                .Returns(new User{ Id = label });
 
-            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock);
+            var identityRecognizer = new FisherFaceService(classifier, learningFile, userServiceMock, loggerMock);
 
             //When
             await identityRecognizer.LearnMore(faceDatabase);
