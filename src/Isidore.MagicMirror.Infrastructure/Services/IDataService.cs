@@ -14,5 +14,11 @@ namespace Isidore.MagicMirror.Infrastructure.Services
         ResultPage<T> GetFiltered(IFilter<T> filter, PageReqest pageRequest);
 
         ResultPage<T> GetAll(PageReqest pageRequest);
+
+        void Insert(T item);
+
+        void Update(string id, T item);
+
+        void Delete(string id);
     }
 }

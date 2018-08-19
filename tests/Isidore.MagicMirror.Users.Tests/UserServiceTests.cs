@@ -46,7 +46,7 @@ namespace Isidore.MagicMirror.Users.Tests
                 FirstName = "Kuba",
                 LastName = "Matjanowski",
                 RegistrationDate = new DateTime(2000, 1, 1),
-                UserNo = 99
+                UserGuid = Guid.NewGuid().ToString("N")
             };
 
             _userService.GetFiltered(filter);
@@ -62,10 +62,9 @@ namespace Isidore.MagicMirror.Users.Tests
                         Assert.Equal("Kuba", obj.FirstName.ToString());
                         Assert.Equal("Matjanowski", obj.LastName.ToString());
                         Assert.Equal(new DateTime(2000, 1, 1), (DateTime)obj.RegistrationDate);
-                        Assert.Equal(99, (int)obj.UserNo);
+                        Assert.Equal(filter.UserGuid, obj.UserGuid.ToString());
 
                         return true;
-
                     })
                 .MustHaveHappened();
 
