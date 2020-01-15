@@ -8,6 +8,6 @@ before_script:
 script:  
   - dotnet restore
   - dotnet build Isidore.MagicMirror.sln
-  - ./scripts/test.sh
+  #- ./scripts/test.sh
   - dotnet publish -c Release
-  - cd src/Isidore.MagicMirror.Docker && docker-compose build .
+  - cd src/Isidore.MagicMirror.Docker && docker-compose build
