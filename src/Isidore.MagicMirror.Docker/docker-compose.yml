@@ -6,6 +6,8 @@ services:
     build:
       context: ../Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API
       dockerfile: Dockerfile
+      args:
+        source: "/bin/Release/netcoreapp2.1/publish"
     links:
       - isidore.magicmirror.mongo:mongo-db
   isidore.magicmirror.mongo:
