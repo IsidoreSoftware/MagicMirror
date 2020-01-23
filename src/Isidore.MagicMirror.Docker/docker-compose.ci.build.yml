@@ -1,9 +1,0 @@
-version: '3.4'
-
-services:
-  ci-build:
-    image: microsoft/dotnet:2.1-sdk
-    volumes:
-      - .:/src
-    working_dir: /src
-    command: /bin/bash -c "dotnet restore ./Isidore.MagicMirror.sln && dotnet publish ./Isidore.MagicMirror.sln -c Release -o ./bin/Docker"

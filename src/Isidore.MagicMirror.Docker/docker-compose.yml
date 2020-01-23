@@ -4,15 +4,22 @@ services:
   isidore.magicmirror.api:
     image: isidore.magicmirror.api
     build:
-      context: ../Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API
-      dockerfile: Dockerfile
-      args:
-        source: "bin/Release/netcoreapp2.1/publish"
+      context: ..
+      dockerfile: ./Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API/Dockerfile
     links:
-      - isidore.magicmirror.mongo:mongo-db
+      - isidore.magicmirror.mongo:mongo
+    environment:
+      MongoDbConfig:Username: mirror_user
+      MongoDbConfig:Password: test
+      MongoDbConfig:Database: magic-mirror
+      MongoDbConfig:ServerUrl: mongo
   isidore.magicmirror.mongo:
-    image: mongo:3.0.4
+    image: mongo:4.2-bionic
     ports:
       - "27017:27017"
       - "28017:28017"
-    command: --smallfiles --rest --noauth
+    command: --storageEngine=wiredTiger
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_DATABASE=magic-mirror
