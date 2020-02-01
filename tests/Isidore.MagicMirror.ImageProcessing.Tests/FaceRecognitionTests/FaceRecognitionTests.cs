@@ -60,7 +60,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
         [Theory]
         [InlineData("i292ua-fn.jpg", "292")]
         [InlineData("i293ua-fn.jpg", "293")]
-        [InlineData("i294ua-mg.jpg", "294")]
+        [InlineData("i294ta-mg.jpg", "294")]
         [InlineData("i295ua-mg.jpg", "295")]
         [InlineData("i296ua-mg.jpg", "296")]
         [InlineData("i297ua-mn.jpg", "297")]

@@ -23,8 +23,22 @@
     <PackageReference Include="Microsoft.ProjectOxford.Face.DotNetStandard" Version="1.0.0" />
     <PackageReference Include="OpenCvSharp4" Version="4.2.0.20200108" />
     <PackageReference Include="OpenCvSharp4.runtime.uwp" Version="4.2.0.20200108" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.2.0.20200108" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.2.0.20200108" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dll\ARM\OpenCvSharpExtern.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\x64\OpenCvSharpExtern.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\x86\OpenCvSharpExtern.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

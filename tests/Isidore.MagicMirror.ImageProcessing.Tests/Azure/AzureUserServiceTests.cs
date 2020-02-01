@@ -38,9 +38,12 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
             var testGuid = Guid.NewGuid();
             var azureUserService = new AzureUserService(_faceServiceClient, _userGroupService, _logger);
             A.CallTo(
-                    () => _faceServiceClient.CreatePersonAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                    () => _faceServiceClient.CreatePersonInPersonGroupAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new CreatePersonResult { PersonId = testGuid });
-            var user = new User { Id = "abcde" };
+            var user = new User
+            {
+                Id = "abcde",
+            };
 
             //Act
             await azureUserService.InsertAsync(user);
@@ -53,13 +56,17 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
         {
             // Arrange
             var azureUserService = new AzureUserService(_faceServiceClient, _userGroupService, _logger);
-            var user = new User();
+            A.CallTo(() => _faceServiceClient.CreatePersonInPersonGroupAsync(DefaulGroupId, A<string>.Ignored, A<string>.Ignored))
+                .Returns(A.Dummy<CreatePersonResult>());
+            var user = new User
+            {
+                Id = A.Dummy<string>(),
+            };
 
             // Act
             await azureUserService.InsertAsync(user);
 
             // Assert
-
             A.CallTo(() => _faceServiceClient.CreatePersonInPersonGroupAsync(A<string>.That.IsEqualTo(DefaulGroupId),
                         A<string>.Ignored, A<string>.Ignored))
                 .MustHaveHappened(Repeated.Exactly.Once);

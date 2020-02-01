@@ -16,7 +16,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
         public TestClassifierTest()
         {
-            var fileProvider =new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
+            var fileProvider = new EmbeddedFileProvider(typeof(TestClassifierTest).GetTypeInfo().Assembly);
             classifier = new HaarCascadeClassifier(fileProvider, "FaceClassifierTests.haarcascade_frontalface_default.xml");
 
             basePath = PhotoLoaderHelper.GetLocalPath($"FaceClassifierTests{Path.DirectorySeparatorChar}");
@@ -62,10 +62,10 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
 
             var face = classifier.RectangleDetectTheBiggestFace(image);
 
-            Assert.Equal(313, face.Top);
-            Assert.Equal(75, face.Left);
-            Assert.Equal(147, face.Width);
-            Assert.Equal(147, face.Height);
+            Assert.InRange(face.Top, 303, 323);
+            Assert.InRange(face.Left, 65, 85);
+            Assert.InRange(face.Width, 140, 152);
+            Assert.InRange(face.Height, 140, 152);
         }
     }
 }
