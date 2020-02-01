@@ -12,7 +12,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 {
     public class FisherFaceByteProxy : IFaceRecognitionService<byte[],User>
     {
-        private IFaceRecognitionService<Mat,User> _service;
+        private readonly IFaceRecognitionService<Mat,User> _service;
 
         public FisherFaceByteProxy(IFaceClassifier<Mat> classifier, string fileName, IUserService userService, ILoggerFactory loggerFactory)
         {
@@ -58,7 +58,7 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
         private static Mat GetMatFromBytes(byte[] image)
         {
-            return Mat.FromImageData(image, ImreadModes.GrayScale);
+            return Mat.FromImageData(image, ImreadModes.Grayscale);
         }
     }
 }

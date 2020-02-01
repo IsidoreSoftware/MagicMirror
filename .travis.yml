@@ -1,11 +1,11 @@
-language: csharp  
-sudo: required  
-dotnet: 2.1
+language: csharp
+sudo: required
+dotnet: 3.1
 mono: none
 dist: trusty
 before_script:
   - chmod -R a+x scripts
-script:  
+script:
   - dotnet restore
   - dotnet build Isidore.MagicMirror.sln
   #- ./scripts/test.sh
