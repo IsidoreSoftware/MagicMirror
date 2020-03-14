@@ -1,16 +1,16 @@
-version: '3.4'
+version: '3.7'
 
 services:
   isidore.magicmirror.api:
     image: isidore.magicmirror.api
     build:
-      context: ..
-      dockerfile: ./Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API/Dockerfile
+      context: ../..
+      dockerfile: ./src/Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API/Dockerfile
     links:
       - isidore.magicmirror.mongo:mongo
     environment:
       MongoDbConfig:Username: mirror_user
-      MongoDbConfig:Password: test
+      MongoDbConfig:Password: eQrqUs1BbXx2
       MongoDbConfig:Database: magic-mirror
       MongoDbConfig:ServerUrl: mongo
   isidore.magicmirror.mongo:
@@ -22,4 +22,9 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_DATABASE=magic-mirror
+      - MONGO_INITDB_DATABASE=magicmirror
+    volumes:
+      - ../Isidore.MagicMirror.DAL.MongoDB/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodb:/data/db
+volumes:
+  mongodb:

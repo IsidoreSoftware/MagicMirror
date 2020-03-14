@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Builder;
 using Isidore.MagicMirror.DAL.MongoDB.Configuration;
+using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
 using Isidore.MagicMirror.Infrastructure.Exceptions;
 using Isidore.MagicMirror.Infrastructure.Extensions;
@@ -36,14 +37,13 @@ namespace Isidore.MagicMirror.Users.API.Modules
                 new FaceServiceClient(faceServiceConfig.AccessKey, faceServiceConfig.ServiceUrl);
             builder.RegisterInstance(faceRecognitionService).As<IFaceServiceClient>();
             builder.RegisterInstance(_loggerFactory).As<ILoggerFactory>();
-            builder.RegisterType<AzureFaceRecognitionService>()
+            builder.RegisterType<FisherFaceByteProxy>()
                 .AsImplementedInterfaces();
             builder.RegisterInstance(SetUpMongoDb());
-            builder.RegisterType<UserService>();
-            builder.RegisterType<AzureUserService>().SingleInstance();
-            builder.RegisterType<CompositeUserService>().AsImplementedInterfaces();
+            builder.RegisterType<UserService>().AsImplementedInterfaces();
+            builder.RegisterType<HaarCascadeClassifier>().AsImplementedInterfaces();
             builder.RegisterType<UserGroupService>();
-            builder.RegisterType<AzureUserGroupService>();
+           // builder.RegisterType<AzureUserGroupService>();
             builder.RegisterType<CompositeUserGroupService>().AsImplementedInterfaces();
             builder.RegisterInstance(_appConfig.Get<FaceServiceConfig>());
             builder.RegisterInstance(GetValidatorFactory()).SingleInstance();

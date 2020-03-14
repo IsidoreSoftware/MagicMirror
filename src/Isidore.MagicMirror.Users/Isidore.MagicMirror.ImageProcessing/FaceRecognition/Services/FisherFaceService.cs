@@ -23,7 +23,6 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
 
         public FisherFaceService(IFaceClassifier<Mat> faceClasifier, string fileName, IUserService userService, ILogger<FisherFaceService> logger)
         {
-
             if (String.IsNullOrWhiteSpace(fileName))
             {
                 throw new ArgumentException("Learning filename is not specified");
