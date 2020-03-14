@@ -11,7 +11,7 @@ services:
     environment:
       MongoDbConfig:Username: mirror_user
       MongoDbConfig:Password: eQrqUs1BbXx2
-      MongoDbConfig:Database: magic-mirror
+      MongoDbConfig:Database: magicmirror
       MongoDbConfig:ServerUrl: mongo
   isidore.magicmirror.mongo:
     image: mongo:4.2-bionic
