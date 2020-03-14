@@ -33,7 +33,7 @@ namespace Isidore.MagicMirror.Users.API
             {
                 var usersModule = new UsersModule(_appConfig, _loggerFactory);
                 builder.RegisterModule(usersModule);
-                //builder.RegisterModule(new LocalFaceServiceModule(_appConfig));
+                builder.RegisterModule(new LocalFaceServiceModule(_appConfig));
             });
         }
 
