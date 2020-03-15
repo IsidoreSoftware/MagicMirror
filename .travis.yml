@@ -10,4 +10,3 @@ before_script:
 script:
   - dotnet build Isidore.MagicMirror.sln
   - ./scripts/test.sh
-  - ./scripts/build-users.sh
