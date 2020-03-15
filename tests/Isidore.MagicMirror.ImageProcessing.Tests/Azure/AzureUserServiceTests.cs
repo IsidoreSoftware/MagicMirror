@@ -69,7 +69,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
             // Assert
             A.CallTo(() => _faceServiceClient.CreatePersonInPersonGroupAsync(A<string>.That.IsEqualTo(DefaulGroupId),
                         A<string>.Ignored, A<string>.Ignored))
-                .MustHaveHappened(Repeated.Exactly.Once);
+                .MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.Azure
             A.CallTo(
                     () => _faceServiceClient.GetPersonAsync(
                         A<string>.Ignored, A<Guid>.That.Matches(x => x.Equals(Guid.Parse(user.UserGuid)))))
-                .MustHaveHappened(Repeated.Exactly.Once);
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 
             await testedService.LearnMore(images);
 
-            var find = File.ReadAllBytes($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
+            var find = File.OpenRead($"{path}{Path.DirectorySeparatorChar}{imageSrc}");
             var result = await testedService.RecognizeAsync(find);
 
             Assert.Equal(label, result.RecognizedItem.Id);
