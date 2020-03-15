@@ -10,5 +10,4 @@ before_script:
 script:
   - dotnet build Isidore.MagicMirror.sln
   - ./scripts/test.sh
-  - dotnet publish -c Release
-  - cd src/Isidore.MagicMirror.Docker && docker-compose build
+  - ./scripts/build-users.sh
