@@ -13,6 +13,18 @@ services:
       MongoDbConfig:Password: eQrqUs1BbXx2
       MongoDbConfig:Database: magicmirror
       MongoDbConfig:ServerUrl: mongo
+  isidore.magicmirror.widgets.api:
+    image: isidore.magicmirror.widgets.api
+    build:
+      context: ../..
+      dockerfile: ./src/Isidore.MagicMirror.Widgets/Isidore.MagicMirror.Widgets.API/Dockerfile
+    links:
+      - isidore.magicmirror.mongo:mongo
+    environment:
+      MongoDbConfig:Username: mirror_user
+      MongoDbConfig:Password: eQrqUs1BbXx2
+      MongoDbConfig:Database: magicmirror
+      MongoDbConfig:ServerUrl: mongo
   isidore.magicmirror.mongo:
     image: mongo:4.2-bionic
     ports:
