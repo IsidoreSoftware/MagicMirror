@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  isidore.magicmirror.api:
-    image: isidore.magicmirror.api
+  isidore.magicmirror.users.api:
+    image: isidore.magicmirror.users.api
     build:
       context: ../..
       dockerfile: ./src/Isidore.MagicMirror.Users/Isidore.MagicMirror.Users.API/Dockerfile
