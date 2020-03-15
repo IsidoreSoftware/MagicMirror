@@ -4,6 +4,7 @@
     {
         public string ServerUrl { get; set; }
         public bool UseSsl { get; set; }
+        public bool VerifySslCertificate { get; set; }
         public int? Port { get; set; }
         public string DbName { get; set; }
         public string Username { get; set; }

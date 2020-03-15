@@ -1,7 +1,4 @@
-version: '2'
- 
-#mounting usersecrets
-#until this is resolved https://github.com/Microsoft/DockerTools/issues/24
+version: '3.7'
 
 services:
   isidore.magicmirror.users.api:

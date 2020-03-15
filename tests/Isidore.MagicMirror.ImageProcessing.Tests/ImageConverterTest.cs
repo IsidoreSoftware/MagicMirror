@@ -10,11 +10,11 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
     public class ImageConverterTest : IDisposable
     {
         private readonly FilePathToBitmapConverter pathToBitmapConverter;
-        private readonly string tempPath= Path.Combine(Path.GetTempPath(),"MagicMirror-tests");
+        private readonly string tempPath = Path.Combine(Path.GetTempPath(), "MagicMirror-tests");
 
         public ImageConverterTest()
         {
-            if(!Directory.Exists(tempPath))
+            if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);
             }
@@ -23,24 +23,24 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         }
 
         [Fact]
-        public void null_path_throws_exception()
+        public async Task null_path_throws_exception()
         {
             string path = null;
-            Assert.ThrowsAsync(typeof(ArgumentNullException),() => pathToBitmapConverter.ConvertAsync(path));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => pathToBitmapConverter.ConvertAsync(path));
         }
 
         [Fact]
-        public void exception_on_not_existing_path()
+        public async Task exception_on_not_existing_path()
         {
             string path = "C:/this_file_does_not_exist.jpg";
-            Assert.ThrowsAsync(typeof(FileNotFoundException), () =>  pathToBitmapConverter.ConvertAsync(path));
+            await Assert.ThrowsAsync<FileNotFoundException>(() => pathToBitmapConverter.ConvertAsync(path));
         }
 
         [Fact]
         public async Task created_file_exists()
         {
             string imagePath;
-            Bitmap bitmapToSave = new Bitmap(1,1); 
+            Bitmap bitmapToSave = new Bitmap(1, 1);
             imagePath = await pathToBitmapConverter.ConvertAsync(bitmapToSave);
 
             Assert.True(File.Exists(imagePath));
@@ -50,17 +50,18 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests
         public async Task created_file_has_jpg_extension()
         {
             string imagePath;
-            Bitmap bitmapToSave = new Bitmap(1,1); 
+            Bitmap bitmapToSave = new Bitmap(1, 1);
             imagePath = await pathToBitmapConverter.ConvertAsync(bitmapToSave);
 
-            Assert.EndsWith(".jpg",imagePath);
+            Assert.EndsWith(".jpg", imagePath);
         }
 
         public void Dispose()
         {
             var files = Directory.GetFiles(tempPath);
-            foreach(var file in files){
-                File.Delete(file);                
+            foreach (var file in files)
+            {
+                File.Delete(file);
             }
         }
     }

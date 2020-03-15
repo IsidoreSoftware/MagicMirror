@@ -27,17 +27,17 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
 
                 if (dictionary.Keys.All(x => x.Id != label.Id))
                     dictionary.Add(label, new List<Mat>());
-                var img = new Mat(Path.Combine(path, file), ImreadModes.GrayScale);
+                var img = new Mat(Path.Combine(path, file), ImreadModes.Grayscale);
                 (dictionary.First(x => x.Key.Id == label.Id).Value as List<Mat>).Add(img);
             }
 
             return dictionary;
         }
 
-        public static IDictionary<User, IEnumerable<byte[]>> LoadPhotosByte(string path, string classRegex, string exclusion = null)
+        public static IDictionary<User, IEnumerable<Stream>> LoadPhotosByte(string path, string classRegex, string exclusion = null)
         {
 
-            var dictionary = new Dictionary<User, IEnumerable<byte[]>>();
+            var dictionary = new Dictionary<User, IEnumerable<Stream>>();
             var files = Directory.GetFiles(path).Where(x => String.IsNullOrWhiteSpace(exclusion) || !x.Contains(exclusion)).Select(x => Path.GetFileName(x));
 
             foreach (var file in files)
@@ -50,10 +50,10 @@ namespace Isidore.MagicMirror.ImageProcessing.Tests.FaceRecognitionTests
                 };
 
                 if (dictionary.Keys.All(x => x.Id != label.Id))
-                    dictionary.Add(label, new List<byte[]>());
+                    dictionary.Add(label, new List<Stream>());
 
 
-                (dictionary.First(x => x.Key.Id == label.Id).Value as List<byte[]>).Add(File.ReadAllBytes(Path.Combine(path, file)));
+                (dictionary.First(x => x.Key.Id == label.Id).Value as List<Stream>).Add(File.OpenRead(Path.Combine(path, file)));
             }
 
             return dictionary;
