@@ -23,6 +23,10 @@ namespace Isidore.MagicMirror.Widgets.API
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
+                webBuilder.ConfigureKestrel(o =>
+                {
+                    o.AllowSynchronousIO = true;
+                });
             });
     }
 }
