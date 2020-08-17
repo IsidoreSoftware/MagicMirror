@@ -11,9 +11,11 @@ namespace Isidore.MagicMirror.Widgets.Models
 
         public string Style { get; set; }
 
+        public TimeSpan RefreshFrequency { get; set; }
+
         public DateTime CreationDate { get; set; }
 
-        public long AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
 
         public dynamic[] Models { get; set; }
 

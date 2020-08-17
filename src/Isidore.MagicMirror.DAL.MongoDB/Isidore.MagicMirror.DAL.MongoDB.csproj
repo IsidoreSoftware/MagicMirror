@@ -1,15 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2"/>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0"/>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj" />
+    <ProjectReference Include="..\Isidore.MagicMirror.Infrastructure\Isidore.MagicMirror.Infrastructure.csproj"/>
   </ItemGroup>
-
 </Project>

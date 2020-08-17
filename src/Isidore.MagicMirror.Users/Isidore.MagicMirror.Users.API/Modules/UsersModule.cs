@@ -70,8 +70,8 @@ namespace Isidore.MagicMirror.Users.API.Modules
                     Servers = new[] { new MongoServerAddress(config.ServerUrl, config.Port ?? 27017) },
                     ConnectTimeout = TimeSpan.FromSeconds(5),
                     Credential = credential,
-                    UseSsl = config.UseSsl,
-                    VerifySslCertificate = config.VerifySslCertificate,
+                    UseTls = config.UseSsl,
+                    AllowInsecureTls = !config.VerifySslCertificate,
                     SocketTimeout = TimeSpan.FromSeconds(5)
                 }).GetDatabase(config.DbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")

@@ -1,32 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Isidore.MagicMirror.ImageProcessing</AssemblyName>
     <PackageId>Isidore.MagicMirror.ImageProcessing</PackageId>
   </PropertyGroup>
-
   <ItemGroup>
-    <EmbeddedResource Include="FaceRecognition\Classifiers\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <EmbeddedResource Include="FaceRecognition\Classifiers\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)"/>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.csproj" />
-    <ProjectReference Include="..\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj" />
+    <ProjectReference Include="..\..\Isidore.MagicMirror.Utils\Isidore.MagicMirror.Utils.csproj"/>
+    <ProjectReference Include="..\Isidore.MagicMirror.Users\Isidore.MagicMirror.Users.csproj"/>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2" />
-    <PackageReference Include="Microsoft.ProjectOxford.Face" Version="1.4.0" />
-    <PackageReference Include="Microsoft.ProjectOxford.Face.DotNetStandard" Version="1.0.0" />
-    <PackageReference Include="OpenCvSharp4" Version="4.2.0.20200208" />
-    <PackageReference Include="OpenCvSharp4.Windows" Version="4.2.0.20200208" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.2"/>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2"/>
+    <PackageReference Include="Microsoft.ProjectOxford.Face" Version="1.4.0"/>
+    <PackageReference Include="Microsoft.ProjectOxford.Face.DotNetStandard" Version="1.0.0"/>
+    <PackageReference Include="OpenCvSharp4" Version="4.2.0.20200208"/>
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.2.0.20200208"/>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0"/>
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0"/>
+    <PackageReference Include="OpenCvSharp4.runtime.ubuntu.16.04-x64" Version="4.2.0.20200208-beta1"/>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="dll\ARM\OpenCvSharpExtern.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -38,5 +34,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
