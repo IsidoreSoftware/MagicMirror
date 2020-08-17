@@ -31,6 +31,11 @@ namespace Isidore.MagicMirror.WebService.Http.FileUploads
             try
             {
                 var tags = (string)field;
+                if (tags == null)
+                {
+                    return new List<string>();
+                }
+
                 return tags.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             }
             catch

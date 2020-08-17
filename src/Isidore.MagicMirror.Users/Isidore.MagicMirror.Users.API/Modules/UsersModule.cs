@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac.Builder;
 using Isidore.MagicMirror.DAL.MongoDB.Configuration;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Classifiers;
 using Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services;
@@ -9,6 +8,7 @@ using Isidore.MagicMirror.Infrastructure.Extensions;
 using Isidore.MagicMirror.Infrastructure.Validation;
 using Isidore.MagicMirror.Users.API.Configuration;
 using Isidore.MagicMirror.Users.API.Validators;
+using Isidore.MagicMirror.Users.Contract;
 using Isidore.MagicMirror.Users.Models;
 using Isidore.MagicMirror.Users.Services;
 using Microsoft.Extensions.Configuration;
@@ -42,9 +42,9 @@ namespace Isidore.MagicMirror.Users.API.Modules
             builder.RegisterInstance(SetUpMongoDb());
             builder.RegisterType<UserService>().AsImplementedInterfaces();
             builder.RegisterType<HaarCascadeClassifier>().AsImplementedInterfaces();
-            builder.RegisterType<UserGroupService>();
+            builder.RegisterType<UserGroupService>().As<IUserGroupService>();
            // builder.RegisterType<AzureUserGroupService>();
-            builder.RegisterType<CompositeUserGroupService>().AsImplementedInterfaces();
+           // builder.RegisterType<CompositeUserGroupService>().AsImplementedInterfaces();
             builder.RegisterInstance(_appConfig.Get<FaceServiceConfig>());
             builder.RegisterInstance(GetValidatorFactory()).SingleInstance();
         }
@@ -70,8 +70,8 @@ namespace Isidore.MagicMirror.Users.API.Modules
                     Servers = new[] { new MongoServerAddress(config.ServerUrl, config.Port ?? 27017) },
                     ConnectTimeout = TimeSpan.FromSeconds(5),
                     Credential = credential,
-                    UseSsl = config.UseSsl,
-                    VerifySslCertificate = config.VerifySslCertificate,
+                    UseTls = config.UseSsl,
+                    AllowInsecureTls = !config.VerifySslCertificate,
                     SocketTimeout = TimeSpan.FromSeconds(5)
                 }).GetDatabase(config.DbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")

@@ -2,7 +2,6 @@
 using Isidore.MagicMirror.Widgets.Models;
 using Nancy;
 using System;
-using MongoDB.Bson;
 
 namespace Isidore.MagicMirror.Widgets.API.Controller
 {
@@ -27,12 +26,18 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
                 {
                     var widgets = new[]{new Widget()
                     {
-                        AuthorId = 1,
+                        AuthorId = Guid.NewGuid(),
                         CreationDate = DateTime.Now,
-                        Id = "1",
+                        Id = Guid.NewGuid().ToString(),
                         Name = "Clock",
-                        Template = "<div>Sum 2+5 =  {{2+5}}</div>",
-                        Style = "div {color:#f00; }"
+                        Template = "<div class=\"time-box\">"+
+                                        "<div class=\"time\">{{ context.now | date:'shortTime'}}</div>"+
+                                        "<div class=\"date\">{{ context.now | date:'EEEE'}}</div>"+
+                                        "<div class=\"date\">{{ context.now | date:'mediumDate'}}</div>"+
+                                    "</div>",
+                        Style = ".time-box {  text-align: left; float: left; font-size: 6em; } " +
+                        ".date {font-size: 1.5rem;}",
+                        ModelRefreshInterval = TimeSpan.FromSeconds(1)
                     }};
                     return widgets;
 
