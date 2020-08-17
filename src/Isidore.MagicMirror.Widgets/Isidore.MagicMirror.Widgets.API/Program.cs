@@ -19,6 +19,7 @@ namespace Isidore.MagicMirror.Widgets.API
                 config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true);
                 config.AddEnvironmentVariables();
+                config.AddUserSecrets<Startup>();
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {

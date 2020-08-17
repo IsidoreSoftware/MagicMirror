@@ -31,13 +31,13 @@ namespace Isidore.MagicMirror.Widgets.API.Controller
                         Id = Guid.NewGuid().ToString(),
                         Name = "Clock",
                         Template = "<div class=\"time-box\">"+
-                                        "<div class=\"time\">{{ now | date:'shortTime'}}</div>"+
-                                        "<div class=\"date\">{{ now | date:'EEEE'}}</div>"+
-                                        "<div class=\"date\">{{ now | date:'mediumDate'}}</div>"+
+                                        "<div class=\"time\">{{ context.now | date:'shortTime'}}</div>"+
+                                        "<div class=\"date\">{{ context.now | date:'EEEE'}}</div>"+
+                                        "<div class=\"date\">{{ context.now | date:'mediumDate'}}</div>"+
                                     "</div>",
-                        Style = ".time-box {  text-align: left; float: left; font - size: 6em; } " +
-                        ".date {font - size: 1.5rem;}",
-                        RefreshFrequency = TimeSpan.FromSeconds(1)
+                        Style = ".time-box {  text-align: left; float: left; font-size: 6em; } " +
+                        ".date {font-size: 1.5rem;}",
+                        ModelRefreshInterval = TimeSpan.FromSeconds(1)
                     }};
                     return widgets;
 
