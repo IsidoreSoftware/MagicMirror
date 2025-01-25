@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nancy.Owin;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace Isidore.MagicMirror.Users.API
 {
@@ -21,6 +22,10 @@ namespace Isidore.MagicMirror.Users.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

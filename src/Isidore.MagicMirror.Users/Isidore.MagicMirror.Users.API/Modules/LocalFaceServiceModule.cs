@@ -27,7 +27,7 @@ namespace Isidore.MagicMirror.Users.API.Modules
             builder.RegisterInstance(fileProvider).As<IFileProvider>();
             builder.RegisterType<HaarCascadeClassifier>().AsImplementedInterfaces()
                 .WithParameter(new NamedParameter("cascadeFileName",
-                    "Assets.HaarClassifiers.haarcascade_frontalcatface_extended.xml"));
+                    "Assets.HaarClassifiers.haarcascade_frontalface_default.xml"));
             builder.RegisterType<FisherFaceByteProxy>().AsImplementedInterfaces()
                 .WithParameter(new NamedParameter("fileName", config.LearnFile));
         }

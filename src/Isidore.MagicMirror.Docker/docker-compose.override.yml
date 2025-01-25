@@ -7,11 +7,11 @@ services:
     ports:
       - "7010:80"
     volumes:
-      - C:\Users\Kuba\AppData\Roaming\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro
+      - ${AppData}\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro
   isidore.magicmirror.widgets.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "7011:80"
     volumes:
-      - C:\Users\Kuba\AppData\Roaming\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro
+      - ${AppData}\microsoft\UserSecrets\:/root/.microsoft/usersecrets/:ro

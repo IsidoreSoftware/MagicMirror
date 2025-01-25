@@ -11,6 +11,7 @@ using System;
 using Isidore.MagicMirror.DAL.MongoDB.Configuration;
 using Isidore.MagicMirror.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
+using System.Runtime.InteropServices;
 
 namespace Isidore.MagicMirror.Widgets.API
 {
@@ -60,15 +61,10 @@ namespace Isidore.MagicMirror.Widgets.API
         {
             IMongoDatabase mongoDb;
             var config = _appConfig.GetSettings<MongoDbConfig>();
-            var credential = MongoCredential.CreateCredential(config.DbName, config.Username, config.Password);
             try
             {
-                mongoDb = new MongoClient(new MongoClientSettings
-                {
-                    Servers = new[] { new MongoServerAddress(config.ServerUrl) },
-                    ConnectTimeout = TimeSpan.FromSeconds(5),
-                    //Credentials = new[] { credential }
-                }).GetDatabase(config.DbName);
+                mongoDb = new MongoClient(config.ConnectionString)
+                    .GetDatabase(config.DbName);
                 mongoDb.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
                     .Wait();
             }

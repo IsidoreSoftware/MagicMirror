@@ -11,7 +11,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Isidore.MagicMirror.DAL.MongoDB
 {
-    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T> where T: BaseMongoObject
+    public abstract class MongoDataService<T> : IDataService<T>, IAsyncDataService<T> where T : BaseMongoObject
     {
         protected readonly IMongoDatabase Database;
         protected readonly IMongoCollection<T> Collection;
@@ -20,7 +20,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
         protected MongoDataService(IMongoDatabase database, string collectionName)
         {
             Database = database;
-            if (!CollectionExistsAsync(database, collectionName).Result)
+            if (!CollectionExists(database, collectionName))
             {
                 database.CreateCollection(collectionName);
             }
@@ -134,7 +134,7 @@ namespace Isidore.MagicMirror.DAL.MongoDB
 
         public void Update(string id, T item)
         {
-            UpdateAsync(id,item).Wait();
+            UpdateAsync(id, item).Wait();
         }
 
         public void Delete(string id)
@@ -188,13 +188,13 @@ namespace Isidore.MagicMirror.DAL.MongoDB
             return result;
         }
 
-        private async Task<bool> CollectionExistsAsync(IMongoDatabase database, string collectionName)
+        private bool CollectionExists(IMongoDatabase database, string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);
             //filter by collection name
-            var collections = await database.ListCollectionsAsync(new ListCollectionsOptions { Filter = filter });
+            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
             //check for existence
-            return await collections.AnyAsync();
+            return collections.Any();
         }
     }
 }

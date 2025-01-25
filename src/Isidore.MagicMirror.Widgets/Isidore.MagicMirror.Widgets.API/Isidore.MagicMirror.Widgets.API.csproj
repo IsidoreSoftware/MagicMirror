@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerComposeProjectPath>..\..\Isidore.MagicMirror.Docker\Isidore.MagicMirror.Docker.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>71c135cf-56dc-44ef-bcc1-6817c2cf7ea0</UserSecretsId>
+    <UserSecretsId>652bc409-e47e-47d3-be26-fef1e77c3524</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

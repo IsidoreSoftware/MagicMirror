@@ -112,14 +112,16 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             Action<LBPHFaceRecognizer, Mat[], string[]> action = (ffr, images, labels) =>
             {
                 var fi = new FileInfo(trainingFile);
+                var integerLabels = labels.Select(x=>x.GetHashCode()).ToArray();
                 if (fi.Length > 0)
                 {
                     ffr.Read(trainingFile);
-                    ffr.Update(images, labels.Select(int.Parse));
+                    ffr.Update(images, integerLabels);
                 }
                 else
                 {
-                    ffr.Train(images, labels.Select(int.Parse));
+
+                    ffr.Train(images, integerLabels);
                 }
             };
 
@@ -139,7 +141,11 @@ namespace Isidore.MagicMirror.ImageProcessing.FaceRecognition.Services
             {
                 foreach (var photo in user.Value)
                 {
-                    var faceImage = GetFaceImage(photo).Resize(normalSize);
+                    var faceImage = GetFaceImage(photo)?.Resize(normalSize);
+                    if (faceImage == null)
+                    {
+                        throw new FaceNotFoundException();
+                    }
                     trainingFaces.AddLast(faceImage);
                     labels.AddLast(user.Key.Id);
                 }
